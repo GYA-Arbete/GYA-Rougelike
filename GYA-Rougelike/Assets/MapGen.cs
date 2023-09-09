@@ -13,6 +13,7 @@ public class MapGen : MonoBehaviour
     {
         m_YourFirstButton.onClick.AddListener(TaskOnClick);
 
+        // Put parent + children into array
         children = GetComponentsInChildren<Transform>();
     }
 
@@ -30,5 +31,15 @@ public class MapGen : MonoBehaviour
         {
             Debug.Log(children);
         }
+
+        System.Random rand = new System.Random();
+
+        // Slumpa mängden element per kolumn
+        int[] RoomCount = { rand.Next(1, 3), rand.Next(1, 3), rand.Next(1, 3), rand.Next(1, 3), rand.Next(1, 3) };
+        
+        // Bestäm spawnpoints
+
+
+        // Skapa punk vid varje spawnpoint
     }
 }
