@@ -1,33 +1,34 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 public class MapGen : MonoBehaviour
 {
-    public Button m_YourFirstButton;
-    public Transform[] children;
+    // Fancy formating stuff for Inspector
+    [Header("Buttons")]
 
-    public GameObject MapPrefab;
+    public Button GenerateButton;
+
+    [Space]
+    [Header("Prefab")]
+
     public Transform MapPrefabParent;
+    public GameObject MapPrefab;
 
+    [Space]
+    [Header("Arrays")]
+
+    public Transform[] children;
     public Transform[] Clones;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_YourFirstButton.onClick.AddListener(TaskOnClick);
+        GenerateButton.onClick.AddListener(TaskOnClick);
 
         // Put parent + children into array
         children = GetComponentsInChildren<Transform>();
     }
-
-    /*
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    */
 
     void TaskOnClick()
     {
@@ -141,14 +142,6 @@ public class MapGen : MonoBehaviour
                     j++;
                 }
             }
-        }
-
-        // Skriv ut värden i Log
-        for (int i = 0; i < 5; i++)
-        {
-            Debug.Log($"Column Number {i}");
-            Debug.Log($"RoomCount: {RoomCount[i]}");
-            Debug.Log($"SpawnPoint: {SpawnPoint[i]}");
         }
     }
 }
