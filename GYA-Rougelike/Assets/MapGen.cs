@@ -36,7 +36,7 @@ public class MapGen : MonoBehaviour
         int[]RoomCount = { rand.Next(1, 4), rand.Next(1, 4), rand.Next(1, 4), rand.Next(1, 4), rand.Next(1, 4) };
 
         // Bestäm vilken / vilka spawnpoints som ska bli rum
-        byte[] SpawnPoint = new byte[5];
+        string[] SpawnPoint = new string[5];
 
         // Bestäm spawnpoints
         for (int i = 0; i < 5; i++)
@@ -48,13 +48,13 @@ public class MapGen : MonoBehaviour
                     switch (temp1)
                     {
                         case 0:
-                            SpawnPoint[i] = 100;
+                            SpawnPoint[i] = "100";
                             break;
                         case 1:
-                            SpawnPoint[i] = 010;
+                            SpawnPoint[i] = "010";
                             break;
                         case 2:
-                            SpawnPoint[i] = 001;
+                            SpawnPoint[i] = "001";
                             break;
                     }
                     break;
@@ -63,29 +63,56 @@ public class MapGen : MonoBehaviour
                     switch (temp2)
                     {
                         case 0:
-                            SpawnPoint[i] = 110;
+                            SpawnPoint[i] = "110";
                             break;
                         case 1:
-                            SpawnPoint[i] = 101;
+                            SpawnPoint[i] = "101";
                             break;
                         case 2:
-                            SpawnPoint[i] = 011;
+                            SpawnPoint[i] = "011";
                             break;
                     }
                     break;
                 case 3:
-                    SpawnPoint[i] = 111;
+                    SpawnPoint[i] = "111";
                     break;
             }
         }
 
-        // This returns the GameObject named "xxxx".
-        //Prefab = GameObject.Find("Hand");
+        // Int for which index of children to use
+        int j = 2;
 
         // Skapa punkt vid varje spawnpoint
-        // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
-        // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
-        Instantiate(MapPrefab, new Vector3(1, 1, 0), new Quaternion(0, 0, 0, 0), MapPrefabParent);
+        for (int i = 0; i < 7; i++)
+        {
+            // Om StartPoint
+            if (i == 0)
+            {
+                // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
+                // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
+                Instantiate(MapPrefab, new Vector3(children[i + 1].position.x, children[i + 1].position.y, children[i + 1].position.z), new Quaternion(0, 0, 0, 0), MapPrefabParent);
+            }
+            // Om EndPoint
+            else if (i == 6)
+            {
+                // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
+                // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
+                Instantiate(MapPrefab, new Vector3(children[i + 11].position.x, children[i + 11].position.y, children[i + 11].position.z), new Quaternion(0, 0, 0, 0), MapPrefabParent);
+            }
+            // Om ngn vanlig kolumn
+            else
+            {
+                foreach (char Number in SpawnPoint[i - 1])
+                {
+                    if (Number == '1')
+                    {
+                        Instantiate(MapPrefab, new Vector3(children[j].position.x, children[j].position.y, children[j].position.z), new Quaternion(0, 0, 0, 0), MapPrefabParent);
+                    }
+
+                    j++;
+                }
+            }
+        }
 
         // Skriv ut värden i Log
         for (int i = 0; i < 5; i++)

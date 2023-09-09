@@ -421,6 +421,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_YourFirstButton: {fileID: 1939067022}
   children: []
+  MapPrefab: {fileID: 1700875041}
+  MapPrefabParent: {fileID: 72757724}
 --- !u!1 &395965415
 GameObject:
   m_ObjectHideFlags: 0
@@ -1131,7 +1133,7 @@ GameObject:
   - component: {fileID: 1700875044}
   - component: {fileID: 1700875043}
   m_Layer: 5
-  m_Name: Map Room Button Prefab
+  m_Name: MapRoomButtonPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1153,7 +1155,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -69.8, y: -69.3}
+  m_AnchoredPosition: {x: -692, y: -307}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1700875043
