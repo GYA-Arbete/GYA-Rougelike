@@ -1,6 +1,6 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.XR;
 
 public class MapGen : MonoBehaviour
 {
@@ -9,6 +9,8 @@ public class MapGen : MonoBehaviour
 
     public GameObject MapPrefab;
     public Transform MapPrefabParent;
+
+    public Transform[] Clones;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +31,33 @@ public class MapGen : MonoBehaviour
 
     void TaskOnClick()
     {
+        /*
+        ############################
+        Delete Previous Map Elements
+        ############################
+        */
+
+        // Put all clones + parent into Array
+        Clones = MapPrefabParent.GetComponentsInChildren<Transform>();
+        for (int  i = 0; i < Clones.Length; i++)
+        {
+            // Ignore the first 2, eg Parent and Template
+            if (i > 1)
+            {
+                // Destroy object
+                Destroy(Clones[i].gameObject);
+            }
+        }
+
+        // Clear array
+        Clones = null;
+
+        /*
+        ##################
+        Generate Map Rooms
+        ##################
+        */
+
         System.Random rand = new System.Random();
 
         // Slumpa mängden element per kolumn
