@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using static System.Net.Mime.MediaTypeNames;
 
 public class MapGen : MonoBehaviour
 {
@@ -75,28 +74,29 @@ public class MapGen : MonoBehaviour
         SpawnPoint[children.Length - 1] = 1;
 
         // Bestäm spawnpoints
-        for (int i = 0; i < 5; i++)
+        // 1 - 5 eftersom Column 1, 2, 3, 4 & 5
+        for (int i = 1; i < 6; i++)
         {
-            switch (RoomCount[i])
+            switch (RoomCount[i - 1])
             {
                 case 1:
                     int temp1 = rand.Next(0, 3);
                     switch (temp1)
                     {
                         case 0:
-                            SpawnPoint[(i + 1) * 3 - 1] = 1;
-                            SpawnPoint[(i + 1) * 3] = 0;
-                            SpawnPoint[(i + 1) * 3 + 1] = 0;
+                            SpawnPoint[i * 3 - 1] = 1;
+                            SpawnPoint[i * 3] = 0;
+                            SpawnPoint[i * 3 + 1] = 0;
                             break;
                         case 1:
-                            SpawnPoint[(i + 1) * 3 - 1] = 0;
-                            SpawnPoint[(i + 1) * 3] = 1;
-                            SpawnPoint[(i + 1) * 3 + 1] = 0;
+                            SpawnPoint[i * 3 - 1] = 0;
+                            SpawnPoint[i * 3] = 1;
+                            SpawnPoint[i * 3 + 1] = 0;
                             break;
                         case 2:
-                            SpawnPoint[(i + 1) * 3 - 1] = 0;
-                            SpawnPoint[(i + 1) * 3] = 0;
-                            SpawnPoint[(i + 1) * 3 + 1] = 1;
+                            SpawnPoint[i * 3 - 1] = 0;
+                            SpawnPoint[i * 3] = 0;
+                            SpawnPoint[i * 3 + 1] = 1;
                             break;
                     }
                     break;
@@ -105,26 +105,26 @@ public class MapGen : MonoBehaviour
                     switch (temp2)
                     {
                         case 0:
-                            SpawnPoint[(i + 1) * 3 - 1] = 1;
-                            SpawnPoint[(i + 1) * 3] = 1;
-                            SpawnPoint[(i + 1) * 3 + 1] = 0;
+                            SpawnPoint[i * 3 - 1] = 1;
+                            SpawnPoint[i * 3] = 1;
+                            SpawnPoint[i * 3 + 1] = 0;
                             break;
                         case 1:
-                            SpawnPoint[(i + 1) * 3 - 1] = 1;
-                            SpawnPoint[(i + 1) * 3] = 0;
-                            SpawnPoint[(i + 1) * 3 + 1] = 1;
+                            SpawnPoint[i * 3 - 1] = 1;
+                            SpawnPoint[i * 3] = 0;
+                            SpawnPoint[i * 3 + 1] = 1;
                             break;
                         case 2:
-                            SpawnPoint[(i + 1) * 3 - 1] = 0;
-                            SpawnPoint[(i + 1) * 3] = 1;
-                            SpawnPoint[(i + 1) * 3 + 1] = 1;
+                            SpawnPoint[i * 3 - 1] = 0;
+                            SpawnPoint[i * 3] = 1;
+                            SpawnPoint[i * 3 + 1] = 1;
                             break;
                     }
                     break;
                 case 3:
-                    SpawnPoint[(i + 1) * 3 - 1] = 1;
-                    SpawnPoint[(i + 1) * 3] = 1;
-                    SpawnPoint[(i + 1) * 3 + 1] = 1;
+                    SpawnPoint[i * 3 - 1] = 1;
+                    SpawnPoint[i * 3] = 1;
+                    SpawnPoint[i * 3 + 1] = 1;
                     break;
             }
         }
