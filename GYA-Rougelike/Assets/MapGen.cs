@@ -24,23 +24,27 @@ public class MapGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GenerateButton.onClick.AddListener(TaskOnClick);
+        GenerateButton.onClick.AddListener(GenerateMapBtnPressed);
 
         // Put parent + children into array
         children = GetComponentsInChildren<Transform>();
     }
 
-    void TaskOnClick()
+    void GenerateMapBtnPressed()
     {
-        /*
-        ############################
-        Delete Previous Map Elements
-        ############################
-        */
+        DeleteMap();
 
+        GenerateRooms();
+
+        GeneratePaths();
+    }
+
+    // Function for deleting all elements of previously generated map
+    void DeleteMap()
+    {
         // Put all clones + parent into Array
         Clones = MapPrefabParent.GetComponentsInChildren<Transform>();
-        for (int  i = 0; i < Clones.Length; i++)
+        for (int i = 0; i < Clones.Length; i++)
         {
             // Ignore the first 2, eg Parent and Template
             if (i > 1)
@@ -52,21 +56,23 @@ public class MapGen : MonoBehaviour
 
         // Clear array
         Clones = null;
+    }
 
-        /*
-        ##################
-        Generate Map Rooms
-        ##################
-        */
-
+    // Function for generating rooms on map
+    void GenerateRooms()
+    {
         System.Random rand = new System.Random();
 
         // Slumpa mängden element per kolumn
         // Upper bounds is not inclusive, eg Next(1, 4) == 1, 2 or 3
-        int[]RoomCount = { rand.Next(1, 4), rand.Next(1, 4), rand.Next(1, 4), rand.Next(1, 4), rand.Next(1, 4) };
+        int[] RoomCount = { rand.Next(1, 4), rand.Next(1, 4), rand.Next(1, 4), rand.Next(1, 4), rand.Next(1, 4) };
 
         // Bestäm vilken / vilka spawnpoints som ska bli rum
-        string[] SpawnPoint = new string[5];
+        int[] SpawnPoint = new int[children.Length];
+
+        // Set SpawnPoints for StartRoom and End Room
+        SpawnPoint[1] = 1;
+        SpawnPoint[children.Length - 1] = 1;
 
         // Bestäm spawnpoints
         for (int i = 0; i < 5; i++)
@@ -78,13 +84,19 @@ public class MapGen : MonoBehaviour
                     switch (temp1)
                     {
                         case 0:
-                            SpawnPoint[i] = "100";
+                            SpawnPoint[(i + 1) * 3 - 1] = 1;
+                            SpawnPoint[(i + 1) * 3] = 0;
+                            SpawnPoint[(i + 1) * 3 + 1] = 0;
                             break;
                         case 1:
-                            SpawnPoint[i] = "010";
+                            SpawnPoint[(i + 1) * 3 - 1] = 0;
+                            SpawnPoint[(i + 1) * 3] = 1;
+                            SpawnPoint[(i + 1) * 3 + 1] = 0;
                             break;
                         case 2:
-                            SpawnPoint[i] = "001";
+                            SpawnPoint[(i + 1) * 3 - 1] = 0;
+                            SpawnPoint[(i + 1) * 3] = 0;
+                            SpawnPoint[(i + 1) * 3 + 1] = 1;
                             break;
                     }
                     break;
@@ -93,55 +105,44 @@ public class MapGen : MonoBehaviour
                     switch (temp2)
                     {
                         case 0:
-                            SpawnPoint[i] = "110";
+                            SpawnPoint[(i + 1) * 3 - 1] = 1;
+                            SpawnPoint[(i + 1) * 3] = 1;
+                            SpawnPoint[(i + 1) * 3 + 1] = 0;
                             break;
                         case 1:
-                            SpawnPoint[i] = "101";
+                            SpawnPoint[(i + 1) * 3 - 1] = 1;
+                            SpawnPoint[(i + 1) * 3] = 0;
+                            SpawnPoint[(i + 1) * 3 + 1] = 1;
                             break;
                         case 2:
-                            SpawnPoint[i] = "011";
+                            SpawnPoint[(i + 1) * 3 - 1] = 0;
+                            SpawnPoint[(i + 1) * 3] = 1;
+                            SpawnPoint[(i + 1) * 3 + 1] = 1;
                             break;
                     }
                     break;
                 case 3:
-                    SpawnPoint[i] = "111";
+                    SpawnPoint[(i + 1) * 3 - 1] = 1;
+                    SpawnPoint[(i + 1) * 3] = 1;
+                    SpawnPoint[(i + 1) * 3 + 1] = 1;
                     break;
             }
         }
 
-        // Int for which index of children to use
-        int j = 2;
-
-        // Skapa punkt vid varje spawnpoint
-        for (int i = 0; i < 7; i++)
+        for (int i = 1; i < children.Length; i++)
         {
-            // Om StartPoint
-            if (i == 0)
+            if (SpawnPoint[i] == 1)
             {
                 // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
                 // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
-                Instantiate(MapPrefab, new Vector3(children[i + 1].position.x, children[i + 1].position.y, children[i + 1].position.z), new Quaternion(0, 0, 0, 0), MapPrefabParent);
-            }
-            // Om EndPoint
-            else if (i == 6)
-            {
-                // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
-                // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
-                Instantiate(MapPrefab, new Vector3(children[i + 11].position.x, children[i + 11].position.y, children[i + 11].position.z), new Quaternion(0, 0, 0, 0), MapPrefabParent);
-            }
-            // Om ngn vanlig kolumn
-            else
-            {
-                foreach (char Number in SpawnPoint[i - 1])
-                {
-                    if (Number == '1')
-                    {
-                        Instantiate(MapPrefab, new Vector3(children[j].position.x, children[j].position.y, children[j].position.z), new Quaternion(0, 0, 0, 0), MapPrefabParent);
-                    }
-
-                    j++;
-                }
+                Instantiate(MapPrefab, new Vector3(children[i].position.x, children[i].position.y, children[i].position.z), new Quaternion(0, 0, 0, 0), MapPrefabParent);
             }
         }
+    }
+
+    // Function for generating paths between rooms
+    void GeneratePaths()
+    {
+
     }
 }
