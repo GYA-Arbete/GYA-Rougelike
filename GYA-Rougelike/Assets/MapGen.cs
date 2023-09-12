@@ -12,16 +12,16 @@ public class MapGen : MonoBehaviour
     public Button ClearMapButton;
 
     [Space]
-    [Header("Map Room Bullshit")]
+    [Header("Map Room Stuff")]
 
-    public Transform MapPrefabParent;
-    public GameObject MapPrefab;
+    public Transform MapRoomPrefabParent;
+    public GameObject MapRoomPrefab;
 
     [Space]
-    [Header("Map Line Bullshit")]
+    [Header("Map Line Stuff")]
 
-    public Transform LinePrefabParent;
-    public GameObject LinePrefab;
+    public Transform MapLinePrefabParent;
+    public GameObject MapLinePrefab;
 
     [Space]
     [Header("Arrays")]
@@ -70,7 +70,7 @@ public class MapGen : MonoBehaviour
     {
         if (Rooms != null )
         {
-            for (int i = 2; i < Rooms.Length; i++)
+            for (int i = 1; i < Rooms.Length; i++)
             {
                 if (Rooms[i] != null)
                 {
@@ -82,7 +82,7 @@ public class MapGen : MonoBehaviour
 
         if (Lines != null)
         {
-            for (int i = 2; i < Lines.Length; i++)
+            for (int i = 1; i < Lines.Length; i++)
             {
                 if (Lines[i] != null)
                 {
@@ -145,23 +145,23 @@ public class MapGen : MonoBehaviour
             {
                 // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
                 // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
-                Instantiate(MapPrefab, new Vector3(SpawnPoints[i].position.x, SpawnPoints[i].position.y, SpawnPoints[i].position.z), new Quaternion(0, 0, 0, 0), MapPrefabParent);
+                Instantiate(MapRoomPrefab, new Vector3(SpawnPoints[i].position.x, SpawnPoints[i].position.y, SpawnPoints[i].position.z), new Quaternion(0, 0, 0, 0), MapRoomPrefabParent);
             }
         }
 
         // Put all clones + parent into Array
-        Rooms = MapPrefabParent.GetComponentsInChildren<Transform>();
+        Rooms = MapRoomPrefabParent.GetComponentsInChildren<Transform>();
     }
 
     // Function for generating paths between rooms
     void GeneratePaths()
     {
-        // Amount of Lines, ignore index 0 & 1 as they are Parent and Template
-        int LineCount = 2;
+        // Amount of Lines, ignore index 0 as it is Parent
+        int LineCount = 1;
 
-        for (int i = 2; i < Rooms.Length; i++)
+        for (int i = 1; i < Rooms.Length; i++)
         {
-            for (int j = 2; j < Rooms.Length; j++)
+            for (int j = 1; j < Rooms.Length; j++)
             {
                 // Så att den inte kollar avstånd mellan objekt n och objekt n
                 if (i != j)
@@ -177,10 +177,10 @@ public class MapGen : MonoBehaviour
                         Lines = null;
 
                         // Skapar en klon av ett tomt objekt som håller en LineRenderer, detta då varje LineRenderer bara kan ha en linje
-                        Instantiate(LinePrefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0), LinePrefabParent);
+                        Instantiate(MapLinePrefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0), MapLinePrefabParent);
 
                         // Put all clones + parent into Array
-                        Lines = LinePrefabParent.GetComponentsInChildren<Transform>();
+                        Lines = MapLinePrefabParent.GetComponentsInChildren<Transform>();
 
                         LineRenderer LineRend = Lines[LineCount].GetComponent<LineRenderer>();
 
