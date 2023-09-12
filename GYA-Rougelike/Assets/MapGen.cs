@@ -26,8 +26,8 @@ public class MapGen : MonoBehaviour
     [Space]
     [Header("Arrays")]
 
-    public Transform[] children;
-    public Transform[] Clones;
+    public Transform[] SpawnPoints;
+    public Transform[] Rooms;
     public Transform[] Lines;
 
     // Start is called before the first frame update
@@ -38,7 +38,7 @@ public class MapGen : MonoBehaviour
         ClearMapButton.onClick.AddListener(ClearMapBtnPressed);
 
         // Put parent + children into array
-        children = GetComponentsInChildren<Transform>();
+        SpawnPoints = GetComponentsInChildren<Transform>();
     }
 
     void GenerateMapBtnPressed()
@@ -68,14 +68,14 @@ public class MapGen : MonoBehaviour
     // Function for deleting all elements of previously generated map
     void DeleteMap()
     {
-        if (Clones != null )
+        if (Rooms != null )
         {
-            for (int i = 2; i < Clones.Length; i++)
+            for (int i = 2; i < Rooms.Length; i++)
             {
-                if (Clones[i] != null)
+                if (Rooms[i] != null)
                 {
                     // Destroy object
-                    Destroy(Clones[i].gameObject);
+                    Destroy(Rooms[i].gameObject);
                 }
             }
         }
@@ -93,7 +93,7 @@ public class MapGen : MonoBehaviour
         }
 
         // Clear Arrays
-        Clones = null;
+        Rooms = null;
         Lines = null;
     }
 
@@ -108,11 +108,11 @@ public class MapGen : MonoBehaviour
         int[] RoomCount = { 2, 2, 2, 2, 2 };
 
         // Bestäm vilken / vilka spawnpoints som ska bli rum
-        int[] SpawnPoint = new int[children.Length];
+        int[] SpawnPoint = new int[SpawnPoints.Length];
 
         // Set SpawnPoints for StartRoom and End Room
         SpawnPoint[1] = 1;
-        SpawnPoint[children.Length - 1] = 1;
+        SpawnPoint[SpawnPoints.Length - 1] = 1;
 
         // Bestäm spawnpoints
         // 1 - 5 eftersom Column 1, 2, 3, 4 & 5
@@ -139,18 +139,18 @@ public class MapGen : MonoBehaviour
             }
         }
 
-        for (int i = 1; i < children.Length; i++)
+        for (int i = 1; i < SpawnPoints.Length; i++)
         {
             if (SpawnPoint[i] == 1)
             {
                 // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
                 // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
-                Instantiate(MapPrefab, new Vector3(children[i].position.x, children[i].position.y, children[i].position.z), new Quaternion(0, 0, 0, 0), MapPrefabParent);
+                Instantiate(MapPrefab, new Vector3(SpawnPoints[i].position.x, SpawnPoints[i].position.y, SpawnPoints[i].position.z), new Quaternion(0, 0, 0, 0), MapPrefabParent);
             }
         }
 
         // Put all clones + parent into Array
-        Clones = MapPrefabParent.GetComponentsInChildren<Transform>();
+        Rooms = MapPrefabParent.GetComponentsInChildren<Transform>();
     }
 
     // Function for generating paths between rooms
@@ -159,16 +159,16 @@ public class MapGen : MonoBehaviour
         // Amount of Lines, ignore index 0 & 1 as they are Parent and Template
         int LineCount = 2;
 
-        for (int i = 2; i < Clones.Length; i++)
+        for (int i = 2; i < Rooms.Length; i++)
         {
-            for (int j = 2; j < Clones.Length; j++)
+            for (int j = 2; j < Rooms.Length; j++)
             {
                 // Så att den inte kollar avstånd mellan objekt n och objekt n
                 if (i != j)
                 {
                     // Calc delta x & delta y
-                    float dX = Math.Abs(Clones[i].position.x - Clones[j].position.x);
-                    float dY = Math.Abs(Clones[i].position.y - Clones[j].position.y);
+                    float dX = Math.Abs(Rooms[i].position.x - Rooms[j].position.x);
+                    float dY = Math.Abs(Rooms[i].position.y - Rooms[j].position.y);
 
                     // Om de inte ligger övanför varandra och avståndet är mindre än roten ur 2, eg ~ 1.4
                     if (dX > 0 && dX <= Math.Sqrt(2) && dY <= Math.Sqrt(2))
@@ -185,34 +185,34 @@ public class MapGen : MonoBehaviour
                         LineRenderer LineRend = Lines[LineCount].GetComponent<LineRenderer>();
 
                         // Start-position för linjen
-                        LineRend.SetPosition(0, new Vector3(Clones[i].position.x, Clones[i].position.y, 0));
+                        LineRend.SetPosition(0, new Vector3(Rooms[i].position.x, Rooms[i].position.y, 0));
 
                         // Om 1:a eller 4:e kvadranten
-                        if (Clones[j].position.x > Clones[i].position.x)
+                        if (Rooms[j].position.x > Rooms[i].position.x)
                         {
                             // Om 1:a kvadranten
-                            if (Clones[j].position.y > Clones[i].position.y)
+                            if (Rooms[j].position.y > Rooms[i].position.y)
                             {
-                                LineRend.SetPosition(1, new Vector3(Clones[i].position.x + dX, Clones[i].position.y + dY, 0));
+                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x + dX, Rooms[i].position.y + dY, 0));
                             }
                             // Om 4:e kvadranten
                             else
                             {
-                                LineRend.SetPosition(1, new Vector3(Clones[i].position.x + dX, Clones[i].position.y - dY, 0));
+                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x + dX, Rooms[i].position.y - dY, 0));
                             }
                         }
                         // Om 2:a eller 3:e kvadranten
                         else
                         {
                             // Om 2:a kvadranten
-                            if (Clones[j].position.y > Clones[i].position.y)
+                            if (Rooms[j].position.y > Rooms[i].position.y)
                             {
-                                LineRend.SetPosition(1, new Vector3(Clones[i].position.x - dX, Clones[i].position.y + dY, 0));
+                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x - dX, Rooms[i].position.y + dY, 0));
                             }
                             // Om 3:e kvadranten
                             else
                             {
-                                LineRend.SetPosition(1, new Vector3(Clones[i].position.x - dX, Clones[i].position.y - dY, 0));
+                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x - dX, Rooms[i].position.y - dY, 0));
                             }
                         }
 
