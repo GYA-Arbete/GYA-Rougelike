@@ -25,7 +25,6 @@ public class RoomTypeGen : MonoBehaviour
         4 == RandomRoom
 
         5 == BossRoom
-         
         */
 
         // ##########################
