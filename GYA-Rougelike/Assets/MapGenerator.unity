@@ -1120,7 +1120,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PullMapUpDownButton: {fileID: 1205830421}
-  MapObjectsParent: {fileID: 679690434}
+  MainCamera: {fileID: 519420032}
+  DontMoveCanvas1: {fileID: 72757724}
+  DontMoveCanvasElements1: []
+  DontMoveCanvas2: {fileID: 174403698}
+  DontMoveCanvasElements2: []
+  MoveDistance: 9.45
 --- !u!1 &686461444
 GameObject:
   m_ObjectHideFlags: 0
@@ -1415,7 +1420,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 510}
+  m_AnchoredPosition: {x: 0, y: -510}
   m_SizeDelta: {x: 160, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1205830421

@@ -51,7 +51,7 @@ public class MapGen : MonoBehaviour
     {
         DeleteMap();
 
-        // yield on a new YieldInstruction that waits for 0.1 seconds.
+        // yield on a new YieldInstruction that waits for 0.05 seconds.
         // 0.1f to tell stupid compiler its float, not double
         yield return new WaitForSeconds(0.05f);
 
