@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/MapGeneratorTest.unity
+    path: Assets/MainMenu.unity
+    guid: 0dce8d61de3bcda45b43ce10366cabe8
+  - enabled: 1
+    path: Assets/MapGenerator.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects: {}
