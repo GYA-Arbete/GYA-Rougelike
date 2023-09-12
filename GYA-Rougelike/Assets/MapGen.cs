@@ -185,7 +185,7 @@ public class MapGen : MonoBehaviour
                         LineRenderer LineRend = Lines[LineCount].GetComponent<LineRenderer>();
 
                         // Start-position för linjen
-                        LineRend.SetPosition(0, new Vector3(Rooms[i].position.x, Rooms[i].position.y, 0));
+                        LineRend.SetPosition(0, new Vector3(Rooms[i].position.x, Rooms[i].position.y, -1));
 
                         // Om 1:a eller 4:e kvadranten
                         if (Rooms[j].position.x > Rooms[i].position.x)
@@ -193,12 +193,12 @@ public class MapGen : MonoBehaviour
                             // Om 1:a kvadranten
                             if (Rooms[j].position.y > Rooms[i].position.y)
                             {
-                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x + dX, Rooms[i].position.y + dY, 0));
+                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x + dX, Rooms[i].position.y + dY, -1));
                             }
                             // Om 4:e kvadranten
                             else
                             {
-                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x + dX, Rooms[i].position.y - dY, 0));
+                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x + dX, Rooms[i].position.y - dY, -1));
                             }
                         }
                         // Om 2:a eller 3:e kvadranten
@@ -207,12 +207,12 @@ public class MapGen : MonoBehaviour
                             // Om 2:a kvadranten
                             if (Rooms[j].position.y > Rooms[i].position.y)
                             {
-                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x - dX, Rooms[i].position.y + dY, 0));
+                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x - dX, Rooms[i].position.y + dY, -1));
                             }
                             // Om 3:e kvadranten
                             else
                             {
-                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x - dX, Rooms[i].position.y - dY, 0));
+                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x - dX, Rooms[i].position.y - dY, -1));
                             }
                         }
 
