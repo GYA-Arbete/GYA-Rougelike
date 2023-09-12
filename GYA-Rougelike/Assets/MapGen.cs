@@ -145,7 +145,8 @@ public class MapGen : MonoBehaviour
             {
                 // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
                 // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
-                Instantiate(MapRoomPrefab, new Vector3(SpawnPoints[i].position.x, SpawnPoints[i].position.y, SpawnPoints[i].position.z), new Quaternion(0, 0, 0, 0), MapRoomPrefabParent);
+                GameObject Room = Instantiate(MapRoomPrefab, new Vector3(SpawnPoints[i].position.x, SpawnPoints[i].position.y, SpawnPoints[i].position.z), new Quaternion(0, 0, 0, 0), MapRoomPrefabParent);
+                Room.name = SpawnPoints[i].name;
             }
         }
 
