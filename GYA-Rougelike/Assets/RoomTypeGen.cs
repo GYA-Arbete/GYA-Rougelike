@@ -3,6 +3,7 @@ using UnityEngine;
 public class RoomTypeGen : MonoBehaviour
 {
     public int RoomType;
+    public bool HiddenType = false;
 
     // Start is called before the first frame update
     void Start()
@@ -22,9 +23,7 @@ public class RoomTypeGen : MonoBehaviour
 
         3 == CampRoom
 
-        4 == RandomRoom
-
-        5 == BossRoom
+        4 == BossRoom
         */
 
         // ##########################
@@ -44,9 +43,16 @@ public class RoomTypeGen : MonoBehaviour
         {
             System.Random rand = new System.Random();
 
-            // Generates a random number 1 -> 4
-            // Flat 1/4 chance for each room-type
-            RoomType = rand.Next(1, 5);
+            // Generates a random number 1 -> 3
+            // Flat 1/3 chance for each room-type
+            RoomType = rand.Next(1, 4);
+
+            // 20% Chans att det är HiddenType
+            int temp = rand.Next(1, 6);
+            if (temp == 0)
+            {
+                HiddenType = true;
+            }
         }
     }
 }
