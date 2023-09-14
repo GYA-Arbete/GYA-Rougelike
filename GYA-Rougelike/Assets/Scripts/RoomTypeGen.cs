@@ -2,8 +2,14 @@ using UnityEngine;
 
 public class RoomTypeGen : MonoBehaviour
 {
+    [Header("Type Generation Stuff")]
+
     public int RoomType;
     public bool HiddenType = false;
+
+    [Header("Image Stuff")]
+
+    public GameObject ImagePrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -25,9 +31,6 @@ public class RoomTypeGen : MonoBehaviour
 
         4 == BossRoom
         */
-
-        // ##########################
-        // Set Picture for Room-Type
 
         // If StartRoom, set room-type to StartRoom
         if (gameObject.name == "SpawnPoint Start")
@@ -54,5 +57,14 @@ public class RoomTypeGen : MonoBehaviour
                 HiddenType = true;
             }
         }
+
+        // Create an overlayed image indicating room-type
+        // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
+        // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
+        // transform.position.n == transform component for object script is attached to
+        // Sets parent as this object
+        GameObject Image = Instantiate(ImagePrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), new Quaternion(0, 0, 0, 0), transform);
+        // Same name as parent object
+        Image.name = transform.name;
     }
 }

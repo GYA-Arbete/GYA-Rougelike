@@ -134,3 +134,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RoomType: 0
+  HiddenType: 0
+  ImagePrefab: {fileID: 3965708321990618195, guid: f951f360cc8880142bac82ea8af05987, type: 3}
