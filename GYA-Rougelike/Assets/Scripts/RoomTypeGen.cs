@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoomTypeGen : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class RoomTypeGen : MonoBehaviour
     [Header("Image Stuff")]
 
     public GameObject ImagePrefab;
+    public Texture[] MapRoomIcons;
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +42,7 @@ public class RoomTypeGen : MonoBehaviour
         // If EndRoom, set room-type to BossRoom
         else if (gameObject.name == "SpawnPoint End")
         {
-            RoomType = 5;
+            RoomType = 4;
         }
         else
         {
@@ -66,5 +68,25 @@ public class RoomTypeGen : MonoBehaviour
         GameObject Image = Instantiate(ImagePrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), new Quaternion(0, 0, 0, 0), transform);
         // Same name as parent object
         Image.name = transform.name;
+
+        Transform[] Children;
+        Children = GetComponentsInChildren<Transform>();
+
+        for (int i = 0; i < Children.Length; i++)
+        {
+            if (Children[i].GetComponent<RawImage>() != null && RoomType > 0)
+            {
+                if (HiddenType)
+                {
+                    RawImage RawImg = Children[i].GetComponent<RawImage>();
+                    RawImg.texture = MapRoomIcons[4]; // 4 == HiddenTypeIcon
+                }
+                else
+                {
+                    RawImage RawImg = Children[i].GetComponent<RawImage>();
+                    RawImg.texture = MapRoomIcons[RoomType - 1];
+                }
+            }
+        }
     }
 }

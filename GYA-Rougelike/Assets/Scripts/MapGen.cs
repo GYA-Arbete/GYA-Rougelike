@@ -172,7 +172,7 @@ public class MapGen : MonoBehaviour
                     float dY = Math.Abs(Rooms[i].position.y - Rooms[j].position.y);
 
                     // Om de inte ligger övanför varandra och avståndet är mindre än roten ur 2, eg ~ 1.4
-                    if (dX > 0 && dX <= Math.Sqrt(2) && dY <= Math.Sqrt(2))
+                    if (dX > 0 && dX <= Math.Sqrt(8) && dY <= Math.Sqrt(8))
                     {
                         // Clear array
                         Lines = null;
