@@ -5,7 +5,8 @@ public class RoomTypeGen : MonoBehaviour
 {
     [Header("Type Generation Stuff")]
 
-    public int RoomType;
+    public static int RoomType;
+    public int RoomTypeValue; // För att visa värdet av RoomType i inspector
     public bool HiddenType = false;
 
     [Header("Image Stuff")]
@@ -88,5 +89,8 @@ public class RoomTypeGen : MonoBehaviour
                 }
             }
         }
+
+        // För att visa värdet av RoomType i inspector
+        RoomTypeValue = RoomType;
     }
 }

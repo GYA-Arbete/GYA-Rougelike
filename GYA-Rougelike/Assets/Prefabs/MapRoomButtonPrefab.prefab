@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8391473375618141353}
   - component: {fileID: 3981749480465916983}
   - component: {fileID: 6076478137172651935}
+  - component: {fileID: 480872800385491130}
   m_Layer: 5
   m_Name: MapRoomButtonPrefab
   m_TagString: Untagged
@@ -142,3 +143,17 @@ MonoBehaviour:
   - {fileID: 2800000, guid: a0a9834aea2ecfa47939864fe4363ec3, type: 3}
   - {fileID: 2800000, guid: d7c07f52de064c2449dbe06aec2c2cb3, type: 3}
   - {fileID: 2800000, guid: c098a20a2f9dd7248812827616b041f0, type: 3}
+--- !u!114 &480872800385491130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4631270058164154296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7abc25bc44ee0634b80d74b38a27b15d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainCamera: {fileID: 0}
+  RoomType: {fileID: 0}
