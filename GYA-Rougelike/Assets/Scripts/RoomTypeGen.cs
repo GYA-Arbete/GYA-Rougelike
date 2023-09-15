@@ -53,7 +53,7 @@ public class RoomTypeGen : MonoBehaviour
             RoomType = rand.Next(1, 4);
 
             // 20% Chans att det är HiddenType
-            int temp = rand.Next(1, 6);
+            int temp = rand.Next(0, 6);
             if (temp == 0)
             {
                 HiddenType = true;
