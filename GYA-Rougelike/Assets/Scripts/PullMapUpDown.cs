@@ -35,7 +35,7 @@ public class PullMapUpDown : MonoBehaviour
         PullMapUpDownButton.onClick.AddListener(MapUpDown);
     }
 
-    void MapUpDown()
+    public void MapUpDown()
     {
         // Put into arrays every element that "shouldnt me moved", eg will be moved won as much as camera is moved up
         DontMoveCanvasElements1 = DontMoveCanvas1.GetComponentsInChildren<Transform>();

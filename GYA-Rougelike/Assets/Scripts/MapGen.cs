@@ -30,6 +30,10 @@ public class MapGen : MonoBehaviour
     public Transform[] Rooms;
     public Transform[] Lines;
 
+    [Header("Shit for other scripts")]
+    public int CurrentRoom;
+    public GameObject PreviousRoom;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -95,6 +99,10 @@ public class MapGen : MonoBehaviour
         // Clear Arrays
         Rooms = null;
         Lines = null;
+
+        CurrentRoom = 1;
+
+        PreviousRoom = GameObject.Find("SpawnPoint Start");
     }
 
     // Function for generating rooms on map
@@ -222,5 +230,12 @@ public class MapGen : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void UpdateOtherScriptShit(int CurrentRoomNumber, GameObject CurrentRoomObject)
+    {
+        CurrentRoom = CurrentRoomNumber;
+
+        PreviousRoom = CurrentRoomObject;
     }
 }
