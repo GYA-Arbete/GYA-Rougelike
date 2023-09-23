@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88916e47b1c790f4cbc45ca2139c6b66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RoomType: 0
+  RoomTypeValue: 0
   HiddenType: 0
   ImagePrefab: {fileID: 3965708321990618195, guid: f951f360cc8880142bac82ea8af05987, type: 3}
   MapRoomIcons:
@@ -156,4 +156,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MainCamera: {fileID: 0}
-  RoomType: {fileID: 0}
+  ExitRoomButton: {fileID: 0}
+  RoomType: 0
+  CameraMoveScript: {fileID: 0}
+  MapGenScript: {fileID: 0}
+  Rooms: []
+  CurrentRoom: 0
+  PreviousRoom: {fileID: 0}
+  Cleared: {fileID: 2800000, guid: bfd78a26b04a5fd48980f335cfda9e6e, type: 3}
+  Selected: {fileID: 2800000, guid: 9fdb0dd714abb4e41a0c1980ace89c37, type: 3}

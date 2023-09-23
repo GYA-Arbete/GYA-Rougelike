@@ -14,6 +14,9 @@ public class MapNavigation : MonoBehaviour
     public int CurrentRoom;
     public GameObject PreviousRoom;
 
+    public Texture Cleared;
+    public Texture Selected;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -62,6 +65,13 @@ public class MapNavigation : MonoBehaviour
                     {
                         CurrentRoom = i;
                         PreviousRoom = gameObject;
+
+                        // Change image
+                        Transform[] Children;
+                        Children = GetComponentsInChildren<Transform>();
+                        RawImage RawImg = Children[1].GetComponent<RawImage>();
+                        RawImg.texture = Cleared;
+
                         MapGenScript.UpdateOtherScriptShit(CurrentRoom, PreviousRoom);
                         CameraMoveScript.MapUpDown();
                     }
