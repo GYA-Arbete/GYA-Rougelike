@@ -43,7 +43,8 @@ public class PlayerCards : MonoBehaviour
 
     void SpawnCards()
     {
-        for (int i = 0; i < CardSpawnPoints.Length; i++)
+        // i = 1 eftersom den ska ingorera parent
+        for (int i = 1; i < CardSpawnPoints.Length; i++)
         {
             // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
             // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
