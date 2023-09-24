@@ -1069,7 +1069,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 489942777}
-  - component: {fileID: 489942778}
   m_Layer: 0
   m_Name: MoveQueue SnapPoints
   m_TagString: Untagged
@@ -1107,25 +1106,6 @@ Transform:
   - {fileID: 1835033889}
   m_Father: {fileID: 2064234101}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &489942778
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 489942776}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dba2a870665827a46a7d72d91104ba21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  JsonString: 
-  CardSpawner: {fileID: 489942777}
-  CardSpawnPoints: []
-  CardsParent: {fileID: 2064234101}
-  CardPrefab: {fileID: 541792869356932419, guid: 14723156fe6411e45860dd50050686f4, type: 3}
-  cardList:
-    cardList: []
 --- !u!1 &509590589
 GameObject:
   m_ObjectHideFlags: 0
