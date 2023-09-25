@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using System.Linq;
 
 public class DragDropCard : MonoBehaviour
 {
@@ -38,6 +39,18 @@ public class DragDropCard : MonoBehaviour
     public void OnMouseUp()
     {
         isDragging = false;
+
+        // Find closest SnapPoint and snap to it
+        double ClosestDistance = SnapPointsDistance.Min();
+        for (int i = 1; i < MoveQueueSnapPoints.Length; i++)
+        {
+            if (SnapPointsDistance[i - 1] == ClosestDistance)
+            {
+                // Snap to closest point
+                gameObject.transform.position = MoveQueueSnapPoints[i].position;
+                break;
+            }
+        }
     }
 
     public void OnMouseDrag()
