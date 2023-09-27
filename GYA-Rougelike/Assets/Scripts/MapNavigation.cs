@@ -7,15 +7,22 @@ public class MapNavigation : MonoBehaviour
     public Transform MainCamera;
     public Button ExitRoomButton;
     public int RoomType;
-    public PullMapUpDown CameraMoveScript;
-    public MapGen MapGenScript;
-
+    
     public Transform[] Rooms;
     public int CurrentRoom;
     public GameObject PreviousRoom;
 
     public Texture Cleared;
     public Texture Selected;
+
+    [Header("Other Scripts")]
+    public PullMapUpDown CameraMoveScript;
+    public MapGen MapGenScript;
+    public CombatSystem CombatSystem;
+
+    [Space]
+    public int EnemyAmount;
+    public int[] EnemyTypes;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +49,7 @@ public class MapNavigation : MonoBehaviour
 
         CameraMoveScript = FindObjectOfType<PullMapUpDown>();
         MapGenScript = FindObjectOfType<MapGen>();
+        CombatSystem = FindObjectOfType<CombatSystem>();
     }
 
     void EnterRoom()
@@ -74,6 +82,7 @@ public class MapNavigation : MonoBehaviour
 
                         MapGenScript.UpdateOtherScriptShit(CurrentRoom, PreviousRoom);
                         CameraMoveScript.MapUpDown();
+                        CombatSystem.StartCombat(EnemyAmount, EnemyTypes);
                     }
                 }
             }

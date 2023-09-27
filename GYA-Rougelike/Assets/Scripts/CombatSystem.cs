@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CombatSystem : MonoBehaviour
 {
+    public int Energy;
+
     [Header("Other Scripts")]
     public EnemySpawner EnemySpawn;
 
@@ -13,14 +15,14 @@ public class CombatSystem : MonoBehaviour
         EnemySpawn = FindObjectOfType<EnemySpawner>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    void StartCombat(int EnemyAmount, int[] EnemyTypes)
+    public void StartCombat(int EnemyAmount, int[] EnemyTypes)
     {
         EnemySpawn.SpawnEnemies(EnemyAmount, EnemyTypes);
+    }
+
+    // Called when player has finished their turn, will play each card in the MoveQueue
+    void PlayCards()
+    {
+
     }
 }
