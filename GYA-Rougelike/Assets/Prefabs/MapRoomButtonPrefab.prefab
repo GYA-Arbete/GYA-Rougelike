@@ -138,6 +138,7 @@ MonoBehaviour:
   HiddenType: 0
   ImagePrefab: {fileID: 3965708321990618195, guid: f951f360cc8880142bac82ea8af05987, type: 3}
   MapRoomIcons:
+  - {fileID: 2800000, guid: 6cf5a97a611b618419928a46c8bd4001, type: 3}
   - {fileID: 2800000, guid: 90df19cadaa432e438ce8fc72276e659, type: 3}
   - {fileID: 2800000, guid: 505adea62c5c3894da1ca36f7ec6f5c5, type: 3}
   - {fileID: 2800000, guid: a0a9834aea2ecfa47939864fe4363ec3, type: 3}

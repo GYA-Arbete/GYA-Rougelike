@@ -85,8 +85,13 @@ public class RoomTypeGen : MonoBehaviour
                 else
                 {
                     RawImage RawImg = Children[i].GetComponent<RawImage>();
-                    RawImg.texture = MapRoomIcons[RoomType - 1];
+                    RawImg.texture = MapRoomIcons[RoomType];
                 }
+            }
+            else if (Children[i].GetComponent<RawImage>() != null && RoomType == 0)
+            {
+                RawImage RawImg = Children[i].GetComponent<RawImage>();
+                RawImg.texture = MapRoomIcons[0];
             }
         }
 
