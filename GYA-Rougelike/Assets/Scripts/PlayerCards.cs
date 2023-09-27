@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerCards : MonoBehaviour
 {
-    public string JsonString;
+    public TextAsset JsonString;
 
     public Transform CardSpawner;
     public Transform[] CardSpawnPoints;
@@ -33,7 +33,7 @@ public class PlayerCards : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cardList = JsonUtility.FromJson<CardList>(JsonString);
+        cardList = JsonUtility.FromJson<CardList>(JsonString.text);
 
         // Put parent + children into array
         CardSpawnPoints = GetComponentsInChildren<Transform>();

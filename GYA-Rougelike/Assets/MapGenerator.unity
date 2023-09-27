@@ -3099,7 +3099,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dba2a870665827a46a7d72d91104ba21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  JsonString: 
+  JsonString: {fileID: 4900000, guid: 589ad5f234ba8df4388d0639a890dffb, type: 3}
   CardSpawner: {fileID: 1799097175}
   CardSpawnPoints: []
   CardsParent: {fileID: 2064234101}
