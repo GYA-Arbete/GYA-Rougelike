@@ -25,4 +25,10 @@ public class CombatSystem : MonoBehaviour
     {
 
     }
+
+    // Called when its the enemies turn, they do stuff then
+    void EnemyAttack()
+    {
+
+    }
 }
