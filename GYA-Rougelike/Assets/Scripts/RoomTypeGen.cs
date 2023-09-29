@@ -14,6 +14,10 @@ public class RoomTypeGen : MonoBehaviour
     public GameObject ImagePrefab;
     public Texture[] MapRoomIcons;
 
+    [Header("Enemy stiff")]
+    public int EnemyAmount;
+    public int[] EnemyTypes;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -97,5 +101,28 @@ public class RoomTypeGen : MonoBehaviour
 
         // För att visa värdet av RoomType i inspector
         RoomTypeValue = RoomType;
+
+        GenerateEnemies();
+    }
+
+    void GenerateEnemies()
+    {
+        if (RoomType == 4)
+        {
+            EnemyAmount = 1;
+            EnemyTypes = new int[1] { 0 };
+        }
+        else if (RoomType == 1)
+        {
+            System.Random Rand = new System.Random();
+            // Slumpar ett tal mellan 1 till och med 4
+            EnemyAmount = Rand.Next(1, 5);
+
+            EnemyTypes = new int[EnemyAmount];
+            for (int i = 0; i < EnemyAmount; i++)
+            {
+                EnemyTypes[i] = Rand.Next(1, 5);
+            }
+        }
     }
 }
