@@ -21,12 +21,14 @@ public class MapNavigation : MonoBehaviour
     public CombatSystem CombatSystem;
     public RoomTypeGen RoomTypeGenScript;
 
+    private Button button;
+
     // Start is called before the first frame update
     void Start()
     {
         MainCamera = Camera.main.transform;
 
-        Button button = GetComponent<Button>();
+        button = GetComponent<Button>();
         button.onClick.AddListener(EnterRoom);
 
         UnityEngine.Object[] temp = Resources.FindObjectsOfTypeAll(typeof(GameObject));
@@ -47,11 +49,13 @@ public class MapNavigation : MonoBehaviour
         CameraMoveScript = FindObjectOfType<PullMapUpDown>();
         MapGenScript = FindObjectOfType<MapGen>();
         CombatSystem = FindObjectOfType<CombatSystem>();
-        RoomTypeGenScript = FindObjectOfType<RoomTypeGen>();
     }
 
     void EnterRoom()
     {
+        // Get specific instance of RoomTypeGenScript from clicked Room
+        RoomTypeGenScript = button.GetComponent<RoomTypeGen>();
+
         Rooms = GameObject.Find("SpawnPoints").GetComponent<MapGen>().Rooms;
         CurrentRoom = GameObject.Find("SpawnPoints").GetComponent<MapGen>().CurrentRoom;
         PreviousRoom = GameObject.Find("SpawnPoints").GetComponent<MapGen>().PreviousRoom;

@@ -9,6 +9,10 @@ public class CombatSystem : MonoBehaviour
     [Header("Other Scripts")]
     public EnemySpawner EnemySpawn;
 
+    [Space]
+    public int EnemyCount;
+    public int[] EnemyTypesList;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +22,9 @@ public class CombatSystem : MonoBehaviour
     public void StartCombat(int EnemyAmount, int[] EnemyTypes)
     {
         Debug.Log("Started Combat");
+
+        EnemyCount = EnemyAmount;
+        EnemyTypesList = EnemyTypes;
 
         EnemySpawn.SpawnEnemies(EnemyAmount, EnemyTypes);
     }
