@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class EnemyStatsGen : MonoBehaviour
 {
-    public Dictionary<int, int> HealthMinMax = new() { { 1, 5 }, { 1, 5 }, { 1, 5 }, { 1, 5 }, { 1, 5 } };
-    public Dictionary<int, int> DamageMinMax = new() { { 1, 5 }, { 1, 5 }, { 1, 5 }, { 1, 5 }, { 1, 5 } };
+    [Header("Health")]
+    public int[] HealthMin = { 1, 1, 1, 1, 1 };
+    public int[] HealthMax = { 5, 5, 5, 5, 5 };
+
+    [Header("Damage")]
+    public int[] DamageMin = { 1, 1, 1, 1, 1 };
+    public int[] DamageMax = { 5, 5, 5, 5, 5 };
 
     [Header("Enemy Stats")]
     public int Health;
     public int Damage;
 
-    void GenerateStats(int EnemyType)
+    public void GenerateStats(int EnemyType)
     {
         System.Random Rand = new();
 
-        Health = Rand.Next(HealthMinMax[EnemyType]);
-        Damage = Rand.Next(DamageMinMax[EnemyType]);
+        Health = Rand.Next(HealthMin[EnemyType], HealthMax[EnemyType]);
+        Damage = Rand.Next(DamageMin[EnemyType], DamageMax[EnemyType]);
     }
 }
