@@ -19,10 +19,7 @@ public class MapNavigation : MonoBehaviour
     public PullMapUpDown CameraMoveScript;
     public MapGen MapGenScript;
     public CombatSystem CombatSystem;
-
-    [Space]
-    public int EnemyAmount;
-    public int[] EnemyTypes;
+    public RoomTypeGen RoomTypeGenScript;
 
     // Start is called before the first frame update
     void Start()
@@ -50,6 +47,7 @@ public class MapNavigation : MonoBehaviour
         CameraMoveScript = FindObjectOfType<PullMapUpDown>();
         MapGenScript = FindObjectOfType<MapGen>();
         CombatSystem = FindObjectOfType<CombatSystem>();
+        RoomTypeGenScript = FindObjectOfType<RoomTypeGen>();
     }
 
     void EnterRoom()
@@ -82,7 +80,14 @@ public class MapNavigation : MonoBehaviour
 
                         MapGenScript.UpdateOtherScriptShit(CurrentRoom, PreviousRoom);
                         CameraMoveScript.MapUpDown();
-                        CombatSystem.StartCombat(EnemyAmount, EnemyTypes);
+
+                        int EnemyAmount = RoomTypeGenScript.EnemyAmount;
+                        int[] EnemyTypes = RoomTypeGenScript.EnemyTypes;
+
+                        if (RoomType == 1 || RoomType == 4)
+                        {
+                            CombatSystem.StartCombat(EnemyAmount, EnemyTypes);
+                        }
                     }
                 }
             }

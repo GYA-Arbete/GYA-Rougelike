@@ -2156,6 +2156,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1799097175}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1103261178
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1103261180}
+  - component: {fileID: 1103261179}
+  m_Layer: 0
+  m_Name: CombatSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1103261179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1103261178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a465bb14e47b0204495748062dfab796, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Energy: 0
+  EnemySpawn: {fileID: 0}
+--- !u!4 &1103261180
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1103261178}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1113121491
 GameObject:
   m_ObjectHideFlags: 0
@@ -2393,7 +2439,12 @@ MonoBehaviour:
   - {fileID: 792600579}
   - {fileID: 1803296390}
   - {fileID: 1413649336}
-  EnemyPrefabs: []
+  EnemyPrefabs:
+  - {fileID: 4340358545121812255, guid: 0723be7b3c8787b4f81d3b20263de1ff, type: 3}
+  - {fileID: 3980382679749795476, guid: f5830ca978a92af4395a930c677555e9, type: 3}
+  - {fileID: 2937931500609133139, guid: e060e08cbf8a958489934579270f24f2, type: 3}
+  - {fileID: 2269655285244606241, guid: 5af94b7c262751042ba1e1c387eb5478, type: 3}
+  - {fileID: 7847554204879673297, guid: 84137904551657d4eaf9f52a0f3d4815, type: 3}
   EnemyParent: {fileID: 944019480}
 --- !u!1 &1236556655
 GameObject:
@@ -4124,3 +4175,4 @@ SceneRoots:
   - {fileID: 570494149}
   - {fileID: 2064234101}
   - {fileID: 1209565285}
+  - {fileID: 1103261180}

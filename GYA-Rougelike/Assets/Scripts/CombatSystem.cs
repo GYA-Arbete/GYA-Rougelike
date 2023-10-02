@@ -17,6 +17,8 @@ public class CombatSystem : MonoBehaviour
 
     public void StartCombat(int EnemyAmount, int[] EnemyTypes)
     {
+        Debug.Log("Started Combat");
+
         EnemySpawn.SpawnEnemies(EnemyAmount, EnemyTypes);
     }
 
