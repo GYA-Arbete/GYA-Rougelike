@@ -55,7 +55,9 @@ public class CombatSystem : MonoBehaviour
     // Called when player has finished their turn, will play each card in the MoveQueue
     void PlayCards()
     {
+        // Get from cards what to do
 
+        // Do said things to enemies and self
     }
 
     // Called when its the enemies turn, they do stuff then
