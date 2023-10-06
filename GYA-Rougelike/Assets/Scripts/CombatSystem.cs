@@ -11,12 +11,16 @@ public class CombatSystem : MonoBehaviour
 
     public Button EndTurnButton;
 
+    public Transform[] Players;
+    public Transform[] Enemies;
+
+    [Header("Stuff for checking card position")]
+    public Transform CardParent;
+    public List<Transform> CardsInMoveQueue;
+    public Transform MoveQueueSnapPoint;
+
     [Header("Other Scripts")]
     public EnemySpawner EnemySpawn;
-
-    [Space]
-    public int EnemyCount;
-    public int[] EnemyTypesList;
 
     // Start is called before the first frame update
     void Start()
@@ -28,18 +32,15 @@ public class CombatSystem : MonoBehaviour
 
     public void StartCombat(int EnemyAmount, int[] EnemyTypes)
     {
-        Debug.Log("Started Combat");
-
-        EnemyCount = EnemyAmount;
-        EnemyTypesList = EnemyTypes;
-
-        EnemySpawn.SpawnEnemies(EnemyAmount, EnemyTypes);
+        Enemies = EnemySpawn.SpawnEnemies(EnemyAmount, EnemyTypes);
     }
 
     void EndTurn()
     {
         if (PlayerTurn)
         {
+            GetCardsInMoveQueue();
+
             PlayCards();
 
             PlayerTurn = false;
@@ -52,12 +53,62 @@ public class CombatSystem : MonoBehaviour
         }
     }
 
+    void GetCardsInMoveQueue()
+    {
+        CardsInMoveQueue.Clear();
+
+        Transform[] Cards = CardParent.GetComponentsInChildren<Transform>();
+
+        foreach (Transform Card in Cards)
+        {
+            if (Card.position.y == MoveQueueSnapPoint.position.y)
+            {
+                CardsInMoveQueue.Add(Card);
+            }
+        }
+    }
+
     // Called when player has finished their turn, will play each card in the MoveQueue
     void PlayCards()
     {
-        // Get from cards what to do
+        int TotalDamage = 0;
+        int TotalDefence = 0;
 
-        // Do said things to enemies and self
+        // Get from cards what to do
+        foreach (Transform Card in CardsInMoveQueue)
+        {
+            CardStats Stats = Card.GetComponent<CardStats>();
+
+            TotalDamage += Stats.Damage;
+            TotalDefence += Stats.Defence;
+        }
+
+        // Do said things to enemies
+        if (TotalDamage > 0)
+        {
+            
+            foreach (Transform Enemy in Enemies)
+            {
+                HealthSystem HealthSystemScript = Enemy.GetComponent<HealthSystem>();
+
+                if (HealthSystemScript.Health > 0)
+                {
+                    HealthSystemScript.TakeDamage(TotalDamage);
+                }
+            }
+        }
+        
+        // Do said things to self
+        if (TotalDefence > 0)
+        {
+            foreach (Transform Player in Players)
+            {
+                HealthSystem HealthSystemScript = Player.GetComponent<HealthSystem>();
+
+                HealthSystemScript.AddDefence(TotalDefence);
+            }
+        }
+        
     }
 
     // Called when its the enemies turn, they do stuff then

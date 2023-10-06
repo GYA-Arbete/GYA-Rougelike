@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6832063937303308881}
   - component: {fileID: 320063392477199210}
   - component: {fileID: -132755015780792053}
+  - component: {fileID: -6503340893411964690}
   m_Layer: 0
   m_Name: BuffDebuffPrefab
   m_TagString: Untagged
@@ -97,5 +98,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8550f3b1ffb2f354092faeb6ed42ab48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 0
+  HealthMin: 0100000001000000010000000100000001000000
+  HealthMax: 0500000005000000050000000500000005000000
+  DamageMin: 0100000001000000010000000100000001000000
+  DamageMax: 0500000005000000050000000500000005000000
   Damage: 0
+--- !u!114 &-6503340893411964690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2937931500609133139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b3ea4e4f8f36354a88d971bda2e38c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 0
+  Health: 0
+  Defence: 0

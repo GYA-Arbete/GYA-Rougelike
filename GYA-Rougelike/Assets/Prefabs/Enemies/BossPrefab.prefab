@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9125276926176155158}
   - component: {fileID: 7044967318725198515}
   - component: {fileID: -3194196629511693340}
+  - component: {fileID: 8181595412422203377}
   m_Layer: 0
   m_Name: BossPrefab
   m_TagString: Untagged
@@ -97,5 +98,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8550f3b1ffb2f354092faeb6ed42ab48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 0
+  HealthMin: 0100000001000000010000000100000001000000
+  HealthMax: 0500000005000000050000000500000005000000
+  DamageMin: 0100000001000000010000000100000001000000
+  DamageMax: 0500000005000000050000000500000005000000
   Damage: 0
+--- !u!114 &8181595412422203377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4340358545121812255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b3ea4e4f8f36354a88d971bda2e38c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 0
+  Health: 0
+  Defence: 0
