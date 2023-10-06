@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6727934071205778585}
   - component: {fileID: -5731033582394011124}
   - component: {fileID: -8796837482279630970}
+  - component: {fileID: 4494123491760093277}
   m_Layer: 0
   m_Name: CardPrefab
   m_TagString: Untagged
@@ -148,6 +149,22 @@ MonoBehaviour:
   MoveQueueSnapPointsParent: {fileID: 0}
   MoveQueueSnapPoints: []
   SnapPointsDistance: []
+--- !u!114 &4494123491760093277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 541792869356932419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6398ac4e736c915448860883461beb57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Energy: 0
+  Damage: 0
+  Defence: 0
+  Cooldown: 0
 --- !u!1 &5017303827616629465
 GameObject:
   m_ObjectHideFlags: 0
