@@ -2394,9 +2394,10 @@ MonoBehaviour:
   Energy: 0
   PlayerTurn: 1
   EndTurnButton: {fileID: 264480458}
+  CardParent: {fileID: 1788190272}
+  CardsInMoveQueue: []
+  MoveQueueSnapPoint: {fileID: 418957647}
   EnemySpawn: {fileID: 0}
-  EnemyCount: 0
-  EnemyTypesList: 
 --- !u!4 &1103261180
 Transform:
   m_ObjectHideFlags: 0
@@ -3483,6 +3484,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 279262562}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1788190271
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1788190272}
+  m_Layer: 0
+  m_Name: CardHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1788190272
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788190271}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.18333693, y: 0.072919846, z: 0.7384888}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2064234101}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1799097174
 GameObject:
   m_ObjectHideFlags: 0
@@ -3545,10 +3577,11 @@ MonoBehaviour:
   JsonString: {fileID: 4900000, guid: 589ad5f234ba8df4388d0639a890dffb, type: 3}
   CardSpawner: {fileID: 1799097175}
   CardSpawnPoints: []
-  CardsParent: {fileID: 2064234101}
+  CardsParent: {fileID: 1788190272}
   CardPrefab: {fileID: 541792869356932419, guid: 14723156fe6411e45860dd50050686f4, type: 3}
   cardList:
     cardList: []
+  AvailableCards: 0
 --- !u!1 &1803296389
 GameObject:
   m_ObjectHideFlags: 0
@@ -4499,6 +4532,7 @@ Transform:
   - {fileID: 1799097175}
   - {fileID: 509590590}
   - {fileID: 489942777}
+  - {fileID: 1788190272}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2081934848

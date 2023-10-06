@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyStatsGen : MonoBehaviour
@@ -13,14 +11,15 @@ public class EnemyStatsGen : MonoBehaviour
     public int[] DamageMax = { 5, 5, 5, 5, 5 };
 
     [Header("Enemy Stats")]
-    public int Health;
     public int Damage;
 
-    public void GenerateStats(int EnemyType)
+    public void GenerateStats(int EnemyType, Transform Object)
     {
+        HealthSystem HealthSystemScript = Object.GetComponent<HealthSystem>();
+
         System.Random Rand = new();
 
-        Health = Rand.Next(HealthMin[EnemyType], HealthMax[EnemyType]);
+        HealthSystemScript.MaxHealth = Rand.Next(HealthMin[EnemyType], HealthMax[EnemyType]);
         Damage = Rand.Next(DamageMin[EnemyType], DamageMax[EnemyType]);
     }
 }
