@@ -86,7 +86,6 @@ public class CombatSystem : MonoBehaviour
         // Do said things to enemies
         if (TotalDamage > 0)
         {
-            
             foreach (Transform Enemy in Enemies)
             {
                 HealthSystem HealthSystemScript = Enemy.GetComponent<HealthSystem>();
@@ -108,12 +107,44 @@ public class CombatSystem : MonoBehaviour
                 HealthSystemScript.AddDefence(TotalDefence);
             }
         }
-        
     }
 
     // Called when its the enemies turn, they do stuff then
     void EnemyAttack()
     {
+        int TotalDamage = 0;
+        int TotalDefence = 0;
 
+        // Get what to do
+        foreach (Transform Enemy in Enemies)
+        {
+            EnemyStatsGen DamageSystemScript = Enemy.GetComponent<EnemyStatsGen>();
+            TotalDamage += DamageSystemScript.Damage;
+        }
+
+        // Do said things to self
+        if (TotalDefence > 0)
+        {
+            foreach (Transform Enemy in Enemies)
+            {
+                HealthSystem HealthSystemScript = Enemy.GetComponent<HealthSystem>();
+
+                HealthSystemScript.AddDefence(TotalDefence);
+            }
+        }
+
+        // Do said things to players
+        if (TotalDamage > 0)
+        {
+            foreach (Transform Player in Players)
+            {
+                HealthSystem HealthSystemScript = Player.GetComponent<HealthSystem>();
+
+                if (HealthSystemScript.Health > 0)
+                {
+                    HealthSystemScript.TakeDamage(TotalDamage);
+                }
+            }
+        }
     }
 }

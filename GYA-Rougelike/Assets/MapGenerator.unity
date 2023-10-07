@@ -2394,6 +2394,10 @@ MonoBehaviour:
   Energy: 0
   PlayerTurn: 1
   EndTurnButton: {fileID: 264480458}
+  Players:
+  - {fileID: 1090164095}
+  - {fileID: 1945140423}
+  Enemies: []
   CardParent: {fileID: 1788190272}
   CardsInMoveQueue: []
   MoveQueueSnapPoint: {fileID: 418957647}
