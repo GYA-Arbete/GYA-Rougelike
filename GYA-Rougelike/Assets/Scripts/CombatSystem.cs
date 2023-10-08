@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public class CombatSystem : MonoBehaviour
 {
-    public int Energy;
-
     public bool PlayerTurn = true;
 
     public Button EndTurnButton;
+
+    public int Energy;
+    public BarScript EnergyBarScript;
 
     public Transform[] Players;
     public Transform[] Enemies;
@@ -33,6 +34,9 @@ public class CombatSystem : MonoBehaviour
     public void StartCombat(int EnemyAmount, int[] EnemyTypes)
     {
         Enemies = EnemySpawn.SpawnEnemies(EnemyAmount, EnemyTypes);
+
+        // Set back energy to 10 / 10
+        EnergyBarScript.UpdateBar(10, 10);
     }
 
     void EndTurn()
@@ -48,6 +52,9 @@ public class CombatSystem : MonoBehaviour
         else
         {
             EnemyAttack();
+
+            // Set back energy to 10 / 10
+            EnergyBarScript.UpdateBar(10, 10);
 
             PlayerTurn = true;
         }

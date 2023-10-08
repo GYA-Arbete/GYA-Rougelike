@@ -22,6 +22,11 @@ public class PullMapUpDown : MonoBehaviour
     public Transform DontMoveCanvas2;
     public Transform[] DontMoveCanvasElements2;
 
+    [Space]
+
+    public Transform DontMoveCanvas3;
+    public Transform[] DontMoveCanvasElements3;
+
     [Header("Modifiers")]
 
     public float MoveDistance;
@@ -40,6 +45,7 @@ public class PullMapUpDown : MonoBehaviour
         // Put into arrays every element that "shouldnt me moved", eg will be moved won as much as camera is moved up
         DontMoveCanvasElements1 = DontMoveCanvas1.GetComponentsInChildren<Transform>();
         DontMoveCanvasElements2 = DontMoveCanvas2.GetComponentsInChildren<Transform>();
+        DontMoveCanvasElements3 = DontMoveCanvas3.GetComponentsInChildren<Transform>();
 
         // Here we pan the camera upp/down while carying some elements with it
         // We do this since we want simple code and less items to do the math to move
@@ -63,6 +69,8 @@ public class PullMapUpDown : MonoBehaviour
                 }
             }
 
+            DontMoveCanvasElements3[1].position = new Vector3(DontMoveCanvasElements3[1].position.x, DontMoveCanvasElements3[1].position.y - MoveDistance, DontMoveCanvasElements3[1].position.z);
+
             IsDown = true;
         }
         else
@@ -84,6 +92,8 @@ public class PullMapUpDown : MonoBehaviour
                     DontMoveCanvasElements2[i].position = new Vector3(DontMoveCanvasElements2[i].position.x, DontMoveCanvasElements2[i].position.y + MoveDistance, DontMoveCanvasElements2[i].position.z); // * Time.deltaTime
                 }
             }
+
+            DontMoveCanvasElements3[1].position = new Vector3(DontMoveCanvasElements3[1].position.x, DontMoveCanvasElements3[1].position.y + MoveDistance, DontMoveCanvasElements3[1].position.z);
 
             IsDown = false;
         }
