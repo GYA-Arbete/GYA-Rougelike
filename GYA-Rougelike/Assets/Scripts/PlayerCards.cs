@@ -26,10 +26,10 @@ public class PlayerCards : MonoBehaviour
     [System.Serializable]
     public class Cards
     {
-        public int Energy { get; set; }
-        public int Damage { get; set; }
-        public int Defence { get; set; }
-        public int Cooldown { get; set; }
+        public int Energy;
+        public int Damage;
+        public int Defence;
+        public int Cooldown;
     }
 
     // Start is called before the first frame update

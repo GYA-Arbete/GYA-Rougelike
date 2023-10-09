@@ -2,35 +2,35 @@
   "cardList": [
     {
       "ID": 0,
-      "Energy": 0,
+      "Energy": 1,
       "Damage": 0,
       "Defence": 0,
       "Cooldown": 0
     },
     {
       "ID": 1,
-      "Energy": 0,
+      "Energy": 1,
       "Damage": 0,
       "Defence": 0,
       "Cooldown": 0
     },
     {
       "ID": 2,
-      "Energy": 0,
+      "Energy": 1,
       "Damage": 0,
       "Defence": 0,
       "Cooldown": 0
     },
     {
       "ID": 3,
-      "Energy": 0,
+      "Energy": 1,
       "Damage": 0,
       "Defence": 0,
       "Cooldown": 0
     },
     {
       "ID": 4,
-      "Energy": 0,
+      "Energy": 1,
       "Damage": 0,
       "Defence": 0,
       "Cooldown": 0

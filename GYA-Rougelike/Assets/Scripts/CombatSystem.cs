@@ -36,7 +36,7 @@ public class CombatSystem : MonoBehaviour
         Enemies = EnemySpawn.SpawnEnemies(EnemyAmount, EnemyTypes);
 
         // Set back energy to 10 / 10
-        EnergyBarScript.UpdateBar(10, 10);
+        EnergyBarScript.ResetBar();
     }
 
     void EndTurn()
@@ -54,7 +54,7 @@ public class CombatSystem : MonoBehaviour
             EnemyAttack();
 
             // Set back energy to 10 / 10
-            EnergyBarScript.UpdateBar(10, 10);
+            EnergyBarScript.ResetBar();
 
             PlayerTurn = true;
         }

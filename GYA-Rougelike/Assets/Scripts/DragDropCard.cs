@@ -13,6 +13,10 @@ public class DragDropCard : MonoBehaviour
     public Transform[] MoveQueueSnapPoints;
     public double[] SnapPointsDistance;
 
+    [Header("EnergyBar stuff")]
+    public BarScript EnergyBarScript;
+    public CardStats ThisCardsStats;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,11 +33,17 @@ public class DragDropCard : MonoBehaviour
         MoveQueueSnapPoints = MoveQueueSnapPointsParent.GetComponentsInChildren<Transform>();
 
         SnapPointsDistance = new double[MoveQueueSnapPoints.Length - 1];
+
+        EnergyBarScript = FindObjectOfType<BarScript>();
+        ThisCardsStats = GetComponent<CardStats>();
     }
 
     public void OnMouseDown()
     {
         isDragging = true;
+
+        // Update EnergyBar to match
+        EnergyBarScript.UpdateBar(ThisCardsStats.Energy);
     }
 
     public void OnMouseUp()
@@ -48,6 +58,10 @@ public class DragDropCard : MonoBehaviour
             {
                 // Snap to closest point
                 gameObject.transform.position = MoveQueueSnapPoints[i].position;
+
+                // Update EnergyBar to match (Set to negative to reduce TotalEnergy)
+                EnergyBarScript.UpdateBar(-ThisCardsStats.Energy);
+
                 break;
             }
         }
