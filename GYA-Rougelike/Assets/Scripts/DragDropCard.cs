@@ -11,8 +11,12 @@ public class DragDropCard : MonoBehaviour
 
     [Header("Stuff for snapping")]
     public Transform MoveQueueSnapPointsParent;
-    public Transform[] MoveQueueSnapPoints;
+    public Transform CardViewSnapPointsParent;
+    public Transform[] SnapPoints;
     public double[] SnapPointsDistance;
+
+    public Transform[] Temp1;
+    public Transform[] Temp2;
 
     [Header("EnergyBar stuff")]
     public BarScript EnergyBarScript;
@@ -28,12 +32,33 @@ public class DragDropCard : MonoBehaviour
             {
                 GameObject temp2 = (GameObject)temp[i];
                 MoveQueueSnapPointsParent = temp2.transform;
-                break;
+            }
+            else if (temp[i].name == "CardSpawner")
+            {
+                GameObject temp2 = (GameObject)temp[i];
+                CardViewSnapPointsParent = temp2.transform;
             }
         }
-        MoveQueueSnapPoints = MoveQueueSnapPointsParent.GetComponentsInChildren<Transform>();
+        Temp1 = MoveQueueSnapPointsParent.GetComponentsInChildren<Transform>();
+        Temp2 = CardViewSnapPointsParent.GetComponentsInChildren<Transform>();
 
-        SnapPointsDistance = new double[MoveQueueSnapPoints.Length - 1];
+        SnapPoints = new Transform[Temp1.Length + Temp2.Length - 2];
+
+        // Merge these arrays into one
+        // Also remove the parents
+        for (int i = 1; i < Temp1.Length; i++)
+        {
+            SnapPoints[i - 1] = Temp1[i];
+        }
+        for (int i = 1; i < Temp2.Length; i++)
+        {
+            if (Temp2[i].name != "CardSpawner")
+            {
+                SnapPoints[Temp1.Length + i - 2] = Temp2[i];
+            }
+        }
+
+        SnapPointsDistance = new double[SnapPoints.Length];
 
         EnergyBarScript = FindObjectOfType<BarScript>();
         ThisCardsStats = GetComponent<CardStats>();
@@ -58,18 +83,21 @@ public class DragDropCard : MonoBehaviour
 
         // Find closest SnapPoint and snap to it
         double ClosestDistance = SnapPointsDistance.Min();
-        for (int i = 1; i < MoveQueueSnapPoints.Length; i++)
+        for (int i = 0; i < SnapPointsDistance.Length; i++)
         {
-            if (SnapPointsDistance[i - 1] == ClosestDistance)
+            if (SnapPointsDistance[i] == ClosestDistance)
             {
                 // Snap to closest point
-                gameObject.transform.position = MoveQueueSnapPoints[i].position;
+                gameObject.transform.position = SnapPoints[i].position;
 
-                // Update EnergyBar to match (Set to negative to reduce TotalEnergy)
-                EnergyBarScript.UpdateBar(-ThisCardsStats.Energy);
+                if (i < 15)
+                {
+                    // Update EnergyBar to match (Set to negative to reduce TotalEnergy)
+                    EnergyBarScript.UpdateBar(-ThisCardsStats.Energy);
 
-                InMoveQueue = true;
-
+                    InMoveQueue = true;
+                }
+                
                 break;
             }
         }
@@ -82,14 +110,14 @@ public class DragDropCard : MonoBehaviour
         transform.Translate(mousePosition);
 
         // Calculate position to each MoveQueue SnapPoint
-        for (int i = 1; i < MoveQueueSnapPoints.Length; i++)
+        for (int i = 0; i < SnapPointsDistance.Length; i++)
         {
             // Calc delta x & delta y
-            float dX = Math.Abs(gameObject.transform.position.x - MoveQueueSnapPoints[i].position.x);
-            float dY = Math.Abs(gameObject.transform.position.y - MoveQueueSnapPoints[i].position.y);
+            float dX = Math.Abs(gameObject.transform.position.x - SnapPoints[i].position.x);
+            float dY = Math.Abs(gameObject.transform.position.y - SnapPoints[i].position.y);
 
             // Calc actual distance
-            SnapPointsDistance[i - 1] = Math.Sqrt(Math.Pow(dX, 2) + Math.Pow(dY, 2));
+            SnapPointsDistance[i] = Math.Sqrt(Math.Pow(dX, 2) + Math.Pow(dY, 2));
         }
     }
 }
