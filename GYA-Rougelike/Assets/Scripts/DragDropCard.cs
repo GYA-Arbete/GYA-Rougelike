@@ -7,6 +7,7 @@ using System.Linq;
 public class DragDropCard : MonoBehaviour
 {
     public bool isDragging;
+    public bool InMoveQueue;
 
     [Header("Stuff for snapping")]
     public Transform MoveQueueSnapPointsParent;
@@ -42,8 +43,13 @@ public class DragDropCard : MonoBehaviour
     {
         isDragging = true;
 
-        // Update EnergyBar to match
-        EnergyBarScript.UpdateBar(ThisCardsStats.Energy);
+        if (InMoveQueue)
+        {
+            // Update EnergyBar to match
+            EnergyBarScript.UpdateBar(ThisCardsStats.Energy);
+
+            InMoveQueue = false;
+        }
     }
 
     public void OnMouseUp()
@@ -61,6 +67,8 @@ public class DragDropCard : MonoBehaviour
 
                 // Update EnergyBar to match (Set to negative to reduce TotalEnergy)
                 EnergyBarScript.UpdateBar(-ThisCardsStats.Energy);
+
+                InMoveQueue = true;
 
                 break;
             }
