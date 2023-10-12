@@ -3,8 +3,8 @@ using UnityEngine;
 public class EnemyStatsGen : MonoBehaviour
 {
     [Header("Health")]
-    public int[] HealthMin = { 1, 1, 1, 1, 1 };
-    public int[] HealthMax = { 5, 5, 5, 5, 5 };
+    public int[] HealthMin = { 10, 10, 10, 10, 10 };
+    public int[] HealthMax = { 50, 50, 50, 50, 50 };
 
     [Header("Damage")]
     public int[] DamageMin = { 1, 1, 1, 1, 1 };
@@ -13,9 +13,9 @@ public class EnemyStatsGen : MonoBehaviour
     [Header("Enemy Stats")]
     public int Damage;
 
-    public void GenerateStats(int EnemyType, Transform Object)
+    public void GenerateStats(int EnemyType)
     {
-        HealthSystem HealthSystemScript = Object.GetComponent<HealthSystem>();
+        HealthSystem HealthSystemScript = gameObject.GetComponent<HealthSystem>();
 
         System.Random Rand = new();
 

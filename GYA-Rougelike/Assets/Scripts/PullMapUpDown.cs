@@ -34,14 +34,31 @@ public class PullMapUpDown : MonoBehaviour
     // Private as it's not helpful to see in editor but declared here so everything in script can access it
     private bool IsDown = true;
 
+    public Camera MapViewCamera;
+    public Camera RoomViewCamera;
+
     // Start is called before the first frame update
     void Start()
     {
         PullMapUpDownButton.onClick.AddListener(MapUpDown);
+
+        RoomViewCamera.enabled = false;
     }
 
     public void MapUpDown()
     {
+        if (MapViewCamera.enabled == true)
+        {
+            MapViewCamera.enabled = false;
+            RoomViewCamera.enabled = true;
+        }
+        else
+        {
+            MapViewCamera.enabled = true;
+            RoomViewCamera.enabled = false;
+        }
+
+        /*
         // Put into arrays every element that "shouldnt me moved", eg will be moved won as much as camera is moved up
         DontMoveCanvasElements1 = DontMoveCanvas1.GetComponentsInChildren<Transform>();
         DontMoveCanvasElements2 = DontMoveCanvas2.GetComponentsInChildren<Transform>();
@@ -97,5 +114,6 @@ public class PullMapUpDown : MonoBehaviour
 
             IsDown = false;
         }
+        */
     }
 }
