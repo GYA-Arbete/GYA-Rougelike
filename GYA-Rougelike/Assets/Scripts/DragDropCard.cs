@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class DragDropCard : MonoBehaviour
 {
+    public Camera RoomViewCamera;
+
     public bool isDragging;
     public bool InMoveQueue;
 
@@ -37,6 +40,10 @@ public class DragDropCard : MonoBehaviour
             {
                 GameObject temp2 = (GameObject)temp[i];
                 CardViewSnapPointsParent = temp2.transform;
+            }
+            else if (temp[i].name == "RoomViewCamera")
+            {
+                RoomViewCamera = temp[i].GetComponent<Camera>();
             }
         }
         Temp1 = MoveQueueSnapPointsParent.GetComponentsInChildren<Transform>();
@@ -106,7 +113,7 @@ public class DragDropCard : MonoBehaviour
     public void OnMouseDrag()
     {
         // Update sprite position
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        Vector2 mousePosition = RoomViewCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         transform.Translate(mousePosition);
 
         // Calculate position to each MoveQueue SnapPoint
