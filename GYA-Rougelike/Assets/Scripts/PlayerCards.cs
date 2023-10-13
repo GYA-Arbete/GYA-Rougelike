@@ -8,6 +8,7 @@ public class PlayerCards : MonoBehaviour
 
     public Transform CardSpawner;
     public Transform[] CardSpawnPoints;
+    public GameObject[] SpawnedCards;
 
     public Transform CardsParent;
 
@@ -48,8 +49,21 @@ public class PlayerCards : MonoBehaviour
         SpawnCards();
     }
 
+    public void ResetCards()
+    {
+        // Remove cards
+        foreach (GameObject Card in SpawnedCards)
+        {
+            Destroy(Card);
+        }
+
+        SpawnCards();
+    }
+
     void SpawnCards()
     {
+        SpawnedCards = new GameObject[AvailableCards];
+
         // i = 1 eftersom den ska ingorera parent
         for (int i = 1; i < AvailableCards + 1; i++)
         {
@@ -60,6 +74,8 @@ public class PlayerCards : MonoBehaviour
             // Assign values to each created card
             CardStats CardStatsScript = Card.GetComponent<CardStats>();
             CardStatsScript.AssignValues(cardList.cardList[i - 1].Energy, cardList.cardList[i - 1].Damage, cardList.cardList[i - 1].Defence, cardList.cardList[i - 1].Cooldown);
+
+            SpawnedCards[i - 1] = Card;
         }
     }
 }

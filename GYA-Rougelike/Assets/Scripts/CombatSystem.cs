@@ -22,13 +22,12 @@ public class CombatSystem : MonoBehaviour
 
     [Header("Other Scripts")]
     public EnemySpawner EnemySpawn;
+    public PlayerCards CardScript;
 
     // Start is called before the first frame update
     void Start()
     {
         EndTurnButton.onClick.AddListener(EndTurn);
-
-        EnemySpawn = FindObjectOfType<EnemySpawner>();
     }
 
     public void StartCombat(int EnemyAmount, int[] EnemyTypes)
@@ -46,6 +45,8 @@ public class CombatSystem : MonoBehaviour
             GetCardsInMoveQueue();
 
             PlayCards();
+
+            CardScript.ResetCards();
 
             PlayerTurn = false;
         }
