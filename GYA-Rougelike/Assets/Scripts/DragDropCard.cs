@@ -45,6 +45,10 @@ public class DragDropCard : MonoBehaviour
             {
                 RoomViewCamera = temp[i].GetComponent<Camera>();
             }
+            else if (temp[i].name == "EnergyBar")
+            {
+                EnergyBarScript = temp[i].GetComponent<BarScript>();
+            }
         }
         Temp1 = MoveQueueSnapPointsParent.GetComponentsInChildren<Transform>();
         Temp2 = CardViewSnapPointsParent.GetComponentsInChildren<Transform>();
@@ -67,7 +71,6 @@ public class DragDropCard : MonoBehaviour
 
         SnapPointsDistance = new double[SnapPoints.Length];
 
-        EnergyBarScript = FindObjectOfType<BarScript>();
         ThisCardsStats = GetComponent<CardStats>();
     }
 
