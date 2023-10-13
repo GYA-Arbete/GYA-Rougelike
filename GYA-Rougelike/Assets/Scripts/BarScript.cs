@@ -24,6 +24,8 @@ public class BarScript : MonoBehaviour
 
     public void SetupBar(int MaxVal)
     {
+        Slider = gameObject.GetComponent<Slider>();
+
         MaxValue = MaxVal;
 
         ResetBar();
@@ -33,8 +35,8 @@ public class BarScript : MonoBehaviour
     {
         CurrentValue = MaxValue;
 
-        //Slider.maxValue = MaxValue;
-        //Slider.value = CurrentValue;
+        Slider.maxValue = MaxValue;
+        Slider.value = CurrentValue;
 
         Text.text = $"{CurrentValue} / {MaxValue}";
     }
