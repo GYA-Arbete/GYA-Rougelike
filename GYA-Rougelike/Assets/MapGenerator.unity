@@ -5243,7 +5243,36 @@ MonoBehaviour:
   Slider: {fileID: 0}
   CurrentValue: 0
   MaxValue: 10
-  FillColor: {r: 0.9882353, g: 0.80784315, b: 0.32156864, a: 0}
+  FillGradient:
+    serializedVersion: 2
+    key0: {r: 0.9882353, g: 0.80784315, b: 0.32156864, a: 1}
+    key1: {r: 0.9882353, g: 0.80784315, b: 0.32156864, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
   Fill: {fileID: 7283540960226986954}
 --- !u!224 &1874822680107745312
 RectTransform:
@@ -5265,7 +5294,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -712, y: -245}
+  m_AnchoredPosition: {x: -743, y: -273}
   m_SizeDelta: {x: 400, y: 74.975}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2478197497596563515

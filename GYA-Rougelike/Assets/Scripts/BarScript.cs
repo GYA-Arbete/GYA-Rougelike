@@ -14,7 +14,7 @@ public class BarScript : MonoBehaviour
     public int MaxValue;
 
     [Header("Stuff for showing BarValue")]
-    public Color FillColor;
+    public Gradient FillGradient;
     public Image Fill;
 
     private void Start()
@@ -27,7 +27,14 @@ public class BarScript : MonoBehaviour
         Slider = gameObject.GetComponent<Slider>();
 
         MaxValue = MaxVal;
-        FillColor = Color;
+
+        GradientColorKey[] GradientColor = new GradientColorKey[1];
+        GradientColor[0] = new GradientColorKey(Color, 0.0f);
+
+        GradientAlphaKey[] Alpha = new GradientAlphaKey[1];
+        Alpha[0] = new GradientAlphaKey(0.0f, 1.0f);
+
+        FillGradient.SetKeys(GradientColor, Alpha);
 
         ResetBar();
     }
@@ -55,7 +62,7 @@ public class BarScript : MonoBehaviour
 
         Slider.value = CurrentValue;
 
-        Fill.color = FillColor;
+        Fill.color = FillGradient.Evaluate(Slider.normalizedValue); ;
 
         Text.text = $"{CurrentValue} / {MaxValue}";
     }
