@@ -1808,14 +1808,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PullMapUpDownButton: {fileID: 1205830421}
-  MainCamera: {fileID: 519420032}
-  DontMoveCanvas1: {fileID: 72757724}
-  DontMoveCanvasElements1: []
-  DontMoveCanvas2: {fileID: 174403698}
-  DontMoveCanvasElements2: []
-  DontMoveCanvas3: {fileID: 1210741372}
-  DontMoveCanvasElements3: []
-  MoveDistance: 9.45
   MapViewCamera: {fileID: 519420031}
   RoomViewCamera: {fileID: 1351606603}
 --- !u!1 &686461444
@@ -2362,6 +2354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1090164095}
   - component: {fileID: 1090164096}
+  - component: {fileID: 1090164097}
   m_Layer: 0
   m_Name: Player 1
   m_TagString: Untagged
@@ -2436,6 +2429,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1090164097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1090164094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b3ea4e4f8f36354a88d971bda2e38c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 0
+  Health: 0
+  Defence: 0
 --- !u!1 &1103261178
 GameObject:
   m_ObjectHideFlags: 0
@@ -4186,6 +4194,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1945140423}
   - component: {fileID: 1945140424}
+  - component: {fileID: 1945140425}
   m_Layer: 0
   m_Name: Player 2
   m_TagString: Untagged
@@ -4260,6 +4269,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1945140425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1945140422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b3ea4e4f8f36354a88d971bda2e38c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 0
+  Health: 0
+  Defence: 0
 --- !u!1 &1959612796
 GameObject:
   m_ObjectHideFlags: 0
