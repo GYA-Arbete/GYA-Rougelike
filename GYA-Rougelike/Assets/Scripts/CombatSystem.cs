@@ -34,6 +34,8 @@ public class CombatSystem : MonoBehaviour
     {
         Enemies = EnemySpawn.SpawnEnemies(EnemyAmount, EnemyTypes);
 
+        PlayerTurn = true;
+
         // Set back energy to 10 / 10
         EnergyBarScript.ResetBar();
     }
@@ -49,6 +51,9 @@ public class CombatSystem : MonoBehaviour
             CardScript.ResetCards();
 
             PlayerTurn = false;
+
+            // Call EndTurn so the enemies takes their turn to do stuff
+            EndTurn();
         }
         else
         {

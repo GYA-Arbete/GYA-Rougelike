@@ -9,9 +9,14 @@ public class HealthSystem : MonoBehaviour
     public int Health;
     public int Defence = 0;
 
-    // Called when restarting the map (only for players)
-    void Restart()
+    [Header("HealthBar Stuff")]
+    public BarScript HealthBarScript;
+
+    // Called when spawning Players
+    public void SetHealth(BarScript Script)
     {
+        HealthBarScript = Script;
+
         Health = MaxHealth;
         Defence = 0;
     }
@@ -29,12 +34,15 @@ public class HealthSystem : MonoBehaviour
             if (Defence < 0)
             {
                 Health -= Math.Abs(Defence);
+                HealthBarScript.UpdateBar(-Math.Abs(Defence));
+
                 Defence = 0;
             }
         }
         else
         {
             Health -= Damage;
+            HealthBarScript.UpdateBar(-Damage);
         }
 
         if (Health  <= 0)

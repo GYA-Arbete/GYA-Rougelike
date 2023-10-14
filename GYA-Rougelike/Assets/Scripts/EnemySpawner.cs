@@ -49,6 +49,9 @@ public class EnemySpawner : MonoBehaviour
             // Set values of said HealthBar
             BarScript HealthBarScript = HealthBar.GetComponent<BarScript>();
             HealthBarScript.SetupBar(HealthSystemScript.MaxHealth, Color.red);
+
+            // Setup HealthSystem
+            HealthSystemScript.SetHealth(HealthBarScript);
         }
 
         return Enemies;

@@ -32,7 +32,7 @@ public class BarScript : MonoBehaviour
         GradientColor[0] = new GradientColorKey(Color, 0.0f);
 
         GradientAlphaKey[] Alpha = new GradientAlphaKey[1];
-        Alpha[0] = new GradientAlphaKey(0.0f, 1.0f);
+        Alpha[0] = new GradientAlphaKey(1.0f, 0.0f);
 
         FillGradient.SetKeys(GradientColor, Alpha);
 
