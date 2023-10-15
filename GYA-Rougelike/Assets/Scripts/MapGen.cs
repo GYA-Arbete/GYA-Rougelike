@@ -1,17 +1,10 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MapGen : MonoBehaviour
 {
     // Fancy formating stuff for Inspector
-    [Header("Buttons")]
-
-    public Button GenerateButton;
-    public Button ClearMapButton;
-
-    [Space]
     [Header("Map Room Stuff")]
 
     public Transform MapRoomPrefabParent;
@@ -37,15 +30,11 @@ public class MapGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GenerateButton.onClick.AddListener(GenerateMapBtnPressed);
-
-        ClearMapButton.onClick.AddListener(ClearMapBtnPressed);
-
         // Put parent + children into array
         SpawnPoints = GetComponentsInChildren<Transform>();
     }
 
-    void GenerateMapBtnPressed()
+    public void GenerateMapBtnPressed()
     {
         StartCoroutine(CreateMap());
     }
@@ -62,11 +51,6 @@ public class MapGen : MonoBehaviour
         GenerateRooms();
 
         GeneratePaths();
-    }
-
-    void ClearMapBtnPressed()
-    {
-        DeleteMap();
     }
 
     // Function for deleting all elements of previously generated map

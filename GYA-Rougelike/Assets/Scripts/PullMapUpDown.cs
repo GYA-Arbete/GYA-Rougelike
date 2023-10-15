@@ -10,6 +10,8 @@ public class PullMapUpDown : MonoBehaviour
     public Camera MapViewCamera;
     public Camera RoomViewCamera;
 
+    public Canvas PauseMenu;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,11 +26,15 @@ public class PullMapUpDown : MonoBehaviour
         {
             MapViewCamera.enabled = false;
             RoomViewCamera.enabled = true;
+
+            PauseMenu.worldCamera = RoomViewCamera;
         }
         else
         {
             MapViewCamera.enabled = true;
             RoomViewCamera.enabled = false;
+
+            PauseMenu.worldCamera = MapViewCamera;
         }
     }
 }

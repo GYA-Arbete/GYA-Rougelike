@@ -1,0 +1,63 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class PauseMenu : MonoBehaviour
+{
+    public bool IsPaused = false;
+
+    public GameObject PauseMenuCanvas;
+
+    public Button UnpauseButton;
+    public Button RestartButton;
+    public Button MainMenuButton;
+
+    public MapGen MapGenScript;
+
+    void Start()
+    {
+        UnpauseButton.onClick.AddListener(Unpause);
+        RestartButton.onClick.AddListener(Restart);
+        MainMenuButton.onClick.AddListener(ToMainMenu);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            if (!IsPaused)
+            {
+                Pause();
+            }
+            else
+            {
+                Unpause();
+            }
+        }
+    }
+
+    void Pause()
+    {
+        PauseMenuCanvas.SetActive(true);
+        IsPaused = true;
+    }
+
+    void Unpause()
+    {
+        PauseMenuCanvas.SetActive(false);
+        IsPaused = false;
+    }
+
+    void Restart()
+    {
+        MapGenScript.GenerateMapBtnPressed();
+
+        Unpause();
+    }
+
+    void ToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+}
