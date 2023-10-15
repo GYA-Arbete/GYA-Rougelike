@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerCards : MonoBehaviour
@@ -38,10 +39,7 @@ public class PlayerCards : MonoBehaviour
     {
         cardList = JsonUtility.FromJson<CardList>(JsonString.text);
 
-        foreach (Cards card in cardList.cardList)
-        {
-            AvailableCards++;
-        }
+        AvailableCards = cardList.cardList.Count;
 
         // Put parent + children into array
         CardSpawnPoints = GetComponentsInChildren<Transform>();
@@ -74,6 +72,17 @@ public class PlayerCards : MonoBehaviour
             // Assign values to each created card
             CardStats CardStatsScript = Card.GetComponent<CardStats>();
             CardStatsScript.AssignValues(cardList.cardList[i - 1].Energy, cardList.cardList[i - 1].Damage, cardList.cardList[i - 1].Defence, cardList.cardList[i - 1].Cooldown);
+
+            // Set text for the card-sprite
+            Transform[] TextBoxes = Card.GetComponentsInChildren<Transform>();
+            foreach (Transform TextBox in TextBoxes)
+            {
+                TextMeshProUGUI Text = TextBox.GetComponent<TextMeshProUGUI>();
+                if (Text != null)
+                {
+                    Text.text = cardList.cardList[i - 1].Energy.ToString();
+                }
+            }
 
             SpawnedCards[i - 1] = Card;
         }
