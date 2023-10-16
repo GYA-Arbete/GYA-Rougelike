@@ -24,17 +24,27 @@ public class PullMapUpDown : MonoBehaviour
     {
         if (MapViewCamera.enabled == true)
         {
-            MapViewCamera.enabled = false;
-            RoomViewCamera.enabled = true;
-
-            PauseMenu.worldCamera = RoomViewCamera;
+            SetViewRoom();
         }
         else
         {
-            MapViewCamera.enabled = true;
-            RoomViewCamera.enabled = false;
-
-            PauseMenu.worldCamera = MapViewCamera;
+            SetViewMap();
         }
+    }
+
+    public void SetViewRoom()
+    {
+        MapViewCamera.enabled = false;
+        RoomViewCamera.enabled = true;
+
+        PauseMenu.worldCamera = RoomViewCamera;
+    }
+
+    public void SetViewMap()
+    {
+        MapViewCamera.enabled = true;
+        RoomViewCamera.enabled = false;
+
+        PauseMenu.worldCamera = MapViewCamera;
     }
 }

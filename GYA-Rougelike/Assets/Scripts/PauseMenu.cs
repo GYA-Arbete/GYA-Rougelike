@@ -12,7 +12,9 @@ public class PauseMenu : MonoBehaviour
     public Button RestartButton;
     public Button MainMenuButton;
 
+    [Header("Other Scripts")]
     public MapGen MapGenScript;
+    public StartRoom StartRoomScript;
 
     void Start()
     {
@@ -52,6 +54,8 @@ public class PauseMenu : MonoBehaviour
     void Restart()
     {
         MapGenScript.GenerateMapBtnPressed();
+
+        StartRoomScript.EnterStartRoom();
 
         Unpause();
     }

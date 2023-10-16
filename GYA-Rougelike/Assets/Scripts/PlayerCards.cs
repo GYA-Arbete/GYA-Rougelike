@@ -11,6 +11,8 @@ public class PlayerCards : MonoBehaviour
     public Transform[] CardSpawnPoints;
     public GameObject[] SpawnedCards;
 
+    public Sprite[] CardSprites;
+
     public Transform CardsParent;
 
     public GameObject CardPrefab;
@@ -72,6 +74,17 @@ public class PlayerCards : MonoBehaviour
             // Assign values to each created card
             CardStats CardStatsScript = Card.GetComponent<CardStats>();
             CardStatsScript.AssignValues(cardList.cardList[i - 1].Energy, cardList.cardList[i - 1].Damage, cardList.cardList[i - 1].Defence, cardList.cardList[i - 1].Cooldown);
+
+            // Change the cards image
+            SpriteRenderer CardImage = Card.GetComponent<SpriteRenderer>();
+            if (cardList.cardList[i - 1].Damage  > 0)
+            {
+                CardImage.sprite = CardSprites[0];
+            }
+            else if (cardList.cardList[i - 1].Defence > 0)
+            {
+                CardImage.sprite = CardSprites[1];
+            }
 
             // Set text for the card-sprite
             Transform[] TextBoxes = Card.GetComponentsInChildren<Transform>();

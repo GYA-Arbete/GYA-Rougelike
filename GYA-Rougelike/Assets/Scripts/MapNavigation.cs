@@ -4,7 +4,6 @@ using System;
 
 public class MapNavigation : MonoBehaviour
 {
-    public Transform MainCamera;
     public Button ExitRoomButton;
     public int RoomType;
     
@@ -26,8 +25,6 @@ public class MapNavigation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MainCamera = Camera.main.transform;
-
         button = GetComponent<Button>();
         button.onClick.AddListener(EnterRoom);
 
@@ -40,7 +37,6 @@ public class MapNavigation : MonoBehaviour
                 ExitRoomButton = temp2.GetComponent<Button>();
                 break;
             }
-            
         }
         ExitRoomButton.onClick.AddListener(ExitRoom);
 

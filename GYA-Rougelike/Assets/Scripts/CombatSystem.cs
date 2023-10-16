@@ -8,12 +8,16 @@ public class CombatSystem : MonoBehaviour
     public bool PlayerTurn = true;
 
     public Button EndTurnButton;
+    public Button ExitRoomButton;
 
     public int Energy;
     public BarScript EnergyBarScript;
 
     public Transform[] Players;
     public Transform[] Enemies;
+
+    [Header("CombatRoom-Exclusive Elements")]
+    public GameObject[] CombatRoomElements;
 
     [Header("Stuff for checking card position")]
     public Transform CardParent;
@@ -28,16 +32,30 @@ public class CombatSystem : MonoBehaviour
     void Start()
     {
         EndTurnButton.onClick.AddListener(EndTurn);
+
+        ExitRoomButton.onClick.AddListener(EndCombat);
     }
 
     public void StartCombat(int EnemyAmount, int[] EnemyTypes)
     {
+        foreach (GameObject Element in CombatRoomElements)
+        {
+            Element.SetActive(true);
+        }
+
         Enemies = EnemySpawn.SpawnEnemies(EnemyAmount, EnemyTypes);
 
         PlayerTurn = true;
 
-        // Set back energy to 10 / 10
-        EnergyBarScript.ResetBar();
+        EnergyBarScript.SetupBar(10, new Color32(252, 206, 82, 255));
+    }
+
+    void EndCombat()
+    {
+        foreach (GameObject Element in CombatRoomElements)
+        {
+            Element.SetActive(false);
+        }
     }
 
     void EndTurn()
@@ -74,7 +92,8 @@ public class CombatSystem : MonoBehaviour
 
         foreach (Transform Card in Cards)
         {
-            if (Card.position.y == MoveQueueSnapPoint.position.y)
+            // If in MoveQueue and is the card itself, not attached text
+            if (Card.position.y == MoveQueueSnapPoint.position.y && Card.GetComponent<CardStats>() != null)
             {
                 CardsInMoveQueue.Add(Card);
             }
