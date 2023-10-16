@@ -55,5 +55,8 @@ public class HealthSystem : MonoBehaviour
     {
         // Removes self
         Destroy(gameObject);
+
+        // Removes the attached HealthBar
+        Destroy(HealthBarScript.gameObject);
     }
 }
