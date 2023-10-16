@@ -16,6 +16,8 @@ public class StartRoom : MonoBehaviour
         ChoiceButtons[0].onClick.AddListener(Choose1);
         ChoiceButtons[1].onClick.AddListener(Choose2);
         ChoiceButtons[2].onClick.AddListener(Choose3);
+
+        EnterStartRoom();
     }
 
     public void EnterStartRoom()

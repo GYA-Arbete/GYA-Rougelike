@@ -32,6 +32,8 @@ public class MapGen : MonoBehaviour
     {
         // Put parent + children into array
         SpawnPoints = GetComponentsInChildren<Transform>();
+
+        StartCoroutine(CreateMap());
     }
 
     public void GenerateMapBtnPressed()
