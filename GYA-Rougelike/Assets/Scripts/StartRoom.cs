@@ -46,6 +46,13 @@ public class StartRoom : MonoBehaviour
         CardsInventory = new CardInventory.CardList();
         CardsInventory = JsonUtility.FromJson<CardInventory.CardList>(CardInventoryJson.text);
 
+        // Add the 5 starting cards to CardInventory
+        CardsInventory.cardList.Add(CardTypes.cardList[0]);
+        CardsInventory.cardList.Add(CardTypes.cardList[0]);
+        CardsInventory.cardList.Add(CardTypes.cardList[0]);
+        CardsInventory.cardList.Add(CardTypes.cardList[1]);
+        CardsInventory.cardList.Add(CardTypes.cardList[1]);
+
         foreach (GameObject Element in ElementsToHide)
         {
             Element.SetActive(false);

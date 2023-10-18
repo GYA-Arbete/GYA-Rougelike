@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class CardInventory : MonoBehaviour
 {
@@ -68,20 +69,21 @@ public class CardInventory : MonoBehaviour
     {
         InventoryBox.SetActive(true);
 
-        // Update the CardList
-        // Inventory = new CardList();
-        // Inventory = JsonUtility.FromJson<CardList>(JsonFile.text);
-
         // Clear SpawnedCars list
         SpawnedCards = new List<GameObject>();
 
         // Spawn cards
         for (int i = 0; i < Inventory.cardList.Count; i++)
         {
+            // Calculate the Y-Offset, rounded down to closest int
+            // This means it increases by one every 5 "loops"
+            Decimal Division = i / 5;
+            Decimal YOffset = Decimal.Truncate(Division);
+
             // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
             // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
             // Running (i Modulo 5) since every 5th value it should jump down, so 0, 1, 2, 3, 4 then back to 0
-            GameObject Card = Instantiate(CardPrefab, new Vector3(Row1SpawnPoints[i % 5].position.x, Row1SpawnPoints[i % 5].position.y, Row1SpawnPoints[i % 5].position.z), new Quaternion(0, 0, 0, 0), CardParent);
+            GameObject Card = Instantiate(CardPrefab, new Vector3(Row1SpawnPoints[i % 5].position.x, Row1SpawnPoints[i % 5].position.y - ((float)YOffset * 3.7f), Row1SpawnPoints[i % 5].position.z), new Quaternion(0, 0, 0, 0), CardParent);
             Card.transform.localScale = new Vector3(2, 2, 0);
 
             // Remove attached scripts
