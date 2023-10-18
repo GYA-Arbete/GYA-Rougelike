@@ -8,6 +8,8 @@ public class StartRoom : MonoBehaviour
     public GameObject StartChoice;
     public Button[] ChoiceButtons;
 
+    public Sprite[] CardSprites;
+
     public PullMapUpDown ViewSwitchScript;
 
     // Start is called before the first frame update
@@ -25,6 +27,12 @@ public class StartRoom : MonoBehaviour
         foreach (GameObject Element in ElementsToHide)
         {
             Element.SetActive(false);
+        }
+
+        System.Random Rand = new();
+        foreach (Button Button in ChoiceButtons)
+        {
+            Button.gameObject.GetComponent<Image>().sprite = CardSprites[Rand.Next(0, 7)];
         }
 
         StartChoice.SetActive(true);
