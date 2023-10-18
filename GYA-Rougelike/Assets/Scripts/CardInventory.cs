@@ -14,7 +14,7 @@ public class CardInventory : MonoBehaviour
     public GameObject InventoryBox;
 
     [Header("CardInventory.json Stuff")]
-    public CardList cardList;
+    public CardList Inventory;
     public TextAsset JsonFile;
 
     [Header("CardSpawning stuff")]
@@ -44,6 +44,11 @@ public class CardInventory : MonoBehaviour
         CardInventoryButton.onClick.AddListener(SwitchInventory);
     }
 
+    public void UpdateInventory(CardList List)
+    {
+        Inventory = List;
+    }
+
     void SwitchInventory()
     {
         if (InventoryOpen)
@@ -64,14 +69,14 @@ public class CardInventory : MonoBehaviour
         InventoryBox.SetActive(true);
 
         // Update the CardList
-        cardList = new CardList();
-        cardList = JsonUtility.FromJson<CardList>(JsonFile.text);
+        // Inventory = new CardList();
+        // Inventory = JsonUtility.FromJson<CardList>(JsonFile.text);
 
         // Clear SpawnedCars list
         SpawnedCards = new List<GameObject>();
 
         // Spawn cards
-        for (int i = 0; i < cardList.cardList.Count; i++)
+        for (int i = 0; i < Inventory.cardList.Count; i++)
         {
             // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
             // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);

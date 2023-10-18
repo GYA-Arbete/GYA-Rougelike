@@ -874,7 +874,7 @@ MonoBehaviour:
   CardInventoryButton: {fileID: 184234080}
   CardInventoryArray: []
   InventoryBox: {fileID: 1444912103}
-  cardList:
+  Inventory:
     cardList: []
   JsonFile: {fileID: 4900000, guid: 589ad5f234ba8df4388d0639a890dffb, type: 3}
   CardParent: {fileID: 1027766261}
@@ -1989,6 +1989,13 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a3d6a385bf4235740ae066729b597727, type: 3}
   - {fileID: 21300000, guid: a3d6a385bf4235740ae066729b597727, type: 3}
   ViewSwitchScript: {fileID: 679690435}
+  CardTypesJson: {fileID: 4900000, guid: c91cfe2f92e525c4895daec664eaa5d9, type: 3}
+  CardTypes:
+    cardList: []
+  CardInventoryJson: {fileID: 4900000, guid: 589ad5f234ba8df4388d0639a890dffb, type: 3}
+  CardsInventory:
+    cardList: []
+  Inventory: {fileID: 399353178}
 --- !u!1 &686461444
 GameObject:
   m_ObjectHideFlags: 0

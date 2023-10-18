@@ -13,26 +13,26 @@ public class StartRoom : MonoBehaviour
 
     public PullMapUpDown ViewSwitchScript;
 
-    public CardList CardInventory;
+    // Array for remembering which card is generated for each button
+    private int[] CardIndex = new int[3];
 
-    [System.Serializable]
-    public class CardList
-    {
-        public List<Cards> cardList;
-    }
+    [Header("CardTypesJson")]
+    public TextAsset CardTypesJson;
+    public CardInventory.CardList CardTypes;
 
-    [System.Serializable]
-    public class Cards
-    {
-        public int Energy;
-        public int Damage;
-        public int Defence;
-        public int Cooldown;
-    }
+    [Header("Cards Inventory")]
+    public TextAsset CardInventoryJson;
+    public CardInventory.CardList CardsInventory;
+
+    [Header("Other Scripts")]
+    public CardInventory Inventory;
 
     // Start is called before the first frame update
     void Start()
     {
+        // Get all card-types
+        CardTypes = JsonUtility.FromJson<CardInventory.CardList>(CardTypesJson.text);
+
         ChoiceButtons[0].onClick.AddListener(Choose1);
         ChoiceButtons[1].onClick.AddListener(Choose2);
         ChoiceButtons[2].onClick.AddListener(Choose3);
@@ -42,15 +42,22 @@ public class StartRoom : MonoBehaviour
 
     public void EnterStartRoom()
     {
+        // Reset Card Inventory when re-starting the map / game
+        CardsInventory = new CardInventory.CardList();
+        CardsInventory = JsonUtility.FromJson<CardInventory.CardList>(CardInventoryJson.text);
+
         foreach (GameObject Element in ElementsToHide)
         {
             Element.SetActive(false);
         }
 
         System.Random Rand = new();
-        foreach (Button Button in ChoiceButtons)
+        for (int i = 0; i < ChoiceButtons.Length; i++)
         {
-            Button.gameObject.GetComponent<Image>().sprite = CardSprites[Rand.Next(0, 7)];
+            int ChosenCard = Rand.Next(0, 7);
+
+            ChoiceButtons[i].gameObject.GetComponent<Image>().sprite = CardSprites[ChosenCard];
+            CardIndex[i] = ChosenCard;
         }
 
         StartChoice.SetActive(true);
@@ -60,6 +67,9 @@ public class StartRoom : MonoBehaviour
 
     void ExitStartRoom()
     {
+        // Give the new card inventory to CardInventory.cs for easier acces from other scripts 
+        Inventory.UpdateInventory(CardsInventory);
+
         foreach (GameObject Element in ElementsToHide)
         {
             Element.SetActive(true);
@@ -72,19 +82,25 @@ public class StartRoom : MonoBehaviour
 
     void Choose1()
     {
-        Debug.Log("Chooooose 1");
+        // Add the selected card to CardInventory
+        CardsInventory.cardList.Add(CardTypes.cardList[CardIndex[0]]);
+
         ExitStartRoom();
     }
 
     void Choose2()
     {
-        Debug.Log("Chooooose 2");
+        // Add the selected card to CardInventory
+        CardsInventory.cardList.Add(CardTypes.cardList[CardIndex[1]]);
+
         ExitStartRoom();
     }
 
     void Choose3()
     {
-        Debug.Log("Chooooose 3");
+        // Add the selected card to CardInventory
+        CardsInventory.cardList.Add(CardTypes.cardList[CardIndex[2]]);
+
         ExitStartRoom();
     }
 }
