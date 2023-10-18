@@ -2,6 +2,7 @@
   "cardList": [
     {
       "ID": 0,
+      "Name": "Slash",
       "Energy": 1,
       "Damage": 0,
       "Defence": 0,
@@ -9,6 +10,7 @@
     },
     {
       "ID": 1,
+      "Name": "Block",
       "Energy": 1,
       "Damage": 0,
       "Defence": 0,
@@ -16,6 +18,7 @@
     },
     {
       "ID": 2,
+      "Name": "Reflexes",
       "Energy": 1,
       "Damage": 0,
       "Defence": 0,
@@ -23,6 +26,7 @@
     },
     {
       "ID": 3,
+      "Name": "Cleave",
       "Energy": 1,
       "Damage": 0,
       "Defence": 0,
@@ -30,6 +34,23 @@
     },
     {
       "ID": 4,
+      "Name": "Bash",
+      "Energy": 1,
+      "Damage": 0,
+      "Defence": 0,
+      "Cooldown": 0
+    },
+    {
+      "ID": 5,
+      "Name": "Adrenaline",
+      "Energy": 1,
+      "Damage": 0,
+      "Defence": 0,
+      "Cooldown": 0
+    },
+    {
+      "ID": 6,
+      "Name": "Surge",
       "Energy": 1,
       "Damage": 0,
       "Defence": 0,
