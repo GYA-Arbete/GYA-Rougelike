@@ -79,6 +79,10 @@ public class CardInventory : MonoBehaviour
             GameObject Card = Instantiate(CardPrefab, new Vector3(Row1SpawnPoints[i % 5].position.x, Row1SpawnPoints[i % 5].position.y, Row1SpawnPoints[i % 5].position.z), new Quaternion(0, 0, 0, 0), CardParent);
             Card.transform.localScale = new Vector3(2, 2, 0);
 
+            // Remove attached scripts
+            Destroy(Card.GetComponent<DragDropCard>());
+            Destroy(Card.GetComponent<CardStats>());
+
             SpawnedCards.Add(Card);
         }
     }
