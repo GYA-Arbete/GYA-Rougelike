@@ -89,14 +89,9 @@ public class CardInventory : MonoBehaviour
             // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
             // Running (i Modulo 5) since every 5th value it should jump down, so 0, 1, 2, 3, 4 then back to 0
             GameObject Card = Instantiate(CardPrefab, new Vector3(Row1SpawnPoints[i % 5].position.x, Row1SpawnPoints[i % 5].position.y - ((float)YOffset * 3.7f), Row1SpawnPoints[i % 5].position.z), new Quaternion(0, 0, 0, 0), CardParent);
-            Card.transform.localScale = new Vector3(2, 2, 0);
 
             // Set image of said Card
-            Card.GetComponent<SpriteRenderer>().sprite = CardSprites[CardType[i]];
-
-            // Remove attached scripts
-            Destroy(Card.GetComponent<DragDropCard>());
-            Destroy(Card.GetComponent<CardStats>());
+            Card.GetComponent<Image>().sprite = CardSprites[CardType[i]];
 
             SpawnedCards.Add(Card);
         }
