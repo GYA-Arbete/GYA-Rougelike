@@ -72,10 +72,13 @@ public class StartRoom : MonoBehaviour
         ViewSwitchScript.SetViewRoom();
     }
 
-    void ExitStartRoom()
+    void ExitStartRoom(int AddedIndex)
     {
+        int[] CardTypes = { 0, 0, 0, 1, 1, AddedIndex };
+
         // Give the new card inventory to CardInventory.cs for easier acces from other scripts 
-        Inventory.UpdateInventory(CardsInventory);
+        // Also send the type of each card
+        Inventory.UpdateInventory(CardsInventory, CardTypes);
 
         foreach (GameObject Element in ElementsToHide)
         {
@@ -89,25 +92,31 @@ public class StartRoom : MonoBehaviour
 
     void Choose1()
     {
-        // Add the selected card to CardInventory
-        CardsInventory.cardList.Add(CardTypes.cardList[CardIndex[0]]);
+        int AddedIndex = CardIndex[0];
 
-        ExitStartRoom();
+        // Add the selected card to CardInventory
+        CardsInventory.cardList.Add(CardTypes.cardList[AddedIndex]);
+
+        ExitStartRoom(AddedIndex);
     }
 
     void Choose2()
     {
-        // Add the selected card to CardInventory
-        CardsInventory.cardList.Add(CardTypes.cardList[CardIndex[1]]);
+        int AddedIndex = CardIndex[1];
 
-        ExitStartRoom();
+        // Add the selected card to CardInventory
+        CardsInventory.cardList.Add(CardTypes.cardList[AddedIndex]);
+
+        ExitStartRoom(AddedIndex);
     }
 
     void Choose3()
     {
-        // Add the selected card to CardInventory
-        CardsInventory.cardList.Add(CardTypes.cardList[CardIndex[2]]);
+        int AddedIndex = CardIndex[2];
 
-        ExitStartRoom();
+        // Add the selected card to CardInventory
+        CardsInventory.cardList.Add(CardTypes.cardList[AddedIndex]);
+
+        ExitStartRoom(AddedIndex);
     }
 }

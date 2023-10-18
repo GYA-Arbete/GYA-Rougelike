@@ -14,6 +14,8 @@ public class CardInventory : MonoBehaviour
 
     public GameObject InventoryBox;
 
+    public Sprite[] CardSprites;
+
     [Header("CardInventory.json Stuff")]
     public CardList Inventory;
     public TextAsset JsonFile;
@@ -23,6 +25,7 @@ public class CardInventory : MonoBehaviour
     public GameObject CardPrefab;
     public Transform[] Row1SpawnPoints;
     public List<GameObject> SpawnedCards;
+    public int[] CardType;
 
     [System.Serializable]
     public class CardList
@@ -45,9 +48,11 @@ public class CardInventory : MonoBehaviour
         CardInventoryButton.onClick.AddListener(SwitchInventory);
     }
 
-    public void UpdateInventory(CardList List)
+    public void UpdateInventory(CardList List, int[] TypeArray)
     {
         Inventory = List;
+
+        CardType = TypeArray;
     }
 
     void SwitchInventory()
@@ -85,6 +90,9 @@ public class CardInventory : MonoBehaviour
             // Running (i Modulo 5) since every 5th value it should jump down, so 0, 1, 2, 3, 4 then back to 0
             GameObject Card = Instantiate(CardPrefab, new Vector3(Row1SpawnPoints[i % 5].position.x, Row1SpawnPoints[i % 5].position.y - ((float)YOffset * 3.7f), Row1SpawnPoints[i % 5].position.z), new Quaternion(0, 0, 0, 0), CardParent);
             Card.transform.localScale = new Vector3(2, 2, 0);
+
+            // Set image of said Card
+            Card.GetComponent<SpriteRenderer>().sprite = CardSprites[CardType[i]];
 
             // Remove attached scripts
             Destroy(Card.GetComponent<DragDropCard>());
