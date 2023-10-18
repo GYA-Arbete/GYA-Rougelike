@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,23 @@ public class StartRoom : MonoBehaviour
     public Sprite[] CardSprites;
 
     public PullMapUpDown ViewSwitchScript;
+
+    public CardList CardInventory;
+
+    [System.Serializable]
+    public class CardList
+    {
+        public List<Cards> cardList;
+    }
+
+    [System.Serializable]
+    public class Cards
+    {
+        public int Energy;
+        public int Damage;
+        public int Defence;
+        public int Cooldown;
+    }
 
     // Start is called before the first frame update
     void Start()
