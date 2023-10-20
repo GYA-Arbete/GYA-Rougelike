@@ -51,7 +51,7 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
-    void Die()
+    public void Die()
     {
         // Removes self
         Destroy(gameObject);

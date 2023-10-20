@@ -53,7 +53,7 @@ public class PauseMenu : MonoBehaviour
 
     void Restart()
     {
-        MapGenScript.GenerateMapBtnPressed();
+        MapGenScript.DeleteMap();
 
         StartRoomScript.EnterStartRoom();
 

@@ -878,8 +878,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0212de42c9a7c874693b106d2de5ff21, type: 3}
   - {fileID: 21300000, guid: d17d4f11a0a3b2140adec9ba538b0280, type: 3}
   - {fileID: 21300000, guid: a3d6a385bf4235740ae066729b597727, type: 3}
-  - {fileID: 21300000, guid: a3d6a385bf4235740ae066729b597727, type: 3}
-  - {fileID: 21300000, guid: a3d6a385bf4235740ae066729b597727, type: 3}
+  - {fileID: 21300000, guid: 76224bcca127eff4dba17d3835e7b810, type: 3}
+  - {fileID: 21300000, guid: 7f98f7d786d9ffb46bbf830fe63e4665, type: 3}
   - {fileID: 21300000, guid: a3d6a385bf4235740ae066729b597727, type: 3}
   - {fileID: 21300000, guid: a3d6a385bf4235740ae066729b597727, type: 3}
   Inventory:
@@ -1993,8 +1993,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0212de42c9a7c874693b106d2de5ff21, type: 3}
   - {fileID: 21300000, guid: d17d4f11a0a3b2140adec9ba538b0280, type: 3}
   - {fileID: 21300000, guid: a3d6a385bf4235740ae066729b597727, type: 3}
-  - {fileID: 21300000, guid: a3d6a385bf4235740ae066729b597727, type: 3}
-  - {fileID: 21300000, guid: a3d6a385bf4235740ae066729b597727, type: 3}
+  - {fileID: 21300000, guid: 76224bcca127eff4dba17d3835e7b810, type: 3}
+  - {fileID: 21300000, guid: 7f98f7d786d9ffb46bbf830fe63e4665, type: 3}
   - {fileID: 21300000, guid: a3d6a385bf4235740ae066729b597727, type: 3}
   - {fileID: 21300000, guid: a3d6a385bf4235740ae066729b597727, type: 3}
   ViewSwitchScript: {fileID: 679690435}
@@ -2005,6 +2005,7 @@ MonoBehaviour:
   CardsInventory:
     cardList: []
   Inventory: {fileID: 399353178}
+  MapGenScript: {fileID: 279262563}
 --- !u!1 &686461444
 GameObject:
   m_ObjectHideFlags: 0
@@ -5206,16 +5207,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dba2a870665827a46a7d72d91104ba21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  JsonString: {fileID: 4900000, guid: 589ad5f234ba8df4388d0639a890dffb, type: 3}
   CardSpawner: {fileID: 1799097175}
   CardSpawnPoints: []
   SpawnedCards: []
   CardSprites: []
   CardsParent: {fileID: 1788190272}
   CardPrefab: {fileID: 541792869356932419, guid: 14723156fe6411e45860dd50050686f4, type: 3}
-  cardList:
+  CardInventoryScript: {fileID: 399353178}
+  CardsInInventory:
     cardList: []
-  AvailableCards: 0
+  CardType: 
 --- !u!1 &1803296389
 GameObject:
   m_ObjectHideFlags: 0

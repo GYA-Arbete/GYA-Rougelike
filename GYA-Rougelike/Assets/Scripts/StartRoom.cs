@@ -26,6 +26,7 @@ public class StartRoom : MonoBehaviour
 
     [Header("Other Scripts")]
     public CardInventory Inventory;
+    public MapGen MapGenScript;
 
     // Start is called before the first frame update
     void Start()
@@ -86,6 +87,8 @@ public class StartRoom : MonoBehaviour
         }
 
         StartChoice.SetActive(false);
+
+        StartCoroutine(MapGenScript.CreateMap());
 
         ViewSwitchScript.SetViewMap();
     }

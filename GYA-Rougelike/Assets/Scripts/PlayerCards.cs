@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class PlayerCards : MonoBehaviour
 {
-    public TextAsset JsonString;
-
     public Transform CardSpawner;
     public Transform[] CardSpawnPoints;
     public GameObject[] SpawnedCards;
@@ -17,32 +15,15 @@ public class PlayerCards : MonoBehaviour
 
     public GameObject CardPrefab;
 
-    public CardList cardList;
+    public CardInventory CardInventoryScript;
 
-    public int AvailableCards = 0;
+    public CardInventory.CardList CardsInInventory;
 
-    [System.Serializable]
-    public class CardList
-    {
-        public List<Cards> cardList;
-    }
-
-    [System.Serializable]
-    public class Cards
-    {
-        public int Energy;
-        public int Damage;
-        public int Defence;
-        public int Cooldown;
-    }
+    public int[] CardType;
 
     // Start is called before the first frame update
     void Start()
     {
-        cardList = JsonUtility.FromJson<CardList>(JsonString.text);
-
-        AvailableCards = cardList.cardList.Count;
-
         // Put parent + children into array
         CardSpawnPoints = GetComponentsInChildren<Transform>();
 
@@ -62,10 +43,14 @@ public class PlayerCards : MonoBehaviour
 
     void SpawnCards()
     {
-        SpawnedCards = new GameObject[AvailableCards];
+        CardsInInventory = CardInventoryScript.Inventory;
+        CardType = CardInventoryScript.CardType;
+        CardSprites = CardInventoryScript.CardSprites;
+
+        SpawnedCards = new GameObject[CardsInInventory.cardList.Count];
 
         // i = 1 eftersom den ska ingorera parent
-        for (int i = 1; i < AvailableCards + 1; i++)
+        for (int i = 1; i < CardsInInventory.cardList.Count + 1; i++)
         {
             // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
             // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
@@ -73,18 +58,11 @@ public class PlayerCards : MonoBehaviour
 
             // Assign values to each created card
             CardStats CardStatsScript = Card.GetComponent<CardStats>();
-            CardStatsScript.AssignValues(cardList.cardList[i - 1].Energy, cardList.cardList[i - 1].Damage, cardList.cardList[i - 1].Defence, cardList.cardList[i - 1].Cooldown);
+            CardStatsScript.AssignValues(CardsInInventory.cardList[i - 1].Energy, CardsInInventory.cardList[i - 1].Damage, CardsInInventory.cardList[i - 1].Defence, CardsInInventory.cardList[i - 1].Cooldown);
 
             // Change the cards image
             SpriteRenderer CardImage = Card.GetComponent<SpriteRenderer>();
-            if (cardList.cardList[i - 1].Damage  > 0)
-            {
-                CardImage.sprite = CardSprites[0];
-            }
-            else if (cardList.cardList[i - 1].Defence > 0)
-            {
-                CardImage.sprite = CardSprites[1];
-            }
+            CardImage.sprite = CardSprites[CardType[i - 1]];
 
             // Set text for the card-sprite
             Transform[] TextBoxes = Card.GetComponentsInChildren<Transform>();
@@ -93,7 +71,21 @@ public class PlayerCards : MonoBehaviour
                 TextMeshProUGUI Text = TextBox.GetComponent<TextMeshProUGUI>();
                 if (Text != null)
                 {
-                    Text.text = cardList.cardList[i - 1].Energy.ToString();
+                    if (TextBox.name == "EnergyCount")
+                    {
+                        Text.text = CardsInInventory.cardList[i - 1].Energy.ToString();
+                    }
+                    else
+                    {
+                        if (CardStatsScript.Damage  > 0)
+                        {
+                            Text.text = CardStatsScript.Damage.ToString();
+                        }
+                        else if (CardStatsScript.Defence > 0)
+                        {
+                            Text.text = CardStatsScript.Defence.ToString();
+                        }
+                    }
                 }
             }
 

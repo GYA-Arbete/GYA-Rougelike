@@ -32,8 +32,6 @@ public class MapGen : MonoBehaviour
     {
         // Put parent + children into array
         SpawnPoints = GetComponentsInChildren<Transform>();
-
-        StartCoroutine(CreateMap());
     }
 
     public void GenerateMapBtnPressed()
@@ -42,7 +40,7 @@ public class MapGen : MonoBehaviour
     }
 
     // FatPerson115 saving my ass
-    IEnumerator CreateMap()
+    public IEnumerator CreateMap()
     {
         DeleteMap();
 
@@ -56,7 +54,7 @@ public class MapGen : MonoBehaviour
     }
 
     // Function for deleting all elements of previously generated map
-    void DeleteMap()
+    public void DeleteMap()
     {
         if (Rooms != null )
         {

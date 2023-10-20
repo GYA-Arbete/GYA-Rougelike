@@ -56,6 +56,17 @@ public class CombatSystem : MonoBehaviour
         {
             Element.SetActive(false);
         }
+
+        // If enemy still exists, remove it
+        foreach (Transform Enemy in Enemies)
+        {
+            if (Enemy != null)
+            {
+                HealthSystem HealthSystemScript = Enemy.GetComponent<HealthSystem>();
+
+                HealthSystemScript.Die();
+            }
+        }
     }
 
     void EndTurn()
@@ -120,11 +131,14 @@ public class CombatSystem : MonoBehaviour
         {
             foreach (Transform Enemy in Enemies)
             {
-                HealthSystem HealthSystemScript = Enemy.GetComponent<HealthSystem>();
-
-                if (HealthSystemScript.Health > 0)
+                if (Enemy != null)
                 {
-                    HealthSystemScript.TakeDamage(TotalDamage);
+                    HealthSystem HealthSystemScript = Enemy.GetComponent<HealthSystem>();
+
+                    if (HealthSystemScript.Health > 0)
+                    {
+                        HealthSystemScript.TakeDamage(TotalDamage);
+                    }
                 }
             }
         }
@@ -150,8 +164,11 @@ public class CombatSystem : MonoBehaviour
         // Get what to do
         foreach (Transform Enemy in Enemies)
         {
-            EnemyStatsGen DamageSystemScript = Enemy.GetComponent<EnemyStatsGen>();
-            TotalDamage += DamageSystemScript.Damage;
+            if (Enemy != null)
+            {
+                EnemyStatsGen DamageSystemScript = Enemy.GetComponent<EnemyStatsGen>();
+                TotalDamage += DamageSystemScript.Damage;
+            }
         }
 
         // Do said things to self

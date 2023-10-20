@@ -6,7 +6,7 @@ public class MapNavigation : MonoBehaviour
 {
     public Button ExitRoomButton;
     public int RoomType;
-    
+
     public Transform[] Rooms;
     public int CurrentRoom;
     public GameObject PreviousRoom;
