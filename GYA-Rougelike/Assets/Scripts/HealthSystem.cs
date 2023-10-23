@@ -21,6 +21,17 @@ public class HealthSystem : MonoBehaviour
         Defence = 0;
     }
 
+    public void Heal(int HealAmount)
+    {
+        Health += HealAmount;
+
+        // Make sure it doesnt heal more than its allowed too
+        if (Health > MaxHealth)
+        {
+            Health = MaxHealth;
+        }
+    }
+
     public void AddDefence(int DefenceToAdd)
     {
         Defence += DefenceToAdd;

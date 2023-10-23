@@ -19,6 +19,7 @@ public class MapNavigation : MonoBehaviour
     public MapGen MapGenScript;
     public CombatSystem CombatSystem;
     public RoomTypeGen RoomTypeGenScript;
+    public CampRoom CampRoomScript;
 
     private Button button;
 
@@ -45,6 +46,7 @@ public class MapNavigation : MonoBehaviour
         CameraMoveScript = FindObjectOfType<PullMapUpDown>();
         MapGenScript = FindObjectOfType<MapGen>();
         CombatSystem = FindObjectOfType<CombatSystem>();
+        CampRoomScript = FindAnyObjectByType<CampRoom>();
     }
 
     void EnterRoom()
@@ -87,6 +89,10 @@ public class MapNavigation : MonoBehaviour
                         if (RoomType == 1 || RoomType == 4)
                         {
                             CombatSystem.StartCombat(EnemyAmount, EnemyTypes);
+                        }
+                        else if (RoomType == 3)
+                        {
+                            CampRoomScript.EnterRoom();
                         }
                     }
                 }
