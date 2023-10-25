@@ -29,6 +29,11 @@ public class HealthSystem : MonoBehaviour
         if (Health > MaxHealth)
         {
             Health = MaxHealth;
+            HealthBarScript.UpdateBar(Health - (int)HealthBarScript.Slider.value);
+        }
+        else
+        {
+            HealthBarScript.UpdateBar(HealAmount);
         }
     }
 
