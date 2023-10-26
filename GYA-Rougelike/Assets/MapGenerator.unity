@@ -3580,6 +3580,7 @@ MonoBehaviour:
   MoveQueueSnapPoint: {fileID: 418957647}
   EnemySpawn: {fileID: 1209565286}
   CardScript: {fileID: 1799097176}
+  PullMapUpDownScript: {fileID: 679690435}
 --- !u!4 &1103261180
 Transform:
   m_ObjectHideFlags: 0

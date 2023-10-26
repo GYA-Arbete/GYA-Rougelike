@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class CombatSystem : MonoBehaviour
 {
-    public bool PlayerTurn = true;
-
     public Button EndTurnButton;
     public Button ExitRoomButton;
 
@@ -15,6 +13,7 @@ public class CombatSystem : MonoBehaviour
 
     public Transform[] Players;
     public Transform[] Enemies;
+    public bool[] DeadEnemies;
 
     [Header("CombatRoom-Exclusive Elements")]
     public GameObject[] CombatRoomElements;
@@ -27,6 +26,7 @@ public class CombatSystem : MonoBehaviour
     [Header("Other Scripts")]
     public EnemySpawner EnemySpawn;
     public PlayerCards CardScript;
+    public PullMapUpDown PullMapUpDownScript;
 
     // Start is called before the first frame update
     void Start()
@@ -45,7 +45,7 @@ public class CombatSystem : MonoBehaviour
 
         Enemies = EnemySpawn.SpawnEnemies(EnemyAmount, EnemyTypes);
 
-        PlayerTurn = true;
+        DeadEnemies = new bool[EnemyAmount];
 
         EnergyBarScript.SetupBar(10, new Color32(252, 206, 82, 255));
     }
@@ -67,32 +67,41 @@ public class CombatSystem : MonoBehaviour
                 HealthSystemScript.Die();
             }
         }
+
+        // Exit the room
+        PullMapUpDownScript.SetViewMap();
     }
 
     void EndTurn()
     {
-        if (PlayerTurn)
+        GetCardsInMoveQueue();
+
+        PlayCards();
+
+        CardScript.ResetCards();
+
+        // Check if all Enemies are dead, eg combat has ended
+        int DeadEnemiesAmount = 0;
+
+        for (int i = 0; i < Enemies.Length; i++)
         {
-            GetCardsInMoveQueue();
-
-            PlayCards();
-
-            CardScript.ResetCards();
-
-            PlayerTurn = false;
-
-            // Call EndTurn so the enemies takes their turn to do stuff
-            EndTurn();
+            if (DeadEnemies[i] == true)
+            {
+                DeadEnemiesAmount++;
+            }
         }
-        else
+        if (DeadEnemiesAmount == Enemies.Length)
         {
-            EnemyAttack();
-
-            // Set back energy to 10 / 10
-            EnergyBarScript.ResetBar();
-
-            PlayerTurn = true;
+            EndCombat();
+            return;
         }
+
+        // Enemies turn
+
+        EnemyAttack();
+
+        // Set back energy to 10 / 10
+        EnergyBarScript.ResetBar();
     }
 
     void GetCardsInMoveQueue()
@@ -129,15 +138,15 @@ public class CombatSystem : MonoBehaviour
         // Do said things to enemies
         if (TotalDamage > 0)
         {
-            foreach (Transform Enemy in Enemies)
+            for (int i = 0; i < Enemies.Length; i++)
             {
-                if (Enemy != null)
+                if (Enemies[i] != null)
                 {
-                    HealthSystem HealthSystemScript = Enemy.GetComponent<HealthSystem>();
+                    HealthSystem HealthSystemScript = Enemies[i].GetComponent<HealthSystem>();
 
                     if (HealthSystemScript.Health > 0)
                     {
-                        HealthSystemScript.TakeDamage(TotalDamage);
+                        DeadEnemies[i] = HealthSystemScript.TakeDamage(TotalDamage);
                     }
                 }
             }

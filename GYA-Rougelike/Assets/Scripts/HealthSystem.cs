@@ -42,7 +42,8 @@ public class HealthSystem : MonoBehaviour
         Defence += DefenceToAdd;
     }
 
-    public void TakeDamage(int Damage)
+    // Function that returns a bool for if dead
+    public bool TakeDamage(int Damage)
     {
         if (Defence > 0)
         {
@@ -64,6 +65,12 @@ public class HealthSystem : MonoBehaviour
         if (Health  <= 0)
         {
             Die();
+
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
