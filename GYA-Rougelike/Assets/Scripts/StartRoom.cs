@@ -34,15 +34,15 @@ public class StartRoom : MonoBehaviour
         // Get all card-types
         CardTypes = JsonUtility.FromJson<CardInventory.CardList>(CardTypesJson.text);
 
-        ChoiceButtons[0].onClick.AddListener(Choose1);
-        ChoiceButtons[1].onClick.AddListener(Choose2);
-        ChoiceButtons[2].onClick.AddListener(Choose3);
-
         EnterStartRoom();
     }
 
     public void EnterStartRoom()
     {
+        ChoiceButtons[0].onClick.AddListener(Choose1);
+        ChoiceButtons[1].onClick.AddListener(Choose2);
+        ChoiceButtons[2].onClick.AddListener(Choose3);
+
         // Reset Card Inventory when re-starting the map / game
         CardsInventory = new CardInventory.CardList();
         CardsInventory = JsonUtility.FromJson<CardInventory.CardList>(CardInventoryJson.text);
@@ -79,7 +79,7 @@ public class StartRoom : MonoBehaviour
 
         // Give the new card inventory to CardInventory.cs for easier acces from other scripts 
         // Also send the type of each card
-        Inventory.UpdateInventory(CardsInventory, CardTypes);
+        Inventory.SetInventory(CardsInventory, CardTypes);
 
         foreach (GameObject Element in ElementsToHide)
         {
@@ -87,6 +87,10 @@ public class StartRoom : MonoBehaviour
         }
 
         StartChoice.SetActive(false);
+
+        ChoiceButtons[0].onClick.RemoveListener(Choose1);
+        ChoiceButtons[1].onClick.RemoveListener(Choose2);
+        ChoiceButtons[2].onClick.RemoveListener(Choose3);
 
         StartCoroutine(MapGenScript.CreateMap());
 

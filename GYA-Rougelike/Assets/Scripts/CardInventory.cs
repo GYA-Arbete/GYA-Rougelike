@@ -25,7 +25,7 @@ public class CardInventory : MonoBehaviour
     public GameObject CardPrefab;
     public Transform[] Row1SpawnPoints;
     public List<GameObject> SpawnedCards;
-    public int[] CardType;
+    public List<int> CardType;
 
     [System.Serializable]
     public class CardList
@@ -48,11 +48,28 @@ public class CardInventory : MonoBehaviour
         CardInventoryButton.onClick.AddListener(SwitchInventory);
     }
 
-    public void UpdateInventory(CardList List, int[] TypeArray)
+    public void SetInventory(CardList List, int[] TypeArray)
     {
         Inventory = List;
 
-        CardType = TypeArray;
+        CardType.Clear();
+        foreach (int Type in TypeArray)
+        {
+            CardType.Add(Type);
+        }
+    }
+
+    public void UpdateInventory(CardList List, int[] TypeArray)
+    {
+        foreach (Cards Card in List.cardList)
+        {
+            Inventory.cardList.Add(Card);
+        }
+
+        foreach (int Type in TypeArray)
+        {
+            CardType.Add(Type);
+        }
     }
 
     void SwitchInventory()

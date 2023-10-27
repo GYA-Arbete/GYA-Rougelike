@@ -19,7 +19,7 @@ public class PlayerCards : MonoBehaviour
 
     public CardInventory.CardList CardsInInventory;
 
-    public int[] CardType;
+    public List<int> CardType;
 
     // Start is called before the first frame update
     void Start()

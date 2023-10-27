@@ -3563,7 +3563,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a465bb14e47b0204495748062dfab796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerTurn: 1
   EndTurnButton: {fileID: 264480458}
   ExitRoomButton: {fileID: 1006624649}
   Energy: 0
@@ -3572,6 +3571,7 @@ MonoBehaviour:
   - {fileID: 1090164095}
   - {fileID: 1945140423}
   Enemies: []
+  DeadEnemies: 
   CombatRoomElements:
   - {fileID: 2064234100}
   - {fileID: 1210741368}
@@ -6533,6 +6533,20 @@ MonoBehaviour:
   UpgradeButton: {fileID: 813013870}
   NewCardButton: {fileID: 1634301148}
   ViewSwitchScript: {fileID: 679690435}
+  ElementsToHide:
+  - {fileID: 2042664322}
+  CardChoice: {fileID: 677888630}
+  ChoiceButtons:
+  - {fileID: 522775278}
+  - {fileID: 2106636318}
+  - {fileID: 907200660}
+  CardSprites: []
+  CardTypesJson: {fileID: 4900000, guid: c91cfe2f92e525c4895daec664eaa5d9, type: 3}
+  CardTypes:
+    cardList: []
+  CardsInventory:
+    cardList: []
+  Inventory: {fileID: 399353178}
 --- !u!4 &1865235715
 Transform:
   m_ObjectHideFlags: 0
