@@ -4,13 +4,14 @@ using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
-    public bool IsPaused = false;
-
+    [Header("Viewable Elements")]
     public GameObject PauseMenuCanvas;
-
     public Button UnpauseButton;
     public Button RestartButton;
     public Button MainMenuButton;
+
+    [Header("Variables")]
+    public bool IsPaused = false;
 
     [Header("Other Scripts")]
     public MapGen MapGenScript;

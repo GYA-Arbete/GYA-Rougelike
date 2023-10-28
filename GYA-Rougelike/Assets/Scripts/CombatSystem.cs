@@ -26,7 +26,7 @@ public class CombatSystem : MonoBehaviour
     [Header("Other Scripts")]
     public EnemySpawner EnemySpawn;
     public PlayerCards CardScript;
-    public PullMapUpDown PullMapUpDownScript;
+    public CameraSwitch PullMapUpDownScript;
 
     // Start is called before the first frame update
     void Start()
@@ -69,7 +69,7 @@ public class CombatSystem : MonoBehaviour
         }
 
         // Exit the room
-        PullMapUpDownScript.SetViewMap();
+        PullMapUpDownScript.SetViewToMap();
     }
 
     void EndTurn()

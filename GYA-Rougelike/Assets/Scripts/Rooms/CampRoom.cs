@@ -1,39 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CampRoom : MonoBehaviour
 {
+    [Header("Viewable Elements")]
     public GameObject CampRoomCanvas;
-
     public Button RestButton;
-
     public GameObject[] Players;
 
-    public PullMapUpDown ViewSwitchScript;
+    [Header("Other Scripts")]
+    public CameraSwitch CameraSwitchScript;
 
     // Start is called before the first frame update
     void Start()
     {
-        RestButton.onClick.AddListener(DoRest);
-
-        ViewSwitchScript = FindAnyObjectByType<PullMapUpDown>();
+        RestButton.onClick.AddListener(Rest);
     }
 
-    public void EnterRoom()
+    public void EnterCampRoom()
     {
         CampRoomCanvas.SetActive(true);
+
+        CameraSwitchScript.SetViewToRoom();
     }
 
-    void ExitRoom()
+    void ExitCampRoom()
     {
         CampRoomCanvas.SetActive(false);
 
-        ViewSwitchScript.SetViewMap();
+        CameraSwitchScript.SetViewToMap();
     }
 
-    void DoRest()
+    void Rest()
     {
         foreach (GameObject Player in Players)
         {
@@ -46,6 +44,6 @@ public class CampRoom : MonoBehaviour
             }
         }
 
-        ExitRoom();
+        ExitCampRoom();
     }
 }

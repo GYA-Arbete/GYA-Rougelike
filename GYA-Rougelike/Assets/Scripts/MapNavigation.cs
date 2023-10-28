@@ -15,7 +15,7 @@ public class MapNavigation : MonoBehaviour
     public Texture Selected;
 
     [Header("Other Scripts")]
-    public PullMapUpDown CameraMoveScript;
+    public CameraSwitch CameraMoveScript;
     public MapGen MapGenScript;
     public CombatSystem CombatSystem;
     public RoomTypeGen RoomTypeGenScript;
@@ -44,7 +44,7 @@ public class MapNavigation : MonoBehaviour
 
         RoomType = RoomTypeGen.RoomType;
 
-        CameraMoveScript = FindObjectOfType<PullMapUpDown>();
+        CameraMoveScript = FindObjectOfType<CameraSwitch>();
         MapGenScript = FindObjectOfType<MapGen>();
         CombatSystem = FindObjectOfType<CombatSystem>();
         CampRoomScript = FindAnyObjectByType<CampRoom>();
@@ -83,7 +83,7 @@ public class MapNavigation : MonoBehaviour
                         RawImg.texture = Cleared;
 
                         MapGenScript.UpdateOtherScriptShit(CurrentRoom, PreviousRoom);
-                        CameraMoveScript.MapUpDown();
+                        CameraMoveScript.SwitchView();
 
                         int EnemyAmount = RoomTypeGenScript.EnemyAmount;
                         int[] EnemyTypes = RoomTypeGenScript.EnemyTypes;
@@ -94,11 +94,11 @@ public class MapNavigation : MonoBehaviour
                         }
                         else if (RoomType == 2)
                         {
-                            LootRoomScript.EnterRoom();
+                            LootRoomScript.EnterLootRoom();
                         }
                         else if (RoomType == 3)
                         {
-                            CampRoomScript.EnterRoom();
+                            CampRoomScript.EnterCampRoom();
                         }
                     }
                 }
@@ -108,6 +108,6 @@ public class MapNavigation : MonoBehaviour
 
     void ExitRoom()
     {
-        CameraMoveScript.MapUpDown();
+        CameraMoveScript.SetViewToMap();
     }
 }

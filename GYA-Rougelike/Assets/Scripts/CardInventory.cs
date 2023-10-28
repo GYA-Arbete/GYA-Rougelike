@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +14,10 @@ public class CardInventory : MonoBehaviour
     public GameObject InventoryBox;
 
     public Sprite[] CardSprites;
+
+    [Header("CardTypesJson")]
+    public TextAsset CardTypesJson;
+    public CardList CardTypes;
 
     [Header("CardInventory.json Stuff")]
     public CardList Inventory;
@@ -46,6 +49,29 @@ public class CardInventory : MonoBehaviour
     void Start()
     {
         CardInventoryButton.onClick.AddListener(SwitchInventory);
+
+        
+    }
+
+    // Function for getting card types from the json file, only called once on first load via FirstLoadManager.cs
+    public void GetCardTypes()
+    {
+        CardTypes = JsonUtility.FromJson<CardList>(CardTypesJson.text);
+    }
+
+    public void ResetInventory()
+    {
+        // Clear each list to not keep values when restarting
+        Inventory.cardList.Clear();
+        CardType.Clear();
+
+        int[] StartingCardTypes = { 0, 0, 0, 1, 1 };
+
+        for (int i = 0; i < 5; i++)
+        {
+            Inventory.cardList.Add(CardTypes.cardList[StartingCardTypes[i]]);
+            CardType.Add(StartingCardTypes[i]);
+        }
     }
 
     public void SetInventory(CardList List, int[] TypeArray)
@@ -59,17 +85,13 @@ public class CardInventory : MonoBehaviour
         }
     }
 
-    public void UpdateInventory(CardList List, int[] TypeArray)
+    // Function that is called when adding cards to the inventory
+    public void AddCardToInventory(int ChoosenCardType)
     {
-        foreach (Cards Card in List.cardList)
-        {
-            Inventory.cardList.Add(Card);
-        }
+        // Add the selected card to the inventory
+        Inventory.cardList.Add(CardTypes.cardList[ChoosenCardType]);
 
-        foreach (int Type in TypeArray)
-        {
-            CardType.Add(Type);
-        }
+        CardType.Add(ChoosenCardType);
     }
 
     void SwitchInventory()
