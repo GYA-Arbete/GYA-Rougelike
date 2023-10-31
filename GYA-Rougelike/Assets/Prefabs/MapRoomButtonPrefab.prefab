@@ -12,8 +12,7 @@ GameObject:
   - component: {fileID: 8722948317674318065}
   - component: {fileID: 8391473375618141353}
   - component: {fileID: 3981749480465916983}
-  - component: {fileID: 6076478137172651935}
-  - component: {fileID: 480872800385491130}
+  - component: {fileID: -8286627788440929511}
   m_Layer: 5
   m_Name: MapRoomButtonPrefab
   m_TagString: Untagged
@@ -122,7 +121,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6076478137172651935
+--- !u!114 &-8286627788440929511
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,38 +130,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4631270058164154296}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88916e47b1c790f4cbc45ca2139c6b66, type: 3}
+  m_Script: {fileID: 11500000, guid: 713161086f95f184ab48e1d18597936f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RoomTypeValue: 0
-  HiddenType: 0
-  ImagePrefab: {fileID: 3965708321990618195, guid: f951f360cc8880142bac82ea8af05987, type: 3}
-  MapRoomIcons:
-  - {fileID: 2800000, guid: 6cf5a97a611b618419928a46c8bd4001, type: 3}
-  - {fileID: 2800000, guid: 90df19cadaa432e438ce8fc72276e659, type: 3}
-  - {fileID: 2800000, guid: 505adea62c5c3894da1ca36f7ec6f5c5, type: 3}
-  - {fileID: 2800000, guid: a0a9834aea2ecfa47939864fe4363ec3, type: 3}
-  - {fileID: 2800000, guid: d7c07f52de064c2449dbe06aec2c2cb3, type: 3}
-  - {fileID: 2800000, guid: c098a20a2f9dd7248812827616b041f0, type: 3}
---- !u!114 &480872800385491130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4631270058164154296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7abc25bc44ee0634b80d74b38a27b15d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MainCamera: {fileID: 0}
-  ExitRoomButton: {fileID: 0}
+  ID: 0
   RoomType: 0
-  CameraMoveScript: {fileID: 0}
-  MapGenScript: {fileID: 0}
-  Rooms: []
-  CurrentRoom: 0
-  PreviousRoom: {fileID: 0}
-  Cleared: {fileID: 2800000, guid: bfd78a26b04a5fd48980f335cfda9e6e, type: 3}
-  Selected: {fileID: 2800000, guid: 9fdb0dd714abb4e41a0c1980ace89c37, type: 3}
+  HiddenType: 0
+  EnemyAmount: 0
+  EnemyTypes: 
+  RoomImage: {fileID: 0}

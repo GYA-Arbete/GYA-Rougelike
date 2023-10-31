@@ -899,7 +899,7 @@ MonoBehaviour:
   - {fileID: 2042664322}
   CameraSwitchScript: {fileID: 628599124}
   CardInventoryScript: {fileID: 399353178}
-  MapGenScript: {fileID: 279262563}
+  MapGenScript: {fileID: 679690435}
   CardChoiceScript: {fileID: 143774139}
 --- !u!1 &279262561
 GameObject:
@@ -910,7 +910,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 279262562}
-  - component: {fileID: 279262563}
   m_Layer: 0
   m_Name: SpawnPoints
   m_TagString: Untagged
@@ -950,27 +949,6 @@ Transform:
   - {fileID: 395965416}
   m_Father: {fileID: 679690434}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &279262563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 279262561}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1edbf46f6619b14fa601ab56ff5b84c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MapRoomPrefabParent: {fileID: 72757724}
-  MapRoomPrefab: {fileID: 4631270058164154296, guid: 15a7b3d7c37a41349b52b94dc2bf2c7d, type: 3}
-  MapLinePrefabParent: {fileID: 1192632115}
-  MapLinePrefab: {fileID: 1866449568405725402, guid: c4adbf8d54378f2469417645e59f6e8a, type: 3}
-  SpawnPoints: []
-  Rooms: []
-  Lines: []
-  CurrentRoom: 0
-  PreviousRoom: {fileID: 0}
 --- !u!1 &281916554
 GameObject:
   m_ObjectHideFlags: 0
@@ -1002,6 +980,68 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1209565285}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &288843430
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 288843431}
+  - component: {fileID: 288843432}
+  m_Layer: 0
+  m_Name: MapNavigation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &288843431
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288843430}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1766066484}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &288843432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288843430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7abc25bc44ee0634b80d74b38a27b15d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Rooms: []
+  RoomsButtons: []
+  CurrentRoom: 0
+  RoomImages:
+  - {fileID: 2800000, guid: 9fdb0dd714abb4e41a0c1980ace89c37, type: 3}
+  - {fileID: 2800000, guid: 90df19cadaa432e438ce8fc72276e659, type: 3}
+  - {fileID: 2800000, guid: 505adea62c5c3894da1ca36f7ec6f5c5, type: 3}
+  - {fileID: 2800000, guid: a0a9834aea2ecfa47939864fe4363ec3, type: 3}
+  - {fileID: 2800000, guid: d7c07f52de064c2449dbe06aec2c2cb3, type: 3}
+  - {fileID: 2800000, guid: c098a20a2f9dd7248812827616b041f0, type: 3}
+  - {fileID: 2800000, guid: bfd78a26b04a5fd48980f335cfda9e6e, type: 3}
+  - {fileID: 2800000, guid: 9fdb0dd714abb4e41a0c1980ace89c37, type: 3}
+  ImagePrefab: {fileID: 3965708321990618195, guid: f951f360cc8880142bac82ea8af05987, type: 3}
+  PreviousRoom: {fileID: 0}
+  MapGenScript: {fileID: 679690435}
+  CampRoomScript: {fileID: 905317487}
+  LootRoomScript: {fileID: 1865235714}
+  CombatSystemScript: {fileID: 1103261179}
 --- !u!1 &395965415
 GameObject:
   m_ObjectHideFlags: 0
@@ -2232,6 +2272,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 679690434}
+  - component: {fileID: 679690435}
   m_Layer: 0
   m_Name: MapGeneration
   m_TagString: Untagged
@@ -2258,6 +2299,29 @@ Transform:
   - {fileID: 174403698}
   m_Father: {fileID: 1766066484}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &679690435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 679690433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1edbf46f6619b14fa601ab56ff5b84c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SpawnPointsParent: {fileID: 279262561}
+  MapRoomPrefabParent: {fileID: 72757724}
+  MapRoomPrefab: {fileID: 4631270058164154296, guid: 15a7b3d7c37a41349b52b94dc2bf2c7d, type: 3}
+  MapLinePrefabParent: {fileID: 1192632115}
+  MapLinePrefab: {fileID: 1866449568405725402, guid: c4adbf8d54378f2469417645e59f6e8a, type: 3}
+  SpawnPoints: []
+  Rooms: []
+  Lines: []
+  CurrentRoom: 0
+  PreviousRoom: {fileID: 0}
+  MapNavigationScript: {fileID: 288843432}
 --- !u!1 &686461444
 GameObject:
   m_ObjectHideFlags: 0
@@ -5848,6 +5912,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 679690434}
+  - {fileID: 288843431}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1768448637
@@ -8280,7 +8345,7 @@ MonoBehaviour:
   RestartButton: {fileID: 828347361}
   MainMenuButton: {fileID: 1665819658}
   IsPaused: 0
-  MapGenScript: {fileID: 279262563}
+  MapGenScript: {fileID: 679690435}
   StartRoomScript: {fileID: 270984553}
 --- !u!114 &163357322308376873
 MonoBehaviour:

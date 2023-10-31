@@ -40,6 +40,8 @@ public class LootRoom : MonoBehaviour
     public void EnterLootRoom()
     {
         LootRoomCanvas.SetActive(true);
+
+        CameraSwitchScript.SetViewToRoom();
     }
 
     public void ExitLootRoom()

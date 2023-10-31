@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System;
 using UnityEngine;
 using System.Linq;
@@ -7,21 +5,19 @@ using Unity.VisualScripting;
 
 public class DragDropCard : MonoBehaviour
 {
+    [Header("Camera")]
     public Camera RoomViewCamera;
 
-    public bool isDragging;
+    [Header("Variables for Snapping")]
     public bool InMoveQueue;
+    public double[] SnapPointsDistance;
 
-    [Header("Stuff for snapping")]
+    [Header("SnapPoints")]
     public Transform MoveQueueSnapPointsParent;
     public Transform CardViewSnapPointsParent;
     public Transform[] SnapPoints;
-    public double[] SnapPointsDistance;
 
-    public Transform[] Temp1;
-    public Transform[] Temp2;
-
-    [Header("EnergyBar stuff")]
+    [Header("Other Scripts")]
     public BarScript EnergyBarScript;
     public CardStats ThisCardsStats;
 
@@ -50,8 +46,8 @@ public class DragDropCard : MonoBehaviour
                 EnergyBarScript = temp[i].GetComponent<BarScript>();
             }
         }
-        Temp1 = MoveQueueSnapPointsParent.GetComponentsInChildren<Transform>();
-        Temp2 = CardViewSnapPointsParent.GetComponentsInChildren<Transform>();
+        Transform[] Temp1 = MoveQueueSnapPointsParent.GetComponentsInChildren<Transform>();
+        Transform[] Temp2 = CardViewSnapPointsParent.GetComponentsInChildren<Transform>();
 
         SnapPoints = new Transform[Temp1.Length + Temp2.Length - 2];
 
@@ -76,11 +72,9 @@ public class DragDropCard : MonoBehaviour
 
     public void OnMouseDown()
     {
-        isDragging = true;
-
         if (InMoveQueue)
         {
-            // Update EnergyBar to match
+            // If removing card from MoveQueue, add back the energy
             EnergyBarScript.UpdateBar(ThisCardsStats.Energy);
 
             InMoveQueue = false;
@@ -89,36 +83,6 @@ public class DragDropCard : MonoBehaviour
 
     public void OnMouseUp()
     {
-        isDragging = false;
-
-        // Find closest SnapPoint and snap to it
-        double ClosestDistance = SnapPointsDistance.Min();
-        for (int i = 0; i < SnapPointsDistance.Length; i++)
-        {
-            if (SnapPointsDistance[i] == ClosestDistance)
-            {
-                // Snap to closest point
-                gameObject.transform.position = SnapPoints[i].position;
-
-                if (i < 15)
-                {
-                    // Update EnergyBar to match (Set to negative to reduce TotalEnergy)
-                    EnergyBarScript.UpdateBar(-ThisCardsStats.Energy);
-
-                    InMoveQueue = true;
-                }
-                
-                break;
-            }
-        }
-    }
-
-    public void OnMouseDrag()
-    {
-        // Update sprite position
-        Vector2 mousePosition = RoomViewCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        transform.Translate(mousePosition);
-
         // Calculate position to each MoveQueue SnapPoint
         for (int i = 0; i < SnapPointsDistance.Length; i++)
         {
@@ -129,5 +93,27 @@ public class DragDropCard : MonoBehaviour
             // Calc actual distance
             SnapPointsDistance[i] = Math.Sqrt(Math.Pow(dX, 2) + Math.Pow(dY, 2));
         }
+
+        // Find closest SnapPoint
+        int ClosestDistanceIndex = Array.IndexOf(SnapPointsDistance, SnapPointsDistance.Min());
+
+        // Snap to the closest SnapPoint
+        gameObject.transform.position = SnapPoints[ClosestDistanceIndex].position;
+
+        // If in the upper half of the screen, eg in MoveQueue
+        if (transform.position.y > -9)
+        {
+            // Update EnergyBar to match (Set to negative to reduce TotalEnergy)
+            EnergyBarScript.UpdateBar(-ThisCardsStats.Energy);
+
+            InMoveQueue = true;
+        }
+    }
+
+    public void OnMouseDrag()
+    {
+        // Update sprite position
+        Vector2 mousePosition = RoomViewCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        transform.Translate(mousePosition);
     }
 }

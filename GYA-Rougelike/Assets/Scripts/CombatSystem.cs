@@ -48,6 +48,8 @@ public class CombatSystem : MonoBehaviour
         DeadEnemies = new bool[EnemyAmount];
 
         EnergyBarScript.SetupBar(10, new Color32(252, 206, 82, 255));
+
+        PullMapUpDownScript.SetViewToRoom();
     }
 
     void EndCombat()
