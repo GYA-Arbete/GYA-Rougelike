@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+// Simple script for making sure each player is correctly set up at the start of the game
 public class PlayerSpawn : MonoBehaviour
 {
     public Transform[] Players;
@@ -34,7 +35,7 @@ public class PlayerSpawn : MonoBehaviour
             Image FillItem = BarFillItem.GetComponent<Image>();
             FillItem.color = Color.red;
 
-            // Get MaxValue for the HealthBar
+            // Get HealthSystemScript of the Player
             HealthSystem HealthSystemScript = Players[i].GetComponent<HealthSystem>();
 
             // Set health for players

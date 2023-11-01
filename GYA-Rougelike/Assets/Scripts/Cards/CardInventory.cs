@@ -1,15 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 public class CardInventory : MonoBehaviour
 {
     bool InventoryOpen = false;
 
     public Button CardInventoryButton;
-
-    public Transform[] CardInventoryArray;
 
     public GameObject InventoryBox;
 
@@ -21,7 +18,6 @@ public class CardInventory : MonoBehaviour
 
     [Header("CardInventory.json Stuff")]
     public CardList Inventory;
-    public TextAsset JsonFile;
 
     [Header("CardSpawning stuff")]
     public Transform CardParent;
@@ -49,8 +45,6 @@ public class CardInventory : MonoBehaviour
     void Start()
     {
         CardInventoryButton.onClick.AddListener(SwitchInventory);
-
-        
     }
 
     // Function for getting card types from the json file, only called once on first load via FirstLoadManager.cs
@@ -71,17 +65,6 @@ public class CardInventory : MonoBehaviour
         {
             Inventory.cardList.Add(CardTypes.cardList[StartingCardTypes[i]]);
             CardType.Add(StartingCardTypes[i]);
-        }
-    }
-
-    public void SetInventory(CardList List, int[] TypeArray)
-    {
-        Inventory = List;
-
-        CardType.Clear();
-        foreach (int Type in TypeArray)
-        {
-            CardType.Add(Type);
         }
     }
 
@@ -113,7 +96,7 @@ public class CardInventory : MonoBehaviour
     {
         InventoryBox.SetActive(true);
 
-        // Clear SpawnedCars list
+        // Clear SpawnedCards list
         SpawnedCards = new List<GameObject>();
 
         // Spawn cards
@@ -121,13 +104,13 @@ public class CardInventory : MonoBehaviour
         {
             // Calculate the Y-Offset, rounded down to closest int
             // This means it increases by one every 5 "loops"
-            Decimal Division = i / 5;
-            Decimal YOffset = Decimal.Truncate(Division);
+            float YOffset = (int)(i / 5);
 
             // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
             // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
             // Running (i Modulo 5) since every 5th value it should jump down, so 0, 1, 2, 3, 4 then back to 0
-            GameObject Card = Instantiate(CardPrefab, new Vector3(Row1SpawnPoints[i % 5].position.x, Row1SpawnPoints[i % 5].position.y - ((float)YOffset * 3.7f), Row1SpawnPoints[i % 5].position.z), new Quaternion(0, 0, 0, 0), CardParent);
+            // YOffset * 3.7f since it should make an even space between each row
+            GameObject Card = Instantiate(CardPrefab, new Vector3(Row1SpawnPoints[i % 5].position.x, Row1SpawnPoints[i % 5].position.y - (YOffset * 3.7f), Row1SpawnPoints[i % 5].position.z), new Quaternion(0, 0, 0, 0), CardParent);
 
             // Set image of said Card
             Card.GetComponent<Image>().sprite = CardSprites[CardType[i]];

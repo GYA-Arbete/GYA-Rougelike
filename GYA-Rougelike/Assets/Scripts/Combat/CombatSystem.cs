@@ -1,16 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CombatSystem : MonoBehaviour
 {
+    [Header("Buttons")]
     public Button EndTurnButton;
     public Button ExitRoomButton;
 
-    public int Energy;
-    public BarScript EnergyBarScript;
-
+    [Header("Combat Participants")]
     public Transform[] Players;
     public Transform[] Enemies;
     public bool[] DeadEnemies;
@@ -24,9 +22,10 @@ public class CombatSystem : MonoBehaviour
     public Transform MoveQueueSnapPoint;
 
     [Header("Other Scripts")]
-    public EnemySpawner EnemySpawn;
-    public PlayerCards CardScript;
-    public CameraSwitch PullMapUpDownScript;
+    public BarScript EnergyBarScript;
+    public EnemySpawner EnemySpawnerScript;
+    public CardSpawner CardSpawnerScript;
+    public CameraSwitch CameraSwitchScript;
 
     // Start is called before the first frame update
     void Start()
@@ -43,13 +42,15 @@ public class CombatSystem : MonoBehaviour
             Element.SetActive(true);
         }
 
-        Enemies = EnemySpawn.SpawnEnemies(EnemyAmount, EnemyTypes);
+        Enemies = EnemySpawnerScript.SpawnEnemies(EnemyAmount, EnemyTypes);
+
+        CardSpawnerScript.ResetCards();
 
         DeadEnemies = new bool[EnemyAmount];
 
         EnergyBarScript.SetupBar(10, new Color32(252, 206, 82, 255));
 
-        PullMapUpDownScript.SetViewToRoom();
+        CameraSwitchScript.SetViewToRoom();
     }
 
     void EndCombat()
@@ -64,14 +65,12 @@ public class CombatSystem : MonoBehaviour
         {
             if (Enemy != null)
             {
-                HealthSystem HealthSystemScript = Enemy.GetComponent<HealthSystem>();
-
-                HealthSystemScript.Die();
+                Enemy.GetComponent<HealthSystem>().Die();
             }
         }
 
         // Exit the room
-        PullMapUpDownScript.SetViewToMap();
+        CameraSwitchScript.SetViewToMap();
     }
 
     void EndTurn()
@@ -80,7 +79,7 @@ public class CombatSystem : MonoBehaviour
 
         PlayCards();
 
-        CardScript.ResetCards();
+        CardSpawnerScript.ResetCards();
 
         // Check if all Enemies are dead, eg combat has ended
         int DeadEnemiesAmount = 0;

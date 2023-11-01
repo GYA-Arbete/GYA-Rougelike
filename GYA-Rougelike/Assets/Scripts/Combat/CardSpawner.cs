@@ -1,33 +1,24 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PlayerCards : MonoBehaviour
+public class CardSpawner : MonoBehaviour
 {
-    public Transform CardSpawner;
+    [Header("Card Spawning")]
+    public Transform CardsParent;
+    public GameObject CardPrefab;
+    public Transform CardSpawnPointsParent;
     public Transform[] CardSpawnPoints;
     public GameObject[] SpawnedCards;
 
-    public Sprite[] CardSprites;
-
-    public Transform CardsParent;
-
-    public GameObject CardPrefab;
-
+    [Header("Other Scripts")]
     public CardInventory CardInventoryScript;
-
-    public CardInventory.CardList CardsInInventory;
-
-    public List<int> CardType;
 
     // Start is called before the first frame update
     void Start()
     {
         // Put parent + children into array
-        CardSpawnPoints = GetComponentsInChildren<Transform>();
-
-        SpawnCards();
+        CardSpawnPoints = CardSpawnPointsParent.GetComponentsInChildren<Transform>();
     }
 
     public void ResetCards()
@@ -43,9 +34,9 @@ public class PlayerCards : MonoBehaviour
 
     void SpawnCards()
     {
-        CardsInInventory = CardInventoryScript.Inventory;
-        CardType = CardInventoryScript.CardType;
-        CardSprites = CardInventoryScript.CardSprites;
+        CardInventory.CardList CardsInInventory = CardInventoryScript.Inventory;
+        List<int> CardType = CardInventoryScript.CardType;
+        Sprite[] CardSprites = CardInventoryScript.CardSprites;
 
         SpawnedCards = new GameObject[CardsInInventory.cardList.Count];
 
@@ -61,8 +52,7 @@ public class PlayerCards : MonoBehaviour
             CardStatsScript.AssignValues(CardsInInventory.cardList[i - 1].Energy, CardsInInventory.cardList[i - 1].Damage, CardsInInventory.cardList[i - 1].Defence, CardsInInventory.cardList[i - 1].Cooldown);
 
             // Change the cards image
-            SpriteRenderer CardImage = Card.GetComponent<SpriteRenderer>();
-            CardImage.sprite = CardSprites[CardType[i - 1]];
+            Card.GetComponent<SpriteRenderer>().sprite = CardSprites[CardType[i - 1]];
 
             // Set text for the card-sprite
             Transform[] TextBoxes = Card.GetComponentsInChildren<Transform>();

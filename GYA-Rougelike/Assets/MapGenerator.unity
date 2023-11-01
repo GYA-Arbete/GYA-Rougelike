@@ -978,7 +978,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1209565285}
+  m_Father: {fileID: 1796401762}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &288843430
 GameObject:
@@ -1042,6 +1042,39 @@ MonoBehaviour:
   CampRoomScript: {fileID: 905317487}
   LootRoomScript: {fileID: 1865235714}
   CombatSystemScript: {fileID: 1103261179}
+--- !u!1 &330661237
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 330661238}
+  m_Layer: 0
+  m_Name: Sprites
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &330661238
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330661237}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 465537962}
+  - {fileID: 509590590}
+  m_Father: {fileID: 961711411}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &395965415
 GameObject:
   m_ObjectHideFlags: 0
@@ -1119,7 +1152,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CardInventoryButton: {fileID: 184234080}
-  CardInventoryArray: []
   InventoryBox: {fileID: 1444912103}
   CardSprites:
   - {fileID: 21300000, guid: 0212de42c9a7c874693b106d2de5ff21, type: 3}
@@ -1134,7 +1166,6 @@ MonoBehaviour:
     cardList: []
   Inventory:
     cardList: []
-  JsonFile: {fileID: 4900000, guid: 589ad5f234ba8df4388d0639a890dffb, type: 3}
   CardParent: {fileID: 1027766261}
   CardPrefab: {fileID: 4095517407591175807, guid: a205f06f0a2bc7844846a4b77ed8f9ed, type: 3}
   Row1SpawnPoints:
@@ -1268,7 +1299,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2064234101}
+  m_Father: {fileID: 330661238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &465537963
 SpriteRenderer:
@@ -1394,11 +1425,11 @@ Transform:
   m_GameObject: {fileID: 509590589}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.45, z: 0}
+  m_LocalPosition: {x: 0, y: 3.4499998, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2064234101}
+  m_Father: {fileID: 330661238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &509590591
 SpriteRenderer:
@@ -2319,8 +2350,6 @@ MonoBehaviour:
   SpawnPoints: []
   Rooms: []
   Lines: []
-  CurrentRoom: 0
-  PreviousRoom: {fileID: 0}
   MapNavigationScript: {fileID: 288843432}
 --- !u!1 &686461444
 GameObject:
@@ -2637,7 +2666,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1209565285}
+  m_Father: {fileID: 1796401762}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &809011521
 GameObject:
@@ -3353,6 +3382,7 @@ Transform:
   - {fileID: 1103261180}
   - {fileID: 2064234101}
   - {fileID: 1210741372}
+  - {fileID: 330661238}
   m_Father: {fileID: 1839729334}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &972691412
@@ -3782,22 +3812,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EndTurnButton: {fileID: 264480458}
   ExitRoomButton: {fileID: 1006624649}
-  Energy: 0
-  EnergyBarScript: {fileID: 1814719337306141361}
   Players:
   - {fileID: 1090164095}
   - {fileID: 1945140423}
   Enemies: []
   DeadEnemies: 
   CombatRoomElements:
-  - {fileID: 2064234100}
+  - {fileID: 330661237}
   - {fileID: 1210741368}
   CardParent: {fileID: 1788190272}
   CardsInMoveQueue: []
   MoveQueueSnapPoint: {fileID: 418957647}
-  EnemySpawn: {fileID: 1209565286}
-  CardScript: {fileID: 1799097176}
-  PullMapUpDownScript: {fileID: 628599124}
+  EnergyBarScript: {fileID: 1814719337306141361}
+  EnemySpawnerScript: {fileID: 1209565286}
+  CardSpawnerScript: {fileID: 2064234102}
+  CameraSwitchScript: {fileID: 628599124}
 --- !u!4 &1103261180
 Transform:
   m_ObjectHideFlags: 0
@@ -4153,10 +4182,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 281916555}
-  - {fileID: 792600579}
-  - {fileID: 1803296390}
-  - {fileID: 1413649336}
+  - {fileID: 1796401762}
   - {fileID: 1686414939}
   - {fileID: 2115617480}
   m_Father: {fileID: 961711411}
@@ -4473,7 +4499,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1209565285}
+  m_Father: {fileID: 1796401762}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1425328992
 GameObject:
@@ -5977,6 +6003,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2064234101}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1796401761
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1796401762}
+  m_Layer: 0
+  m_Name: SpawnPoints
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1796401762
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1796401761}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 281916555}
+  - {fileID: 792600579}
+  - {fileID: 1803296390}
+  - {fileID: 1413649336}
+  m_Father: {fileID: 1209565285}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1796844598
 GameObject:
   m_ObjectHideFlags: 0
@@ -6092,9 +6153,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1799097175}
-  - component: {fileID: 1799097176}
   m_Layer: 0
-  m_Name: CardSpawner
+  m_Name: CardSpawnPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6130,28 +6190,6 @@ Transform:
   - {fileID: 972691413}
   m_Father: {fileID: 2064234101}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1799097176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1799097174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dba2a870665827a46a7d72d91104ba21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CardSpawner: {fileID: 1799097175}
-  CardSpawnPoints: []
-  SpawnedCards: []
-  CardSprites: []
-  CardsParent: {fileID: 1788190272}
-  CardPrefab: {fileID: 541792869356932419, guid: 14723156fe6411e45860dd50050686f4, type: 3}
-  CardInventoryScript: {fileID: 399353178}
-  CardsInInventory:
-    cardList: []
-  CardType: 
 --- !u!1 &1803296389
 GameObject:
   m_ObjectHideFlags: 0
@@ -6181,7 +6219,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1209565285}
+  m_Father: {fileID: 1796401762}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1816879916
 GameObject:
@@ -7820,13 +7858,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2064234101}
+  - component: {fileID: 2064234102}
   m_Layer: 0
-  m_Name: Cards
+  m_Name: CardSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2064234101
 Transform:
   m_ObjectHideFlags: 0
@@ -7840,13 +7879,29 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 465537962}
   - {fileID: 1799097175}
-  - {fileID: 509590590}
   - {fileID: 489942777}
   - {fileID: 1788190272}
   m_Father: {fileID: 961711411}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2064234102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064234100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dba2a870665827a46a7d72d91104ba21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CardsParent: {fileID: 1788190272}
+  CardPrefab: {fileID: 541792869356932419, guid: 14723156fe6411e45860dd50050686f4, type: 3}
+  CardSpawnPointsParent: {fileID: 1799097175}
+  CardSpawnPoints: []
+  SpawnedCards: []
+  CardInventoryScript: {fileID: 399353178}
 --- !u!1 &2081934848
 GameObject:
   m_ObjectHideFlags: 0

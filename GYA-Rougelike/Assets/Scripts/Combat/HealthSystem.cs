@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 
@@ -62,6 +60,7 @@ public class HealthSystem : MonoBehaviour
             HealthBarScript.UpdateBar(-Damage);
         }
 
+        // Check if dead
         if (Health  <= 0)
         {
             Die();

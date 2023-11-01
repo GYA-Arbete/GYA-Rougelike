@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Simple script for holding the values of the card its attached too
 public class CardStats : MonoBehaviour
 {
     [Header("Card Stats")]

@@ -32,7 +32,7 @@ public class DragDropCard : MonoBehaviour
                 GameObject temp2 = (GameObject)temp[i];
                 MoveQueueSnapPointsParent = temp2.transform;
             }
-            else if (temp[i].name == "CardSpawner")
+            else if (temp[i].name == "CardSpawnPoints")
             {
                 GameObject temp2 = (GameObject)temp[i];
                 CardViewSnapPointsParent = temp2.transform;
