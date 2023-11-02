@@ -7859,6 +7859,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2064234101}
   - component: {fileID: 2064234102}
+  - component: {fileID: 2064234103}
   m_Layer: 0
   m_Name: CardSystem
   m_TagString: Untagged
@@ -7902,6 +7903,24 @@ MonoBehaviour:
   CardSpawnPoints: []
   SpawnedCards: []
   CardInventoryScript: {fileID: 399353178}
+--- !u!114 &2064234103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064234100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819555dfff5453147919e4fbf59b7e7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SnapPointsDistance: []
+  CardInPoint: 
+  CardViewSnapPointsParent: {fileID: 1799097175}
+  MoveQueueSnapPointsParent: {fileID: 489942777}
+  SnapPoints: []
+  EnergyBarScript: {fileID: 1814719337306141361}
 --- !u!1 &2081934848
 GameObject:
   m_ObjectHideFlags: 0

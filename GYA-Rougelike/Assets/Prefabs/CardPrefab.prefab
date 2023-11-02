@@ -145,8 +145,8 @@ GameObject:
   - component: {fileID: 8513907468866584437}
   - component: {fileID: 6727934071205778585}
   - component: {fileID: -5731033582394011124}
-  - component: {fileID: -8796837482279630970}
   - component: {fileID: 4494123491760093277}
+  - component: {fileID: -7900355219064296573}
   m_Layer: 0
   m_Name: CardPrefab
   m_TagString: Untagged
@@ -267,29 +267,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.5}
   m_EdgeRadius: 0
---- !u!114 &-8796837482279630970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 541792869356932419}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 819555dfff5453147919e4fbf59b7e7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RoomViewCamera: {fileID: 0}
-  isDragging: 0
-  InMoveQueue: 0
-  MoveQueueSnapPointsParent: {fileID: 0}
-  CardViewSnapPointsParent: {fileID: 0}
-  SnapPoints: []
-  SnapPointsDistance: []
-  Temp1: []
-  Temp2: []
-  EnergyBarScript: {fileID: 0}
-  ThisCardsStats: {fileID: 0}
 --- !u!114 &4494123491760093277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,6 +283,20 @@ MonoBehaviour:
   Damage: 0
   Defence: 0
   Cooldown: 0
+--- !u!114 &-7900355219064296573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 541792869356932419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8155be7156ba8e048a5df993ad418799, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RoomViewCamera: {fileID: 0}
+  DragDropCardManagerScript: {fileID: 0}
 --- !u!1 &803180275042994014
 GameObject:
   m_ObjectHideFlags: 0
