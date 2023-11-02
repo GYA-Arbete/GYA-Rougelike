@@ -343,7 +343,7 @@ RectTransform:
   m_Children:
   - {fileID: 1205830420}
   - {fileID: 184234079}
-  m_Father: {fileID: 679690434}
+  m_Father: {fileID: 2010621793}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1904,6 +1904,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PauseMenuCanvas: {fileID: 1796844601}
   PullMapUpDownButton: {fileID: 1205830421}
+  Map: {fileID: 679690433}
   MapViewCamera: {fileID: 519420031}
   RoomViewCamera: {fileID: 1351606603}
 --- !u!1 &630011472
@@ -2327,7 +2328,6 @@ Transform:
   - {fileID: 279262562}
   - {fileID: 72757724}
   - {fileID: 1192632115}
-  - {fileID: 174403698}
   m_Father: {fileID: 1766066484}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &679690435
@@ -7465,6 +7465,7 @@ Transform:
   m_Children:
   - {fileID: 2145417892}
   - {fileID: 399353177}
+  - {fileID: 174403698}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2015001817

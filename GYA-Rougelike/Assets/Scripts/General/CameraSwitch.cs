@@ -6,6 +6,7 @@ public class CameraSwitch : MonoBehaviour
     [Header("Viewable Elements")]
     public Canvas PauseMenuCanvas;
     public Button PullMapUpDownButton;
+    public GameObject Map;
 
     [Header("Cameras")]
     public Camera MapViewCamera;
@@ -36,6 +37,9 @@ public class CameraSwitch : MonoBehaviour
         MapViewCamera.enabled = false;
         RoomViewCamera.enabled = true;
 
+        // Disable the map to avoid stupid bug (See issue #56)
+        Map.SetActive(false);
+
         // Set which camera is used to render PauseMenu
         PauseMenuCanvas.worldCamera = RoomViewCamera;
     }
@@ -44,6 +48,9 @@ public class CameraSwitch : MonoBehaviour
     {
         MapViewCamera.enabled = true;
         RoomViewCamera.enabled = false;
+
+        // Disable the map to avoid stupid bug (See issue #56)
+        Map.SetActive(true);
 
         // Set which camera is used to render PauseMenu
         PauseMenuCanvas.worldCamera = MapViewCamera;
