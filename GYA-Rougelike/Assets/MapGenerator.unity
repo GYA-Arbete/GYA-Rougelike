@@ -3810,6 +3810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a465bb14e47b0204495748062dfab796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InCombat: 0
   EndTurnButton: {fileID: 264480458}
   ExitRoomButton: {fileID: 1006624649}
   Players:
@@ -8422,6 +8423,8 @@ MonoBehaviour:
   IsPaused: 0
   MapGenScript: {fileID: 679690435}
   StartRoomScript: {fileID: 270984553}
+  CombatSystemScript: {fileID: 1103261179}
+  CardSpawnerScript: {fileID: 2064234102}
 --- !u!114 &163357322308376873
 MonoBehaviour:
   m_ObjectHideFlags: 0

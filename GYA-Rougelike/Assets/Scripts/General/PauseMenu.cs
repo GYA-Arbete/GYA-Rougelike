@@ -16,6 +16,8 @@ public class PauseMenu : MonoBehaviour
     [Header("Other Scripts")]
     public MapGen MapGenScript;
     public StartRoom StartRoomScript;
+    public CombatSystem CombatSystemScript;
+    public CardSpawner CardSpawnerScript;
 
     void Start()
     {
@@ -54,6 +56,13 @@ public class PauseMenu : MonoBehaviour
 
     void Restart()
     {
+        // If in combat, end combat
+        if (CombatSystemScript.InCombat)
+        {
+            CombatSystemScript.EndCombat();
+            CardSpawnerScript.DespawnCards();
+        }
+
         MapGenScript.DeleteMap();
 
         StartRoomScript.EnterStartRoom();

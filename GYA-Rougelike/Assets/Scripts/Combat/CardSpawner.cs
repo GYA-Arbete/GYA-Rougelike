@@ -21,6 +21,15 @@ public class CardSpawner : MonoBehaviour
         CardSpawnPoints = CardSpawnPointsParent.GetComponentsInChildren<Transform>();
     }
 
+    public void DespawnCards()
+    {
+        // Remove cards
+        foreach (GameObject Card in SpawnedCards)
+        {
+            Destroy(Card);
+        }
+    }
+
     public void ResetCards()
     {
         // Remove cards

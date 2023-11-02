@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class CombatSystem : MonoBehaviour
 {
+    public bool InCombat = false;
+
     [Header("Buttons")]
     public Button EndTurnButton;
     public Button ExitRoomButton;
@@ -37,6 +39,8 @@ public class CombatSystem : MonoBehaviour
 
     public void StartCombat(int EnemyAmount, int[] EnemyTypes)
     {
+        InCombat = true;
+
         foreach (GameObject Element in CombatRoomElements)
         {
             Element.SetActive(true);
@@ -53,8 +57,10 @@ public class CombatSystem : MonoBehaviour
         CameraSwitchScript.SetViewToRoom();
     }
 
-    void EndCombat()
+    public void EndCombat()
     {
+        InCombat = false;
+
         foreach (GameObject Element in CombatRoomElements)
         {
             Element.SetActive(false);
