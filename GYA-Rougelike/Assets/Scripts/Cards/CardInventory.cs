@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -111,9 +112,35 @@ public class CardInventory : MonoBehaviour
             // Running (i Modulo 5) since every 5th value it should jump down, so 0, 1, 2, 3, 4 then back to 0
             // YOffset * 3.7f since it should make an even space between each row
             GameObject Card = Instantiate(CardPrefab, new Vector3(Row1SpawnPoints[i % 5].position.x, Row1SpawnPoints[i % 5].position.y - (YOffset * 3.7f), Row1SpawnPoints[i % 5].position.z), new Quaternion(0, 0, 0, 0), CardParent);
+            Card.transform.localScale = new Vector3(2, 2, 0);
 
             // Set image of said Card
             Card.GetComponent<Image>().sprite = CardSprites[CardType[i]];
+
+            // Set text for the card-sprite
+            Transform[] TextBoxes = Card.GetComponentsInChildren<Transform>();
+            foreach (Transform TextBox in TextBoxes)
+            {
+                TextMeshProUGUI Text = TextBox.GetComponent<TextMeshProUGUI>();
+                if (Text != null)
+                {
+                    if (TextBox.name == "EnergyCount")
+                    {
+                        Text.text = Inventory.cardList[i].Energy.ToString();
+                    }
+                    else
+                    {
+                        if (Inventory.cardList[i].Damage > 0)
+                        {
+                            Text.text = Inventory.cardList[i].Damage.ToString();
+                        }
+                        else if (Inventory.cardList[i].Defence > 0)
+                        {
+                            Text.text = Inventory.cardList[i].Defence.ToString();
+                        }
+                    }
+                }
+            }
 
             SpawnedCards.Add(Card);
         }

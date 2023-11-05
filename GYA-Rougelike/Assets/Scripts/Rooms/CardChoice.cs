@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,6 +39,31 @@ public class CardChoice : MonoBehaviour
 
             // Set correct image for each button
             ChoiceButtons[i].gameObject.GetComponent<Image>().sprite = CardInventoryScript.CardSprites[CardType];
+
+            // Set text for the card-sprite
+            Transform[] TextBoxes = ChoiceButtons[i].GetComponentsInChildren<Transform>();
+            foreach (Transform TextBox in TextBoxes)
+            {
+                TextMeshProUGUI Text = TextBox.GetComponent<TextMeshProUGUI>();
+                if (Text != null)
+                {
+                    if (TextBox.name == "EnergyCount")
+                    {
+                        Text.text = CardInventoryScript.CardTypes.cardList[CardType].Energy.ToString();
+                    }
+                    else
+                    {
+                        if (CardInventoryScript.CardTypes.cardList[CardType].Damage > 0)
+                        {
+                            Text.text = CardInventoryScript.CardTypes.cardList[CardType].Damage.ToString();
+                        }
+                        else if (CardInventoryScript.CardTypes.cardList[CardType].Defence > 0)
+                        {
+                            Text.text = CardInventoryScript.CardTypes.cardList[CardType].Defence.ToString();
+                        }
+                    }
+                }
+            }
         }
 
         // Show the choice buttons
