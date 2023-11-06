@@ -19,3 +19,4 @@ Finns också en bool HiddenType som har 20% chans att vara true. Denna gör att 
 | 2     | Buff/Debuff |
 | 3     | Summoner    |
 | 4     | Tank        |
+| 5     | Summon      |
