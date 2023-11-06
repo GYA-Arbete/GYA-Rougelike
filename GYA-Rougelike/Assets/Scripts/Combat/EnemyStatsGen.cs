@@ -10,16 +10,14 @@ public class EnemyStatsGen : MonoBehaviour
     public int[] DamageMin = { 1, 1, 1, 1, 1 };
     public int[] DamageMax = { 5, 5, 5, 5, 5 };
 
-    [Header("Enemy Stats")]
-    public int Damage;
-
     public void GenerateStats(int EnemyType)
     {
         HealthSystem HealthSystemScript = gameObject.GetComponent<HealthSystem>();
+        EnemyAI EnemyAIScript = gameObject.GetComponent<EnemyAI>();
 
         System.Random Rand = new();
 
         HealthSystemScript.MaxHealth = Rand.Next(HealthMin[EnemyType], HealthMax[EnemyType]);
-        Damage = Rand.Next(DamageMin[EnemyType], DamageMax[EnemyType]);
+        EnemyAIScript.Damage = Rand.Next(DamageMin[EnemyType], DamageMax[EnemyType]);
     }
 }

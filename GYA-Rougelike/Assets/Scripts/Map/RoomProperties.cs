@@ -83,7 +83,8 @@ public class RoomProperties : MonoBehaviour
             EnemyTypes = new int[EnemyAmount];
             for (int i = 0; i < EnemyAmount; i++)
             {
-                EnemyTypes[i] = Rand.Next(1, 5);
+                //EnemyTypes[i] = Rand.Next(1, 5);
+                EnemyTypes[i] = 1;
             }
         }
     }

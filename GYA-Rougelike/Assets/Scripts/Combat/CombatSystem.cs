@@ -23,6 +23,10 @@ public class CombatSystem : MonoBehaviour
     public List<Transform> CardsInMoveQueue;
     public Transform MoveQueueSnapPoint;
 
+    [Header("EnemyAI Stuff")]
+    public Sprite[] MoveIndicators;
+    public int[] EnemyMove;
+
     [Header("Other Scripts")]
     public BarScript EnergyBarScript;
     public EnemySpawner EnemySpawnerScript;
@@ -55,6 +59,16 @@ public class CombatSystem : MonoBehaviour
         EnergyBarScript.SetupBar(10, new Color32(252, 206, 82, 255));
 
         CameraSwitchScript.SetViewToRoom();
+
+        // Generate each enemies next turn
+        for (int i = 0; i < EnemyAmount; i++) 
+        {
+            EnemyAI EnemyAIScript = Enemies[i].gameObject.GetComponent<EnemyAI>();
+
+
+            EnemyAIScript.SetupEnemy(EnemyTypes[i], MoveIndicators);
+            EnemyMove[i] = EnemyAIScript.GenerateMove();
+        }
     }
 
     public void EndCombat()
@@ -107,10 +121,19 @@ public class CombatSystem : MonoBehaviour
 
         // Enemies turn
 
-        EnemyAttack();
+        EnemyTurn();
 
         // Set back energy to 10 / 10
         EnergyBarScript.ResetBar();
+
+        // Generate each enemies next turn
+        foreach (Transform Enemy in Enemies)
+        {
+            if (Enemy != null)
+            {
+                Enemy.GetComponent<EnemyAI>().GenerateMove();
+            }
+        }
     }
 
     void GetCardsInMoveQueue()
@@ -174,18 +197,26 @@ public class CombatSystem : MonoBehaviour
     }
 
     // Called when its the enemies turn, they do stuff then
-    void EnemyAttack()
+    void EnemyTurn()
     {
         int TotalDamage = 0;
         int TotalDefence = 0;
 
         // Get what to do
-        foreach (Transform Enemy in Enemies)
+        for (int i = 0; i < EnemyMove.Length; i++)
         {
-            if (Enemy != null)
+            // Check that enemy exists
+            if (Enemies[i] != null)
             {
-                EnemyStatsGen DamageSystemScript = Enemy.GetComponent<EnemyStatsGen>();
-                TotalDamage += DamageSystemScript.Damage;
+                switch (EnemyMove[i])
+                {
+                    case 0:
+                        TotalDefence += 2;
+                        break;
+                    case 1:
+                        TotalDamage += gameObject.GetComponent<EnemyAI>().Damage;
+                        break;
+                }
             }
         }
 

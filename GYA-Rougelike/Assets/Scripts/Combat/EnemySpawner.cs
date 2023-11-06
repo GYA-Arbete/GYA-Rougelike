@@ -22,6 +22,7 @@ public class EnemySpawner : MonoBehaviour
             // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
             // Skapa en ny EnemyPrefab för varje fiende som ska skapas
             GameObject Enemy = Instantiate(EnemyPrefabs[EnemyTypes[i]], new Vector3(EnemySpawnPoints[i].position.x, EnemySpawnPoints[i].position.y, EnemySpawnPoints[i].position.z), new Quaternion(0, 0, 0, 0), EnemyParent);
+            Enemy.transform.localScale = new Vector3(108, 108, 1);
 
             Enemies[i] = Enemy.transform;
 
