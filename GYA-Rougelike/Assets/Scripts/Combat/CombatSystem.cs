@@ -75,6 +75,8 @@ public class CombatSystem : MonoBehaviour
             }
         }
 
+        CardSpawnerScript.DespawnCards();
+
         // Exit the room
         CameraSwitchScript.SetViewToMap();
     }
