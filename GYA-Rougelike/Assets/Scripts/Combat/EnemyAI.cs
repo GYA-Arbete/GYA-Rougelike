@@ -15,15 +15,27 @@ public class EnemyAI : MonoBehaviour
 
     public Sprite[] MoveIndicators;
 
+    public int Cooldown;
+
     public void SetupEnemy(int Enemytype, Sprite[] Images)
     {
         EnemyType = Enemytype;
         MoveIndicators = Images;
+
+        switch (EnemyType)
+        {
+            case 0:
+                break;
+            case 1:
+                Cooldown = 5;
+                break;
+        }
     }
 
-    public int GenerateMove()
+    // Int for type of move, bool for if splash damage
+    public Dictionary<int, bool> GenerateMove()
     {
-        System.Random Rand = new();
+        Dictionary<int, bool> ReturnVal = new();
 
         switch (EnemyType)
         {
@@ -32,18 +44,23 @@ public class EnemyAI : MonoBehaviour
                 break;
             // Basic Grunt
             case 1:
-                int Move = Rand.Next(0, 6);
-                // 20% Defence
-                if (Move == 0)
+                // Splash Attack
+                if (Cooldown == 0)
                 {
+                    Cooldown = 5;
+
                     EnemyMoveIndicatorImage.sprite = MoveIndicators[0];
-                    return 0;
+                    ReturnVal.Add(0, true);
+                    break;
                 }
-                // 80% Attack
+                // Normal Attack
                 else
                 {
+                    Cooldown--;
+
                     EnemyMoveIndicatorImage.sprite = MoveIndicators[1];
-                    return 1;
+                    ReturnVal.Add(1, false);
+                    break;
                 }
             // Buff / Debuff
             case 2:
@@ -58,6 +75,6 @@ public class EnemyAI : MonoBehaviour
             case 5:
                 break;
         }
-        return 0;
+        return ReturnVal;
     }
 }

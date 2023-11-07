@@ -25,7 +25,7 @@ public class CombatSystem : MonoBehaviour
 
     [Header("EnemyAI Stuff")]
     public Sprite[] MoveIndicators;
-    public int[] EnemyMove;
+    public Dictionary<int, bool> EnemyMove;
 
     [Header("Other Scripts")]
     public BarScript EnergyBarScript;
@@ -67,7 +67,7 @@ public class CombatSystem : MonoBehaviour
 
 
             EnemyAIScript.SetupEnemy(EnemyTypes[i], MoveIndicators);
-            EnemyMove[i] = EnemyAIScript.GenerateMove();
+            EnemyMove.Add(EnemyAIScript.GenerateMove());
         }
     }
 
