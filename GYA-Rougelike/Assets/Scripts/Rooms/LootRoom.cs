@@ -46,6 +46,11 @@ public class LootRoom : MonoBehaviour
 
     public void ExitLootRoom()
     {
+        foreach (GameObject Element in ElementsToHide)
+        {
+            Element.SetActive(true);
+        }
+
         LootRoomCanvas.SetActive(false);
 
         CameraSwitchScript.SetViewToMap();

@@ -33,10 +33,8 @@ public class EnemyAI : MonoBehaviour
     }
 
     // Int for type of move, bool for if splash damage
-    public Dictionary<int, bool> GenerateMove()
+    public (int, bool) GenerateMove()
     {
-        Dictionary<int, bool> ReturnVal = new();
-
         switch (EnemyType)
         {
             // Boss
@@ -50,8 +48,7 @@ public class EnemyAI : MonoBehaviour
                     Cooldown = 5;
 
                     EnemyMoveIndicatorImage.sprite = MoveIndicators[0];
-                    ReturnVal.Add(0, true);
-                    break;
+                    return (0, true);
                 }
                 // Normal Attack
                 else
@@ -59,8 +56,7 @@ public class EnemyAI : MonoBehaviour
                     Cooldown--;
 
                     EnemyMoveIndicatorImage.sprite = MoveIndicators[1];
-                    ReturnVal.Add(1, false);
-                    break;
+                    return (1, false);
                 }
             // Buff / Debuff
             case 2:
@@ -75,6 +71,6 @@ public class EnemyAI : MonoBehaviour
             case 5:
                 break;
         }
-        return ReturnVal;
+        return (0, true);
     }
 }

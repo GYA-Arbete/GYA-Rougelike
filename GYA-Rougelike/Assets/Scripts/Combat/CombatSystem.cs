@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,7 +26,8 @@ public class CombatSystem : MonoBehaviour
 
     [Header("EnemyAI Stuff")]
     public Sprite[] MoveIndicators;
-    public Dictionary<int, bool> EnemyMove;
+    public int[] EnemyMove;
+    public bool[] SplashDamage;
 
     [Header("Other Scripts")]
     public BarScript EnergyBarScript;
@@ -55,6 +57,8 @@ public class CombatSystem : MonoBehaviour
         CardSpawnerScript.ResetCards();
 
         DeadEnemies = new bool[EnemyAmount];
+        EnemyMove = new int[EnemyAmount];
+        SplashDamage = new bool[EnemyAmount];
 
         EnergyBarScript.SetupBar(10, new Color32(252, 206, 82, 255));
 
@@ -65,9 +69,12 @@ public class CombatSystem : MonoBehaviour
         {
             EnemyAI EnemyAIScript = Enemies[i].gameObject.GetComponent<EnemyAI>();
 
-
             EnemyAIScript.SetupEnemy(EnemyTypes[i], MoveIndicators);
-            EnemyMove.Add(EnemyAIScript.GenerateMove());
+
+            // Get each enemies move
+            var ReturnedValues = EnemyAIScript.GenerateMove();
+            EnemyMove[i] = ReturnedValues.Item1;
+            SplashDamage[i] = ReturnedValues.Item2;
         }
     }
 
@@ -127,11 +134,14 @@ public class CombatSystem : MonoBehaviour
         EnergyBarScript.ResetBar();
 
         // Generate each enemies next turn
-        foreach (Transform Enemy in Enemies)
+        for (int i = 0; i < Enemies.Length; i++)
         {
-            if (Enemy != null)
+            if (Enemies[i] != null)
             {
-                Enemy.GetComponent<EnemyAI>().GenerateMove();
+                // Get each enemies move
+                var ReturnedValues = Enemies[i].GetComponent<EnemyAI>().GenerateMove();
+                EnemyMove[i] = ReturnedValues.Item1;
+                SplashDamage[i] = ReturnedValues.Item2;
             }
         }
     }
@@ -199,27 +209,48 @@ public class CombatSystem : MonoBehaviour
     // Called when its the enemies turn, they do stuff then
     void EnemyTurn()
     {
-        int TotalDamage = 0;
-        int TotalDefence = 0;
-
-        // Get what to do
+        // Do each move in EnemyMoves
         for (int i = 0; i < EnemyMove.Length; i++)
         {
-            // Check that enemy exists
             if (Enemies[i] != null)
             {
-                switch (EnemyMove[i])
+                if (SplashDamage[i] == true)
                 {
-                    case 0:
-                        TotalDefence += 2;
-                        break;
-                    case 1:
-                        TotalDamage += gameObject.GetComponent<EnemyAI>().Damage;
-                        break;
+                    int Damage = Enemies[i].GetComponent<EnemyAI>().Damage;
+
+                    foreach (Transform Player in Players)
+                    {
+                        if (Player != null)
+                        {
+                            Player.GetComponent<HealthSystem>().TakeDamage(Damage);
+                        }
+                    }
+                }
+                else
+                {
+                    switch (EnemyMove[i])
+                    {
+                        // Cleave (Normal splash)
+                        case 0:
+                            break;
+                        // Slash (Normal attack)
+                        case 1:
+                            int Damage = Enemies[i].GetComponent<EnemyAI>().Damage;
+
+                            foreach (Transform Player in Players)
+                            {
+                                if (Player != null)
+                                {
+                                    Player.GetComponent<HealthSystem>().TakeDamage(Damage);
+                                    break;
+                                }
+                            }
+                            break;
+                    }
                 }
             }
         }
-
+        /*
         // Do said things to self
         if (TotalDefence > 0)
         {
@@ -229,20 +260,6 @@ public class CombatSystem : MonoBehaviour
 
                 HealthSystemScript.AddDefence(TotalDefence);
             }
-        }
-
-        // Do said things to players
-        if (TotalDamage > 0)
-        {
-            foreach (Transform Player in Players)
-            {
-                HealthSystem HealthSystemScript = Player.GetComponent<HealthSystem>();
-
-                if (HealthSystemScript.Health > 0)
-                {
-                    HealthSystemScript.TakeDamage(TotalDamage);
-                }
-            }
-        }
+        }*/
     }
 }
