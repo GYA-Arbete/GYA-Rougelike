@@ -8994,6 +8994,7 @@ MonoBehaviour:
   CardSpawnPoints: []
   SpawnedCards: []
   CardInventoryScript: {fileID: 399353178}
+  DragDropCardManagerScript: {fileID: 2064234103}
 --- !u!114 &2064234103
 MonoBehaviour:
   m_ObjectHideFlags: 0

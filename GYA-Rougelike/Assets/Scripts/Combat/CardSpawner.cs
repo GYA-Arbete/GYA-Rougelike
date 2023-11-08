@@ -13,6 +13,7 @@ public class CardSpawner : MonoBehaviour
 
     [Header("Other Scripts")]
     public CardInventory CardInventoryScript;
+    public DragDropCardManager DragDropCardManagerScript;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,13 @@ public class CardSpawner : MonoBehaviour
         {
             Destroy(Card);
         }
+
+        // Reset CardInPoint array, no cards are in any point since they are all despawned
+        for (int i = 0; i < DragDropCardManagerScript.CardInPoint.Length; i++)
+        {
+
+            DragDropCardManagerScript.CardInPoint[i] = false;
+        }
     }
 
     public void ResetCards()
@@ -36,6 +44,13 @@ public class CardSpawner : MonoBehaviour
         foreach (GameObject Card in SpawnedCards)
         {
             Destroy(Card);
+        }
+
+        // Reset CardInPoint array, no cards are in any point since they are all despawned
+        for (int i = 0; i < DragDropCardManagerScript.CardInPoint.Length; i++)
+        {
+
+            DragDropCardManagerScript.CardInPoint[i] = false;
         }
 
         SpawnCards();
