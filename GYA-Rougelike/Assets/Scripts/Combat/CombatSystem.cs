@@ -209,24 +209,6 @@ public class CombatSystem : MonoBehaviour
     // Called when its the enemies turn, they do stuff then
     void EnemyTurn()
     {
-        // Get what to do
-        for (int i = 0; i < EnemyMove.Length; i++)
-        {
-            // Check that enemy exists
-            if (Enemies[i] != null)
-            {
-                switch (EnemyMove[i])
-                {
-                    case 0:
-                        SplashDamage[i] = true;
-                        break;
-                    case 1:
-                        SplashDamage[i] = false;
-                        break;
-                }
-            }
-        }
-
         // Do each move in EnemyMoves
         for (int i = 0; i < EnemyMove.Length; i++)
         {
