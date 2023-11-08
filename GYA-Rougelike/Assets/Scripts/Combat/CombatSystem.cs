@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -165,43 +164,40 @@ public class CombatSystem : MonoBehaviour
     // Called when player has finished their turn, will play each card in the MoveQueue
     void PlayCards()
     {
-        int TotalDamage = 0;
-        int TotalDefence = 0;
-
-        // Get from cards what to do
-        foreach (Transform Card in CardsInMoveQueue)
+        // Do each cards "thing"
+        for (int i = 0; i < CardsInMoveQueue.Count; i++)
         {
-            CardStats Stats = Card.GetComponent<CardStats>();
+            CardStats CardStatsScript = CardsInMoveQueue[i].gameObject.GetComponent<CardStats>();
 
-            TotalDamage += Stats.Damage;
-            TotalDefence += Stats.Defence;
-        }
-
-        // Do said things to enemies
-        if (TotalDamage > 0)
-        {
-            for (int i = 0; i < Enemies.Length; i++)
+            if (CardStatsScript.SplashDamage == true)
             {
-                if (Enemies[i] != null)
+                foreach (Transform Enemy in Enemies)
                 {
-                    HealthSystem HealthSystemScript = Enemies[i].GetComponent<HealthSystem>();
-
-                    if (HealthSystemScript.Health > 0)
+                    if (Enemy != null)
                     {
-                        DeadEnemies[i] = HealthSystemScript.TakeDamage(TotalDamage);
+                        Enemy.GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage);
                     }
                 }
+                break;
             }
-        }
-        
-        // Do said things to self
-        if (TotalDefence > 0)
-        {
-            foreach (Transform Player in Players)
+            else if (CardStatsScript.Defence > 0)
             {
-                HealthSystem HealthSystemScript = Player.GetComponent<HealthSystem>();
-
-                HealthSystemScript.AddDefence(TotalDefence);
+                foreach (Transform Player in Players)
+                {
+                    Player.GetComponent<HealthSystem>().AddDefence(CardStatsScript.Defence);
+                }
+                break;
+            }
+            else
+            {
+                foreach (Transform Enemy in Enemies)
+                {
+                    if (Enemy != null)
+                    {
+                        Enemy.GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -250,16 +246,5 @@ public class CombatSystem : MonoBehaviour
                 }
             }
         }
-        /*
-        // Do said things to self
-        if (TotalDefence > 0)
-        {
-            foreach (Transform Enemy in Enemies)
-            {
-                HealthSystem HealthSystemScript = Enemy.GetComponent<HealthSystem>();
-
-                HealthSystemScript.AddDefence(TotalDefence);
-            }
-        }*/
     }
 }

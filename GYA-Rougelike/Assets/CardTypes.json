@@ -5,6 +5,7 @@
       "Name": "Slash",
       "Energy": 1,
       "Damage": 5,
+      "SplashDamage":  false,
       "Defence": 0,
       "Cooldown": 0
     },
@@ -13,14 +14,16 @@
       "Name": "Block",
       "Energy": 1,
       "Damage": 0,
+      "SplashDamage": false,
       "Defence": 5,
       "Cooldown": 0
     },
     {
       "ID": 2,
-      "Name": "Reflexes",
+      "Name": "Thorns",
       "Energy": 1,
       "Damage": 5,
+      "SplashDamage": false,
       "Defence": 0,
       "Cooldown": 0
     },
@@ -29,6 +32,7 @@
       "Name": "Cleave",
       "Energy": 1,
       "Damage": 5,
+      "SplashDamage": true,
       "Defence": 0,
       "Cooldown": 0
     },
@@ -37,6 +41,7 @@
       "Name": "Bash",
       "Energy": 1,
       "Damage": 5,
+      "SplashDamage": false,
       "Defence": 0,
       "Cooldown": 0
     },
@@ -45,14 +50,16 @@
       "Name": "Adrenaline",
       "Energy": 1,
       "Damage": 5,
+      "SplashDamage": false,
       "Defence": 0,
       "Cooldown": 0
     },
     {
       "ID": 6,
-      "Name": "Surge",
+      "Name": "Roid-Rage",
       "Energy": 1,
       "Damage": 5,
+      "SplashDamage": false,
       "Defence": 0,
       "Cooldown": 0
     }

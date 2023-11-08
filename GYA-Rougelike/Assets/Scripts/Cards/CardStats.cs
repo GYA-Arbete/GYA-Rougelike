@@ -6,13 +6,15 @@ public class CardStats : MonoBehaviour
     [Header("Card Stats")]
     public int Energy;
     public int Damage;
+    public bool SplashDamage;
     public int Defence;
     public int Cooldown;
 
-    public void AssignValues(int energy, int damage, int defence, int cooldown)
+    public void AssignValues(int energy, int damage, bool splash, int defence, int cooldown)
     {
         Energy = energy;
         Damage = damage;
+        SplashDamage = splash;
         Defence = defence;
         Cooldown = cooldown;
     }
