@@ -4334,6 +4334,7 @@ MonoBehaviour:
   MoveIndicators:
   - {fileID: 21300000, guid: c9adb41cd7b12e84faa0343d83d1074d, type: 3}
   - {fileID: 21300000, guid: a8c27fa21e46f2541abe519dfe35f03f, type: 3}
+  - {fileID: 21300000, guid: 632f0defc2513fa4785e7fb048a5ff6a, type: 3}
   EnemyMove: 
   SplashDamage: 
   EnergyBarScript: {fileID: 1814719337306141361}

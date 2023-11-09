@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -84,7 +85,10 @@ public class RoomProperties : MonoBehaviour
             for (int i = 0; i < EnemyAmount; i++)
             {
                 //EnemyTypes[i] = Rand.Next(1, 5);
-                EnemyTypes[i] = 1;
+
+                // Temporary code to only spawn implemented enemies
+                int[] AllowedEnemyTypes = { 1, 4 };
+                EnemyTypes[i] = AllowedEnemyTypes[Rand.Next(0, AllowedEnemyTypes.Length)];
             }
         }
     }

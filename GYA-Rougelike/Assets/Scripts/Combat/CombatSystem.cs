@@ -242,6 +242,10 @@ public class CombatSystem : MonoBehaviour
                                 }
                             }
                             break;
+                        // Block
+                        case 2:
+                            Enemies[i].GetComponent<HealthSystem>().AddDefence(Enemies[i].GetComponent<EnemyAI>().Defence);
+                            break;
                     }
                 }
             }
