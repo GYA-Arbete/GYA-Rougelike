@@ -3698,6 +3698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eba6d24704721e4b95fae11f5c68dc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InCampRoom: 0
   CampRoomCanvas: {fileID: 2048057013}
   RestButton: {fileID: 703334485}
   Players:
@@ -7542,6 +7543,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f731f72d532cabb42b185a7d55cc0b00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InLootRoom: 0
   LootRoomCanvas: {fileID: 1863287361}
   UpgradeButton: {fileID: 813013870}
   NewCardButton: {fileID: 1634301148}
@@ -9618,6 +9620,8 @@ MonoBehaviour:
   IsPaused: 0
   MapGenScript: {fileID: 679690435}
   StartRoomScript: {fileID: 270984553}
+  LootRoomScript: {fileID: 1865235714}
+  CampRoomScript: {fileID: 905317487}
   CombatSystemScript: {fileID: 1103261179}
   CardSpawnerScript: {fileID: 2064234102}
   PlayerManagerScript: {fileID: 2042664324}

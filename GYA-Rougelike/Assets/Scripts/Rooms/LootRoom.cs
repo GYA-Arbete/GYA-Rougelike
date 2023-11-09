@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class LootRoom : MonoBehaviour
 {
+    public bool InLootRoom = false;
+
     [Header("Viewable Elements")]
     public GameObject LootRoomCanvas;
     public Button UpgradeButton;
@@ -39,6 +41,8 @@ public class LootRoom : MonoBehaviour
 
     public void EnterLootRoom()
     {
+        InLootRoom = true;
+
         LootRoomCanvas.SetActive(true);
 
         CameraSwitchScript.SetViewToRoom();
@@ -46,6 +50,8 @@ public class LootRoom : MonoBehaviour
 
     public void ExitLootRoom()
     {
+        InLootRoom = false;
+
         foreach (GameObject Element in ElementsToHide)
         {
             Element.SetActive(true);

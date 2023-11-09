@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class CampRoom : MonoBehaviour
 {
+    public bool InCampRoom = false;
+
     [Header("Viewable Elements")]
     public GameObject CampRoomCanvas;
     public Button RestButton;
@@ -19,13 +21,17 @@ public class CampRoom : MonoBehaviour
 
     public void EnterCampRoom()
     {
+        InCampRoom = true;
+
         CampRoomCanvas.SetActive(true);
 
         CameraSwitchScript.SetViewToRoom();
     }
 
-    void ExitCampRoom()
+    public void ExitCampRoom()
     {
+        InCampRoom = false;
+
         CampRoomCanvas.SetActive(false);
 
         CameraSwitchScript.SetViewToMap();
