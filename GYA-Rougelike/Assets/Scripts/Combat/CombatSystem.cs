@@ -184,7 +184,10 @@ public class CombatSystem : MonoBehaviour
             {
                 foreach (Transform Player in Players)
                 {
-                    Player.GetComponent<HealthSystem>().AddDefence(CardStatsScript.Defence);
+                    if (Player.gameObject.activeSelf)
+                    {
+                        Player.GetComponent<HealthSystem>().AddDefence(CardStatsScript.Defence);
+                    }
                 }
                 break;
             }
@@ -210,13 +213,14 @@ public class CombatSystem : MonoBehaviour
         {
             if (Enemies[i] != null)
             {
+                // Do Cleave (Normal Splash)
                 if (SplashDamage[i] == true)
                 {
                     int Damage = Enemies[i].GetComponent<EnemyAI>().Damage;
 
                     foreach (Transform Player in Players)
                     {
-                        if (Player != null)
+                        if (Player.gameObject.activeSelf)
                         {
                             Player.GetComponent<HealthSystem>().TakeDamage(Damage);
                         }
@@ -235,7 +239,7 @@ public class CombatSystem : MonoBehaviour
 
                             foreach (Transform Player in Players)
                             {
-                                if (Player != null)
+                                if (Player.gameObject.activeSelf)
                                 {
                                     Player.GetComponent<HealthSystem>().TakeDamage(Damage);
                                     break;

@@ -4287,6 +4287,7 @@ MonoBehaviour:
   MaxHealth: 0
   Health: 0
   Defence: 0
+  Player: 0
   HealthBarScript: {fileID: 0}
 --- !u!1 &1103261178
 GameObject:
@@ -8266,6 +8267,7 @@ MonoBehaviour:
   MaxHealth: 0
   Health: 0
   Defence: 0
+  Player: 0
   HealthBarScript: {fileID: 0}
 --- !u!1 &1959612796
 GameObject:
@@ -9618,6 +9620,7 @@ MonoBehaviour:
   StartRoomScript: {fileID: 270984553}
   CombatSystemScript: {fileID: 1103261179}
   CardSpawnerScript: {fileID: 2064234102}
+  PlayerManagerScript: {fileID: 2042664324}
 --- !u!114 &163357322308376873
 MonoBehaviour:
   m_ObjectHideFlags: 0

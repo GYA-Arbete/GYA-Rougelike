@@ -18,6 +18,7 @@ public class PauseMenu : MonoBehaviour
     public StartRoom StartRoomScript;
     public CombatSystem CombatSystemScript;
     public CardSpawner CardSpawnerScript;
+    public PlayerManager PlayerManagerScript;
 
     void Start()
     {
@@ -66,6 +67,8 @@ public class PauseMenu : MonoBehaviour
         MapGenScript.DeleteMap();
 
         StartRoomScript.EnterStartRoom();
+
+        PlayerManagerScript.ResetPlayers();
 
         Unpause();
     }

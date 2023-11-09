@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // Simple script for making sure each player is correctly set up at the start of the game
-public class PlayerSpawn : MonoBehaviour
+public class PlayerManager : MonoBehaviour
 {
     public Transform[] Players;
 
@@ -47,6 +47,16 @@ public class PlayerSpawn : MonoBehaviour
 
             // Setup HealthSystem
             HealthSystemScript.SetHealth(HealthBarScript);
+        }
+    }
+
+    public void ResetPlayers()
+    {
+        for (int i = 0; i < Players.Length; i++)
+        {
+            HealthSystem HealthSystemScript = Players[i].GetComponent<HealthSystem>();
+
+            HealthSystemScript.ResetHealth();
         }
     }
 }
