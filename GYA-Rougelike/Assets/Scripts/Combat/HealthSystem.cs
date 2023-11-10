@@ -53,6 +53,8 @@ public class HealthSystem : MonoBehaviour
     public void AddDefence(int DefenceToAdd)
     {
         Defence += DefenceToAdd;
+
+        HealthBarScript.UpdateDefence(Defence);
     }
 
     // Function that returns a bool for if dead
@@ -67,6 +69,8 @@ public class HealthSystem : MonoBehaviour
                 HealthBarScript.UpdateBar(-Math.Abs(Defence));
 
                 Defence = 0;
+
+                HealthBarScript.UpdateDefence(Defence);
             }
         }
         else
@@ -95,6 +99,7 @@ public class HealthSystem : MonoBehaviour
             gameObject.SetActive(false);
             HealthBarScript.GetComponent<Transform>().gameObject.SetActive(false);
         }
+        // If an Enemy
         else
         {
             // Removes self

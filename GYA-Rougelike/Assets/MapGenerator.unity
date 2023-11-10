@@ -9741,9 +9741,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Text: {fileID: 4814589210553422452}
-  Slider: {fileID: 0}
+  Slider: {fileID: 2478197497596563515}
   CurrentValue: 0
   MaxValue: 10
+  BlockIndicator: {fileID: 0}
+  BlockText: {fileID: 0}
   FillGradient:
     serializedVersion: 2
     key0: {r: 0.9882353, g: 0.80784315, b: 0.32156864, a: 1}
