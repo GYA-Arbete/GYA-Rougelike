@@ -69,9 +69,9 @@ public class HealthSystem : MonoBehaviour
                 HealthBarScript.UpdateBar(-Math.Abs(Defence));
 
                 Defence = 0;
-
-                HealthBarScript.UpdateDefence(Defence);
             }
+
+            HealthBarScript.UpdateDefence(Defence);
         }
         else
         {

@@ -178,7 +178,6 @@ public class CombatSystem : MonoBehaviour
                         Enemy.GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage);
                     }
                 }
-                break;
             }
             else if (CardStatsScript.Defence > 0)
             {
@@ -189,7 +188,6 @@ public class CombatSystem : MonoBehaviour
                         Player.GetComponent<HealthSystem>().AddDefence(CardStatsScript.Defence);
                     }
                 }
-                break;
             }
             else
             {
