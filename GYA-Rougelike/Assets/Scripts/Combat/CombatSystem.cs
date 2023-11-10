@@ -13,6 +13,7 @@ public class CombatSystem : MonoBehaviour
     [Header("Combat Participants")]
     public Transform[] Players;
     public Transform[] Enemies;
+    public Transform[] Summons;
     public bool[] DeadEnemies;
 
     [Header("CombatRoom-Exclusive Elements")]
@@ -247,6 +248,10 @@ public class CombatSystem : MonoBehaviour
                         // Block
                         case 2:
                             Enemies[i].GetComponent<HealthSystem>().AddDefence(Enemies[i].GetComponent<EnemyAI>().Defence);
+                            break;
+                        // Summon summons
+                        case 3:
+                            Summons = EnemySpawnerScript.SpawnSummons();
                             break;
                     }
                 }

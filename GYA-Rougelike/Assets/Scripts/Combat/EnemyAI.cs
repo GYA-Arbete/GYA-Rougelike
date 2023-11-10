@@ -28,6 +28,9 @@ public class EnemyAI : MonoBehaviour
             case 1:
                 Cooldown = 5;
                 break;
+            case 3:
+                Cooldown = 5;
+                break;
             case 4:
                 Cooldown = 5;
                 break;
@@ -67,7 +70,22 @@ public class EnemyAI : MonoBehaviour
                 break;
             // Summoner
             case 3:
-                break;
+                // Summon summons
+                if (Cooldown == 0)
+                {
+                    Cooldown = 5;
+
+                    //EnemyMoveIndicatorImage.sprite = MoveIndicators[] // MISSING CORRECT IMAGE
+                    return (3, false);
+                }
+                // Normal Attack
+                else
+                {
+                    Cooldown--;
+
+                    EnemyMoveIndicatorImage.sprite = MoveIndicators[1];
+                    return (1, false);
+                }
             // Tank
             case 4:
                 // Block
@@ -91,7 +109,9 @@ public class EnemyAI : MonoBehaviour
                 }
             // Summon (Enemy spawned by Summoner)
             case 5:
-                break;
+                // Only has normal attack
+                EnemyMoveIndicatorImage.sprite = MoveIndicators[1];
+                return (1, false);
         }
         return (0, true);
     }

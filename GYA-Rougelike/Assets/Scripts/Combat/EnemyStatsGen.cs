@@ -3,12 +3,12 @@ using UnityEngine;
 public class EnemyStatsGen : MonoBehaviour
 {
     [Header("Health")]
-    public int[] HealthMin = { 10, 10, 10, 10, 10 };
-    public int[] HealthMax = { 50, 50, 50, 50, 50 };
+    public int[] HealthMin = { 10, 10, 10, 10, 10, 5 };
+    public int[] HealthMax = { 50, 50, 50, 50, 50, 25 };
 
     [Header("Damage")]
-    public int[] DamageMin = { 1, 1, 1, 1, 1 };
-    public int[] DamageMax = { 5, 5, 5, 5, 5 };
+    public int[] DamageMin = { 1, 1, 1, 1, 1, 1 };
+    public int[] DamageMax = { 5, 5, 5, 5, 5, 3 };
 
     public void GenerateStats(int EnemyType)
     {

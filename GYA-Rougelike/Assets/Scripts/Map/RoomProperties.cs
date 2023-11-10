@@ -87,7 +87,7 @@ public class RoomProperties : MonoBehaviour
                 //EnemyTypes[i] = Rand.Next(1, 5);
 
                 // Temporary code to only spawn implemented enemies
-                int[] AllowedEnemyTypes = { 1, 4 };
+                int[] AllowedEnemyTypes = { 1, 3, 4 };
                 EnemyTypes[i] = AllowedEnemyTypes[Rand.Next(0, AllowedEnemyTypes.Length)];
             }
         }

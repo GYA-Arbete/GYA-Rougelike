@@ -23,6 +23,14 @@ public class HealthSystem : MonoBehaviour
         Player = true;
     }
 
+    public void SetupEnemy(BarScript Script)
+    {
+        HealthBarScript = Script;
+
+        Health = MaxHealth;
+        Defence = 0;
+    }
+
     public void ResetHealth()
     {
         Health = MaxHealth;
