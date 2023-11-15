@@ -67,43 +67,52 @@ public class CardSpawner : MonoBehaviour
         // i = 1 eftersom den ska ingorera parent
         for (int i = 1; i < CardsInInventory.cardList.Count + 1; i++)
         {
-            // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
-            // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
-            GameObject Card = Instantiate(CardPrefab, new Vector3(CardSpawnPoints[i].position.x, CardSpawnPoints[i].position.y, CardSpawnPoints[i].position.z), new Quaternion(0, 0, 0, 0), CardsParent);
-
-            // Assign values to each created card
-            CardStats CardStatsScript = Card.GetComponent<CardStats>();
-            CardStatsScript.AssignValues(CardsInInventory.cardList[i - 1].Energy, CardsInInventory.cardList[i - 1].Damage, CardsInInventory.cardList[i - 1].SplashDamage, CardsInInventory.cardList[i - 1].Defence, CardsInInventory.cardList[i - 1].Cooldown);
-
-            // Change the cards image
-            Card.GetComponent<SpriteRenderer>().sprite = CardSprites[CardType[i - 1]];
-
-            // Set text for the card-sprite
-            Transform[] TextBoxes = Card.GetComponentsInChildren<Transform>();
-            foreach (Transform TextBox in TextBoxes)
+            // Check that the card isnt on cooldown
+            if (CardsInInventory.cardList[i - 1].CardCooldown == 0)
             {
-                TextMeshProUGUI Text = TextBox.GetComponent<TextMeshProUGUI>();
-                if (Text != null)
+                // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
+                // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
+                GameObject Card = Instantiate(CardPrefab, new Vector3(CardSpawnPoints[i].position.x, CardSpawnPoints[i].position.y, CardSpawnPoints[i].position.z), new Quaternion(0, 0, 0, 0), CardsParent);
+
+                // Assign values to each created card
+                CardStats CardStatsScript = Card.GetComponent<CardStats>();
+                CardStatsScript.AssignValues(CardsInInventory.cardList[i - 1].Energy, CardsInInventory.cardList[i - 1].Damage, CardsInInventory.cardList[i - 1].SplashDamage, CardsInInventory.cardList[i - 1].Defence, CardsInInventory.cardList[i - 1].Cooldown, i);
+
+                // Change the cards image
+                Card.GetComponent<SpriteRenderer>().sprite = CardSprites[CardType[i - 1]];
+
+                // Set text for the card-sprite
+                Transform[] TextBoxes = Card.GetComponentsInChildren<Transform>();
+                foreach (Transform TextBox in TextBoxes)
                 {
-                    if (TextBox.name == "EnergyCount")
+                    TextMeshProUGUI Text = TextBox.GetComponent<TextMeshProUGUI>();
+                    if (Text != null)
                     {
-                        Text.text = CardsInInventory.cardList[i - 1].Energy.ToString();
-                    }
-                    else
-                    {
-                        if (CardStatsScript.Damage  > 0)
+                        if (TextBox.name == "EnergyCount")
                         {
-                            Text.text = CardStatsScript.Damage.ToString();
+                            Text.text = CardsInInventory.cardList[i - 1].Energy.ToString();
                         }
-                        else if (CardStatsScript.Defence > 0)
+                        else
                         {
-                            Text.text = CardStatsScript.Defence.ToString();
+                            if (CardStatsScript.Damage > 0)
+                            {
+                                Text.text = CardStatsScript.Damage.ToString();
+                            }
+                            else if (CardStatsScript.Defence > 0)
+                            {
+                                Text.text = CardStatsScript.Defence.ToString();
+                            }
                         }
                     }
                 }
-            }
 
-            SpawnedCards[i - 1] = Card;
+                SpawnedCards[i - 1] = Card;
+            }
+            // If the card is on cooldown, reduce it by 1
+            else
+            {
+                CardInventoryScript.Inventory.cardList[i - 1].CardCooldown--;
+            }
         }
     }
 }

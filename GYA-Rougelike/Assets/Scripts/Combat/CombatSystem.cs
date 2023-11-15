@@ -34,6 +34,7 @@ public class CombatSystem : MonoBehaviour
     public EnemySpawner EnemySpawnerScript;
     public CardSpawner CardSpawnerScript;
     public CameraSwitch CameraSwitchScript;
+    public CardInventory CardInventoryScript;
 
     // Start is called before the first frame update
     void Start()
@@ -154,10 +155,15 @@ public class CombatSystem : MonoBehaviour
 
         foreach (Transform Card in Cards)
         {
+            CardStats Stats = Card.GetComponent<CardStats>();
+
             // If in MoveQueue and is the card itself, not attached text
-            if (Card.position.y == MoveQueueSnapPoint.position.y && Card.GetComponent<CardStats>() != null)
+            if (Card.position.y == MoveQueueSnapPoint.position.y && Stats != null)
             {
                 CardsInMoveQueue.Add(Card);
+
+                // Set cooldown for each used card
+                CardInventoryScript.Inventory.cardList[Stats.InventoryIndex].CardCooldown = Stats.Cooldown;
             }
         }
     }

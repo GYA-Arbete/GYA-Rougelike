@@ -17,7 +17,7 @@ public class CardInventory : MonoBehaviour
     public TextAsset CardTypesJson;
     public CardList CardTypes;
 
-    [Header("CardInventory.json Stuff")]
+    [Header("CardInventory")]
     public CardList Inventory;
 
     [Header("CardSpawning stuff")]
@@ -41,6 +41,7 @@ public class CardInventory : MonoBehaviour
         public bool SplashDamage;
         public int Defence;
         public int Cooldown;
+        public int CardCooldown;
     }
 
     // Start is called before the first frame update
@@ -106,7 +107,7 @@ public class CardInventory : MonoBehaviour
         {
             // Calculate the Y-Offset, rounded down to closest int
             // This means it increases by one every 5 "loops"
-            float YOffset = (int)(i / 5);
+            int YOffset = i / 5;
 
             // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
             // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);

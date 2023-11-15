@@ -5,9 +5,10 @@
       "Name": "Slash",
       "Energy": 1,
       "Damage": 5,
-      "SplashDamage":  false,
+      "SplashDamage": false,
       "Defence": 0,
-      "Cooldown": 0
+      "Cooldown": 0,
+      "CardCooldown": 0
     },
     {
       "ID": 1,
@@ -16,7 +17,8 @@
       "Damage": 0,
       "SplashDamage": false,
       "Defence": 5,
-      "Cooldown": 0
+      "Cooldown": 0,
+      "CardCooldown": 0
     },
     {
       "ID": 2,
@@ -25,7 +27,8 @@
       "Damage": 5,
       "SplashDamage": false,
       "Defence": 0,
-      "Cooldown": 0
+      "Cooldown": 0,
+      "CardCooldown": 0
     },
     {
       "ID": 3,
@@ -34,7 +37,8 @@
       "Damage": 5,
       "SplashDamage": true,
       "Defence": 0,
-      "Cooldown": 0
+      "Cooldown": 0,
+      "CardCooldown": 0
     },
     {
       "ID": 4,
@@ -43,7 +47,8 @@
       "Damage": 5,
       "SplashDamage": false,
       "Defence": 0,
-      "Cooldown": 0
+      "Cooldown": 0,
+      "CardCooldown": 0
     },
     {
       "ID": 5,
@@ -52,7 +57,8 @@
       "Damage": 5,
       "SplashDamage": false,
       "Defence": 0,
-      "Cooldown": 0
+      "Cooldown": 0,
+      "CardCooldown": 0
     },
     {
       "ID": 6,
@@ -61,7 +67,8 @@
       "Damage": 5,
       "SplashDamage": false,
       "Defence": 0,
-      "Cooldown": 0
+      "Cooldown": 0,
+      "CardCooldown": 0
     }
   ]
 }
