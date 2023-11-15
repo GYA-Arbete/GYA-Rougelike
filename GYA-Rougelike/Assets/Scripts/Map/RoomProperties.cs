@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -78,26 +77,23 @@ public class RoomProperties : MonoBehaviour
         }
         else if (RoomType == 1)
         {
-            System.Random Rand = new System.Random();
+            System.Random Rand = new();
+
             // Slumpar ett tal mellan 1 till och med 4
             EnemyAmount = Rand.Next(1, 5);
 
             EnemyTypes = new int[EnemyAmount];
+
             for (int i = 0; i < EnemyAmount; i++)
             {
-                //EnemyTypes[i] = Rand.Next(1, 5);
-
                 // Check that it doesnt already contain a Summoner
                 if (!EnemyTypes.Contains(3))
                 {
-                    // Temporary code to only spawn implemented enemies
-                    int[] AllowedEnemyTypes = { 1, 2, 3, 4 };
-
-                    EnemyTypes[i] = AllowedEnemyTypes[Rand.Next(0, AllowedEnemyTypes.Length)];
+                    // If a summoner hasnt been included, allow every enemy to be picked
+                    EnemyTypes[i] = Rand.Next(1, 5);
                 }
                 else
                 {
-                    // Temporary code to only spawn implemented enemies
                     int[] AllowedEnemyTypes = { 1, 2, 4 };
 
                     EnemyTypes[i] = AllowedEnemyTypes[Rand.Next(0, AllowedEnemyTypes.Length)];
