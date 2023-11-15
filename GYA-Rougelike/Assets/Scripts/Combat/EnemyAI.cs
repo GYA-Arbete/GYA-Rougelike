@@ -86,7 +86,6 @@ public class EnemyAI : MonoBehaviour
                     EnemyMoveIndicatorImage.sprite = MoveIndicators[1];
                     return (1, false);
                 }
-                break;
             // Summoner
             case 3:
                 // Summon summons
