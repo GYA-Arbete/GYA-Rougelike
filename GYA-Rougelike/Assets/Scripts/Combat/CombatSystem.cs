@@ -28,6 +28,7 @@ public class CombatSystem : MonoBehaviour
     public Sprite[] MoveIndicators;
     public int[] EnemyMove;
     public bool[] SplashDamage;
+    public int[] DamageBuff;
 
     [Header("Other Scripts")]
     public BarScript EnergyBarScript;
@@ -60,6 +61,7 @@ public class CombatSystem : MonoBehaviour
         DeadEnemies = new bool[EnemyAmount];
         EnemyMove = new int[EnemyAmount];
         SplashDamage = new bool[EnemyAmount];
+        DamageBuff = new int[EnemyAmount];
 
         EnergyBarScript.SetupBar(10, new Color32(252, 206, 82, 255));
 
@@ -76,6 +78,9 @@ public class CombatSystem : MonoBehaviour
             var ReturnedValues = EnemyAIScript.GenerateMove();
             EnemyMove[i] = ReturnedValues.Item1;
             SplashDamage[i] = ReturnedValues.Item2;
+
+            // Set default value
+            DamageBuff[i] = 0;
         }
     }
 
@@ -227,9 +232,12 @@ public class CombatSystem : MonoBehaviour
                     {
                         if (Player.gameObject.activeSelf)
                         {
-                            Player.GetComponent<HealthSystem>().TakeDamage(Damage);
+                            Player.GetComponent<HealthSystem>().TakeDamage(Damage + DamageBuff[i]);
                         }
                     }
+
+                    // Reset DamageBuff when it has been used
+                    DamageBuff[i] = 0;
                 }
                 else
                 {
@@ -246,7 +254,10 @@ public class CombatSystem : MonoBehaviour
                             {
                                 if (Player.gameObject.activeSelf)
                                 {
-                                    Player.GetComponent<HealthSystem>().TakeDamage(Damage);
+                                    Player.GetComponent<HealthSystem>().TakeDamage(Damage + DamageBuff[i]);
+
+                                    // Reset DamageBuff when it has been used
+                                    DamageBuff[i] = 0;
                                     break;
                                 }
                             }
@@ -258,6 +269,13 @@ public class CombatSystem : MonoBehaviour
                         // Summon summons
                         case 3:
                             Summons = EnemySpawnerScript.SpawnSummons();
+                            break;
+                        // Buff each ally
+                        case 4:
+                            for (int j = 0; j < DamageBuff.Length; j++)
+                            {
+                                DamageBuff[j] = 2;
+                            }
                             break;
                     }
                 }

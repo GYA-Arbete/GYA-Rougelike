@@ -28,6 +28,9 @@ public class EnemyAI : MonoBehaviour
             case 1:
                 Cooldown = 5;
                 break;
+            case 2:
+                Cooldown = 4;
+                break;
             case 3:
                 Cooldown = 5;
                 break;
@@ -67,6 +70,22 @@ public class EnemyAI : MonoBehaviour
                 }
             // Buff / Debuff
             case 2:
+                // Buff every ally
+                if (Cooldown == 0)
+                {
+                    Cooldown = 4;
+
+                    //EnemyMoveIndicatorImage.sprite = MoveIndicators[] // MISSING CORRECT IMAGE
+                    return (4, false);
+                }
+                // Normal Attack
+                else
+                {
+                    Cooldown--;
+
+                    EnemyMoveIndicatorImage.sprite = MoveIndicators[1];
+                    return (1, false);
+                }
                 break;
             // Summoner
             case 3:
