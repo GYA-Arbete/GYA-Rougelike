@@ -98,7 +98,15 @@ public class CombatSystem : MonoBehaviour
         {
             if (Enemy != null)
             {
-                Enemy.GetComponent<HealthSystem>().Die();
+                Enemy.gameObject.GetComponent<HealthSystem>().Die();
+            }
+        }
+        // If a Summon exists, remove it
+        foreach (Transform Summon in Summons)
+        {
+            if (Summon != null)
+            {
+                Summon.gameObject.GetComponent<HealthSystem>().Die();
             }
         }
 
