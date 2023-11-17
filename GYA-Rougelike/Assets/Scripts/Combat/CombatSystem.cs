@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -226,6 +227,15 @@ public class CombatSystem : MonoBehaviour
     // Called when its the enemies turn, they do stuff then
     void EnemyTurn()
     {
+        // Check if a DamageBuff move is in the "queue"
+        if (EnemyMove.Contains(4))
+        {
+            for (int i = 0; i < DamageBuff.Length; i++)
+            {
+                DamageBuff[i] = 2;
+            }
+        }
+
         // Do each move in EnemyMoves
         for (int i = 0; i < EnemyMove.Length; i++)
         {
@@ -280,10 +290,6 @@ public class CombatSystem : MonoBehaviour
                             break;
                         // Buff each ally
                         case 4:
-                            for (int j = 0; j < DamageBuff.Length; j++)
-                            {
-                                DamageBuff[j] = 2;
-                            }
                             break;
                     }
                 }
