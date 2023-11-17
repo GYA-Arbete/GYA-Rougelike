@@ -33,7 +33,6 @@ public class CardSpawner : MonoBehaviour
         // Reset CardInPoint array, no cards are in any point since they are all despawned
         for (int i = 0; i < DragDropCardManagerScript.CardInPoint.Length; i++)
         {
-
             DragDropCardManagerScript.CardInPoint[i] = false;
         }
     }
@@ -49,7 +48,6 @@ public class CardSpawner : MonoBehaviour
         // Reset CardInPoint array, no cards are in any point since they are all despawned
         for (int i = 0; i < DragDropCardManagerScript.CardInPoint.Length; i++)
         {
-
             DragDropCardManagerScript.CardInPoint[i] = false;
         }
 
@@ -76,7 +74,7 @@ public class CardSpawner : MonoBehaviour
 
                 // Assign values to each created card
                 CardStats CardStatsScript = Card.GetComponent<CardStats>();
-                CardStatsScript.AssignValues(CardsInInventory.cardList[i - 1].Energy, CardsInInventory.cardList[i - 1].Damage, CardsInInventory.cardList[i - 1].SplashDamage, CardsInInventory.cardList[i - 1].Defence, CardsInInventory.cardList[i - 1].Cooldown, i);
+                CardStatsScript.AssignValues(CardsInInventory.cardList[i - 1].Energy, CardsInInventory.cardList[i - 1].Damage, CardsInInventory.cardList[i - 1].SplashDamage, CardsInInventory.cardList[i - 1].Defence, CardsInInventory.cardList[i - 1].Cooldown, i - 1);
 
                 // Change the cards image
                 Card.GetComponent<SpriteRenderer>().sprite = CardSprites[CardType[i - 1]];

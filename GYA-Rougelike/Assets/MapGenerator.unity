@@ -4606,10 +4606,12 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 632f0defc2513fa4785e7fb048a5ff6a, type: 3}
   EnemyMove: 
   SplashDamage: 
+  DamageBuff: 
   EnergyBarScript: {fileID: 1814719337306141361}
   EnemySpawnerScript: {fileID: 1209565286}
   CardSpawnerScript: {fileID: 2064234102}
   CameraSwitchScript: {fileID: 628599124}
+  CardInventoryScript: {fileID: 399353178}
 --- !u!4 &1103261180
 Transform:
   m_ObjectHideFlags: 0
