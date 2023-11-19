@@ -134,6 +134,7 @@ public class MapGen : MonoBehaviour
     void GeneratePaths()
     {
         List<KeyValuePair<Vector3, Vector3>> LineEndPoints = new();
+        List<Transform> TempLineHolder = new();
 
         for (int i = 1; i < Rooms.Length; i++)
         {
@@ -212,6 +213,8 @@ public class MapGen : MonoBehaviour
 
                         if (!DuplicateLine)
                         {
+                            TempLineHolder.Add(LineHolder.transform);
+
                             LineEndPoints.Add(new KeyValuePair<Vector3, Vector3>(LineRend.GetPosition(0), LineRend.GetPosition(1)));
                         }
                     }
@@ -219,7 +222,11 @@ public class MapGen : MonoBehaviour
             }
         }
 
-        // Put all lines into an array
-        Lines = MapLinePrefabParent.GetComponentsInChildren<Transform>();
+        // Convert temp list into an array
+        Lines = new Transform[TempLineHolder.Count];
+        for (int i = 0; i < TempLineHolder.Count; i++)
+        {
+            Lines[i] = TempLineHolder[i];
+        }
     }
 }
