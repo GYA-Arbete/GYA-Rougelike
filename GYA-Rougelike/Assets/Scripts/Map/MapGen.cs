@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MapGen : MonoBehaviour
@@ -132,6 +133,8 @@ public class MapGen : MonoBehaviour
 
     void GeneratePaths()
     {
+        Dictionary<Vector3, Vector3> LineEndPoints = new();
+
         for (int i = 1; i < Rooms.Length; i++)
         {
             for (int j = 1; j < Rooms.Length; j++)
@@ -185,6 +188,31 @@ public class MapGen : MonoBehaviour
                             {
                                 LineRend.SetPosition(1, new Vector3(Rooms[i].position.x - dX, Rooms[i].position.y - dY, -1));
                             }
+                        }
+
+                        // Dumb shit to compare the current LineRend positions to each spawned LineRend
+                        List<KeyValuePair<Vector3, Vector3>> ToSpawnEndPoints = new()
+                        {
+                            new KeyValuePair<Vector3, Vector3>(LineRend.GetPosition(1), LineRend.GetPosition(0))
+                        };
+
+                        bool DuplicateLine = false;
+
+                        foreach (KeyValuePair<Vector3, Vector3> EndPoints in LineEndPoints)
+                        {
+                            // Check if the line has already been spawned by inverting positions on the new LineRend and referencing it to each spawned line
+                            if (EndPoints.Key == ToSpawnEndPoints[0].Key && EndPoints.Value == ToSpawnEndPoints[0].Value)
+                            {
+                                // Destroy the spawned Line
+                                Destroy(LineRend.gameObject);
+
+                                DuplicateLine = true;
+                            }
+                        }
+
+                        if (!DuplicateLine)
+                        {
+                            LineEndPoints.Add(LineRend.GetPosition(0), LineRend.GetPosition(1));
                         }
                     }
                 }
