@@ -81,7 +81,7 @@ public class MapGen : MonoBehaviour
 
     void GenerateRooms()
     {
-        System.Random rand = new System.Random();
+        System.Random rand = new();
 
         // Array for if each SpawnPoint has a room or not
         // 1 == Yes room, 0 == No room
@@ -159,12 +159,12 @@ public class MapGen : MonoBehaviour
                         // Get the LineRenderer component of the newly created object
                         LineRenderer LineRend = LineHolder.GetComponent<LineRenderer>();
 
-                        // Start-position for the Line
-                        LineRend.SetPosition(0, new Vector3(Rooms[i].position.x, Rooms[i].position.y, -1));
-
                         // Om 1:a eller 4:e kvadranten
                         if (Rooms[j].position.x > Rooms[i].position.x)
                         {
+                            // Start-position for the Line
+                            LineRend.SetPosition(0, new Vector3(Rooms[i].position.x, Rooms[i].position.y, -1));
+
                             // Om 1:a kvadranten
                             if (Rooms[j].position.y > Rooms[i].position.y)
                             {
@@ -179,35 +179,59 @@ public class MapGen : MonoBehaviour
                         // Om 2:a eller 3:e kvadranten
                         else
                         {
+                            // Start-position for the Line
+                            LineRend.SetPosition(1, new Vector3(Rooms[i].position.x, Rooms[i].position.y, -1));
+
                             // Om 2:a kvadranten
                             if (Rooms[j].position.y > Rooms[i].position.y)
                             {
-                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x - dX, Rooms[i].position.y + dY, -1));
+                                LineRend.SetPosition(0, new Vector3(Rooms[i].position.x - dX, Rooms[i].position.y + dY, -1));
                             }
                             // Om 3:e kvadranten
                             else
                             {
-                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x - dX, Rooms[i].position.y - dY, -1));
+                                LineRend.SetPosition(0, new Vector3(Rooms[i].position.x - dX, Rooms[i].position.y - dY, -1));
                             }
                         }
 
                         // Dumb shit to compare the current LineRend positions to each spawned LineRend
-                        List<KeyValuePair<Vector3, Vector3>> ToSpawnEndPoints = new()
-                        {
-                            new KeyValuePair<Vector3, Vector3>(LineRend.GetPosition(1), LineRend.GetPosition(0))
-                        };
+                        KeyValuePair<Vector3, Vector3> ToSpawnEndPoints = new(LineRend.GetPosition(1), LineRend.GetPosition(0));
 
                         bool DuplicateLine = false;
 
                         foreach (KeyValuePair<Vector3, Vector3> EndPoints in LineEndPoints)
                         {
                             // Check if the line has already been spawned by inverting positions on the new LineRend and referencing it to each spawned line
-                            if (EndPoints.Key == ToSpawnEndPoints[0].Key && EndPoints.Value == ToSpawnEndPoints[0].Value)
+                            if (EndPoints.Key == ToSpawnEndPoints.Key && EndPoints.Value == ToSpawnEndPoints.Value)
                             {
                                 // Destroy the spawned Line
                                 Destroy(LineRend.gameObject);
 
                                 DuplicateLine = true;
+
+                                break;
+                            }
+                            // Calc all vals
+                            int k1 = ((int)EndPoints.Key.y - (int)EndPoints.Value.y)/((int)EndPoints.Key.x - (int)EndPoints.Value.x);
+                            int k2 = ((int)ToSpawnEndPoints.Key.y - (int)ToSpawnEndPoints.Value.y) / ((int)ToSpawnEndPoints.Key.x - (int)ToSpawnEndPoints.Value.x);
+
+                            int x1old = (int)EndPoints.Key.x;
+                            int x2old = (int)EndPoints.Value.x;
+                            int x1new = (int)ToSpawnEndPoints.Value.x;
+                            int x2new = (int)ToSpawnEndPoints.Key.x;
+
+                            int dy1 = Math.Abs((int)EndPoints.Key.y - (int)ToSpawnEndPoints.Value.y);
+                            int dy2 = Math.Abs((int)EndPoints.Value.y - (int)ToSpawnEndPoints.Key.y);
+
+                            // Check if the line is intersecting an existing line (See "Line Cross Calc.png" for more info on how / why)
+                            if (k1 != 0 && k1 == -k2 && x1old == x1new && x2old == x2new && dy1 == 2 && dy2 == 2)
+                            {
+                                // Destroy the spawned Line
+                                Destroy(LineRend.gameObject);
+
+                                DuplicateLine = true;
+
+                                break;
                             }
                         }
 
@@ -223,6 +247,8 @@ public class MapGen : MonoBehaviour
         }
 
         // Convert temp list into an array
+        // All lines are put into a temporary list cause if we just try to fill the array normally
+        // then the LineRends that are being deleted will be put into said array
         Lines = new Transform[TempLineHolder.Count];
         for (int i = 0; i < TempLineHolder.Count; i++)
         {
