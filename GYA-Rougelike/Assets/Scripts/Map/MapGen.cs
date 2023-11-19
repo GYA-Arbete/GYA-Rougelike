@@ -133,7 +133,7 @@ public class MapGen : MonoBehaviour
 
     void GeneratePaths()
     {
-        Dictionary<Vector3, Vector3> LineEndPoints = new();
+        List<KeyValuePair<Vector3, Vector3>> LineEndPoints = new();
 
         for (int i = 1; i < Rooms.Length; i++)
         {
@@ -212,7 +212,7 @@ public class MapGen : MonoBehaviour
 
                         if (!DuplicateLine)
                         {
-                            LineEndPoints.Add(LineRend.GetPosition(0), LineRend.GetPosition(1));
+                            LineEndPoints.Add(new KeyValuePair<Vector3, Vector3>(LineRend.GetPosition(0), LineRend.GetPosition(1)));
                         }
                     }
                 }
