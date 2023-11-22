@@ -64,7 +64,7 @@ public class MapGen : MonoBehaviour
         if (Lines != null)
         {
             // Delete each line
-            for (int i = 1; i < Lines.Length; i++)
+            for (int i = 0; i < Lines.Length; i++)
             {
                 if (Lines[i] != null)
                 {
