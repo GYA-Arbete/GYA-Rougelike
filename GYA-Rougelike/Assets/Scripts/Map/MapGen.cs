@@ -202,7 +202,8 @@ public class MapGen : MonoBehaviour
                         foreach (KeyValuePair<Vector3, Vector3> EndPoints in LineEndPoints)
                         {
                             // Check if the line has already been spawned by inverting positions on the new LineRend and referencing it to each spawned line
-                            if (EndPoints.Key == ToSpawnEndPoints.Key && EndPoints.Value == ToSpawnEndPoints.Value)
+                            // Also check with the "non-inverted" positions to cover both cases
+                            if ((EndPoints.Key == ToSpawnEndPoints.Key && EndPoints.Value == ToSpawnEndPoints.Value) || (EndPoints.Key == ToSpawnEndPoints.Value && EndPoints.Value == ToSpawnEndPoints.Key))
                             {
                                 // Destroy the spawned Line
                                 Destroy(LineRend.gameObject);
