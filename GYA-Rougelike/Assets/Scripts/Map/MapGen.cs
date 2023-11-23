@@ -177,7 +177,7 @@ public class MapGen : MonoBehaviour
                         else
                         {
                             // Start-position for the Line
-                            StartPoint = new(Rooms[i].position.x, Rooms[i].position.y);
+                            StartPoint = new(Rooms[i].position.x, Rooms[i].position.y, -1);
 
                             // Om 2:a kvadranten
                             if (Rooms[j].position.y > Rooms[i].position.y)
