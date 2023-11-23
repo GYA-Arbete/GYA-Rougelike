@@ -237,12 +237,13 @@ public class MapGen : MonoBehaviour
                 if ((EndPoints.Key == ToSpawnEndPoints.Key && EndPoints.Value == ToSpawnEndPoints.Value) || (EndPoints.Key == ToSpawnEndPoints.Value && EndPoints.Value == ToSpawnEndPoints.Key))
                 {
                     // Destroy the spawned Line
-                    Destroy(LineRend.gameObject);
+                    Destroy(LineHolder);
 
                     DuplicateLine = true;
 
                     break;
                 }
+
                 // Calc all vals
                 int k1 = ((int)EndPoints.Key.y - (int)EndPoints.Value.y) / ((int)EndPoints.Key.x - (int)EndPoints.Value.x);
                 int k2 = ((int)ToSpawnEndPoints.Key.y - (int)ToSpawnEndPoints.Value.y) / ((int)ToSpawnEndPoints.Key.x - (int)ToSpawnEndPoints.Value.x);
@@ -259,7 +260,25 @@ public class MapGen : MonoBehaviour
                 if (k1 != 0 && k1 == -k2 && x1old == x1new && x2old == x2new && dy1 == 2 && dy2 == 2)
                 {
                     // Destroy the spawned Line
-                    Destroy(LineRend.gameObject);
+                    Destroy(LineHolder);
+
+                    DuplicateLine = true;
+
+                    break;
+                }
+
+                // Re-calculate some values for the "flipped" positions
+                x1new = (int)ToSpawnEndPoints.Key.x;
+                x2new = (int)ToSpawnEndPoints.Value.x;
+
+                dy1 = Math.Abs((int)EndPoints.Key.y - (int)ToSpawnEndPoints.Key.y);
+                dy2 = Math.Abs((int)EndPoints.Value.y - (int)ToSpawnEndPoints.Value.y);
+
+                // Check again if the line is intersecting an existing line (See "Line Cross Calc.png" for more info on how / why)
+                if (k1 != 0 && k1 == -k2 && x1old == x1new && x2old == x2new && dy1 == 2 && dy2 == 2)
+                {
+                    // Destroy the spawned Line
+                    Destroy(LineHolder);
 
                     DuplicateLine = true;
 
