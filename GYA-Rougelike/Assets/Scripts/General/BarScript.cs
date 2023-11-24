@@ -6,25 +6,23 @@ using UnityEngine.UI;
 // Most off them being EnergyBar or HealthBar
 public class BarScript : MonoBehaviour
 {
+    [Header("Bar Stuff")]
     public TextMeshProUGUI Text;
     public Slider Slider;
 
     public int CurrentValue;
     public int MaxValue;
 
+    [Header("Block Indicator")]
+    public GameObject BlockIndicator;
+    public TextMeshProUGUI BlockText;
+
     [Header("Stuff for showing BarValue")]
     public Gradient FillGradient;
     public Image Fill;
 
-    private void Start()
-    {
-        Slider = gameObject.GetComponent<Slider>();   
-    }
-
     public void SetupBar(int MaxVal, Color Color)
     {
-        Slider = gameObject.GetComponent<Slider>();
-
         MaxValue = MaxVal;
 
         GradientColorKey[] GradientColor = new GradientColorKey[1];
@@ -36,6 +34,20 @@ public class BarScript : MonoBehaviour
         FillGradient.SetKeys(GradientColor, Alpha);
 
         ResetBar();
+    }
+
+    public void UpdateDefence(int DefenceAmount)
+    {
+        BlockText.text = DefenceAmount.ToString();
+
+        if (DefenceAmount > 0)
+        {
+            BlockIndicator.SetActive(true);
+        }
+        else
+        {
+            BlockIndicator.SetActive(false);
+        }
     }
 
     public void ResetBar()

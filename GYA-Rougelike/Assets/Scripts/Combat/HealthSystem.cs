@@ -3,9 +3,11 @@ using System;
 
 public class HealthSystem : MonoBehaviour
 {
+    [Header("Variables")]
     public int MaxHealth;
     public int Health;
     public int Defence = 0;
+    public bool Player = false;
 
     [Header("HealthBar Stuff")]
     public BarScript HealthBarScript;
@@ -17,6 +19,27 @@ public class HealthSystem : MonoBehaviour
 
         Health = MaxHealth;
         Defence = 0;
+
+        Player = true;
+    }
+
+    public void SetupEnemy(BarScript Script)
+    {
+        HealthBarScript = Script;
+
+        Health = MaxHealth;
+        Defence = 0;
+    }
+
+    public void ResetHealth()
+    {
+        Health = MaxHealth;
+        Defence = 0;
+
+        gameObject.SetActive(true);
+        HealthBarScript.GetComponent<Transform>().gameObject.SetActive(true);
+
+        HealthBarScript.ResetBar();
     }
 
     public void Heal(int HealAmount)
@@ -38,6 +61,8 @@ public class HealthSystem : MonoBehaviour
     public void AddDefence(int DefenceToAdd)
     {
         Defence += DefenceToAdd;
+
+        HealthBarScript.UpdateDefence(Defence);
     }
 
     // Function that returns a bool for if dead
@@ -53,6 +78,8 @@ public class HealthSystem : MonoBehaviour
 
                 Defence = 0;
             }
+
+            HealthBarScript.UpdateDefence(Defence);
         }
         else
         {
@@ -75,10 +102,19 @@ public class HealthSystem : MonoBehaviour
 
     public void Die()
     {
-        // Removes self
-        Destroy(gameObject);
+        if (Player)
+        {
+            gameObject.SetActive(false);
+            HealthBarScript.GetComponent<Transform>().gameObject.SetActive(false);
+        }
+        // If an Enemy
+        else
+        {
+            // Removes self
+            Destroy(gameObject);
 
-        // Removes the attached HealthBar
-        Destroy(HealthBarScript.gameObject);
+            // Removes the attached HealthBar
+            Destroy(HealthBarScript.gameObject);
+        }
     }
 }

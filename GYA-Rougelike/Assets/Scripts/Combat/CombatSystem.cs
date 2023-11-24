@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +14,7 @@ public class CombatSystem : MonoBehaviour
     [Header("Combat Participants")]
     public Transform[] Players;
     public Transform[] Enemies;
+    public Transform[] Summons;
     public bool[] DeadEnemies;
 
     [Header("CombatRoom-Exclusive Elements")]
@@ -28,12 +29,14 @@ public class CombatSystem : MonoBehaviour
     public Sprite[] MoveIndicators;
     public int[] EnemyMove;
     public bool[] SplashDamage;
+    public int[] DamageBuff;
 
     [Header("Other Scripts")]
     public BarScript EnergyBarScript;
     public EnemySpawner EnemySpawnerScript;
     public CardSpawner CardSpawnerScript;
     public CameraSwitch CameraSwitchScript;
+    public CardInventory CardInventoryScript;
 
     // Start is called before the first frame update
     void Start()
@@ -59,6 +62,7 @@ public class CombatSystem : MonoBehaviour
         DeadEnemies = new bool[EnemyAmount];
         EnemyMove = new int[EnemyAmount];
         SplashDamage = new bool[EnemyAmount];
+        DamageBuff = new int[EnemyAmount];
 
         EnergyBarScript.SetupBar(10, new Color32(252, 206, 82, 255));
 
@@ -75,6 +79,9 @@ public class CombatSystem : MonoBehaviour
             var ReturnedValues = EnemyAIScript.GenerateMove();
             EnemyMove[i] = ReturnedValues.Item1;
             SplashDamage[i] = ReturnedValues.Item2;
+
+            // Set default value
+            DamageBuff[i] = 0;
         }
     }
 
@@ -92,7 +99,15 @@ public class CombatSystem : MonoBehaviour
         {
             if (Enemy != null)
             {
-                Enemy.GetComponent<HealthSystem>().Die();
+                Enemy.gameObject.GetComponent<HealthSystem>().Die();
+            }
+        }
+        // If a Summon exists, remove it
+        foreach (Transform Summon in Summons)
+        {
+            if (Summon != null)
+            {
+                Summon.gameObject.GetComponent<HealthSystem>().Die();
             }
         }
 
@@ -154,10 +169,15 @@ public class CombatSystem : MonoBehaviour
 
         foreach (Transform Card in Cards)
         {
+            CardStats Stats = Card.GetComponent<CardStats>();
+
             // If in MoveQueue and is the card itself, not attached text
-            if (Card.position.y == MoveQueueSnapPoint.position.y && Card.GetComponent<CardStats>() != null)
+            if (Card.position.y == MoveQueueSnapPoint.position.y && Stats != null)
             {
                 CardsInMoveQueue.Add(Card);
+
+                // Set cooldown for each used card
+                CardInventoryScript.Inventory.cardList[Stats.InventoryIndex].CardCooldown = Stats.Cooldown;
             }
         }
     }
@@ -165,43 +185,41 @@ public class CombatSystem : MonoBehaviour
     // Called when player has finished their turn, will play each card in the MoveQueue
     void PlayCards()
     {
-        int TotalDamage = 0;
-        int TotalDefence = 0;
-
-        // Get from cards what to do
-        foreach (Transform Card in CardsInMoveQueue)
+        // Do each cards "thing"
+        for (int i = 0; i < CardsInMoveQueue.Count; i++)
         {
-            CardStats Stats = Card.GetComponent<CardStats>();
+            CardStats CardStatsScript = CardsInMoveQueue[i].gameObject.GetComponent<CardStats>();
 
-            TotalDamage += Stats.Damage;
-            TotalDefence += Stats.Defence;
-        }
-
-        // Do said things to enemies
-        if (TotalDamage > 0)
-        {
-            for (int i = 0; i < Enemies.Length; i++)
+            if (CardStatsScript.SplashDamage == true)
             {
-                if (Enemies[i] != null)
+                foreach (Transform Enemy in Enemies)
                 {
-                    HealthSystem HealthSystemScript = Enemies[i].GetComponent<HealthSystem>();
-
-                    if (HealthSystemScript.Health > 0)
+                    if (Enemy != null)
                     {
-                        DeadEnemies[i] = HealthSystemScript.TakeDamage(TotalDamage);
+                        Enemy.GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage);
                     }
                 }
             }
-        }
-        
-        // Do said things to self
-        if (TotalDefence > 0)
-        {
-            foreach (Transform Player in Players)
+            else if (CardStatsScript.Defence > 0)
             {
-                HealthSystem HealthSystemScript = Player.GetComponent<HealthSystem>();
-
-                HealthSystemScript.AddDefence(TotalDefence);
+                foreach (Transform Player in Players)
+                {
+                    if (Player.gameObject.activeSelf)
+                    {
+                        Player.GetComponent<HealthSystem>().AddDefence(CardStatsScript.Defence);
+                    }
+                }
+            }
+            else
+            {
+                foreach (Transform Enemy in Enemies)
+                {
+                    if (Enemy != null)
+                    {
+                        Enemy.GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -209,22 +227,35 @@ public class CombatSystem : MonoBehaviour
     // Called when its the enemies turn, they do stuff then
     void EnemyTurn()
     {
+        // Check if a DamageBuff move is in the "queue"
+        if (EnemyMove.Contains(4))
+        {
+            for (int i = 0; i < DamageBuff.Length; i++)
+            {
+                DamageBuff[i] = 2;
+            }
+        }
+
         // Do each move in EnemyMoves
         for (int i = 0; i < EnemyMove.Length; i++)
         {
             if (Enemies[i] != null)
             {
+                // Do Cleave (Normal Splash)
                 if (SplashDamage[i] == true)
                 {
                     int Damage = Enemies[i].GetComponent<EnemyAI>().Damage;
 
                     foreach (Transform Player in Players)
                     {
-                        if (Player != null)
+                        if (Player.gameObject.activeSelf)
                         {
-                            Player.GetComponent<HealthSystem>().TakeDamage(Damage);
+                            Player.GetComponent<HealthSystem>().TakeDamage(Damage + DamageBuff[i]);
                         }
                     }
+
+                    // Reset DamageBuff when it has been used
+                    DamageBuff[i] = 0;
                 }
                 else
                 {
@@ -239,27 +270,30 @@ public class CombatSystem : MonoBehaviour
 
                             foreach (Transform Player in Players)
                             {
-                                if (Player != null)
+                                if (Player.gameObject.activeSelf)
                                 {
-                                    Player.GetComponent<HealthSystem>().TakeDamage(Damage);
+                                    Player.GetComponent<HealthSystem>().TakeDamage(Damage + DamageBuff[i]);
+
+                                    // Reset DamageBuff when it has been used
+                                    DamageBuff[i] = 0;
                                     break;
                                 }
                             }
+                            break;
+                        // Block
+                        case 2:
+                            Enemies[i].GetComponent<HealthSystem>().AddDefence(Enemies[i].GetComponent<EnemyAI>().Defence);
+                            break;
+                        // Summon summons
+                        case 3:
+                            Summons = EnemySpawnerScript.SpawnSummons();
+                            break;
+                        // Buff each ally
+                        case 4:
                             break;
                     }
                 }
             }
         }
-        /*
-        // Do said things to self
-        if (TotalDefence > 0)
-        {
-            foreach (Transform Enemy in Enemies)
-            {
-                HealthSystem HealthSystemScript = Enemy.GetComponent<HealthSystem>();
-
-                HealthSystemScript.AddDefence(TotalDefence);
-            }
-        }*/
     }
 }

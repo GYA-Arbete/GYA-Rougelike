@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MapGen : MonoBehaviour
@@ -39,7 +40,7 @@ public class MapGen : MonoBehaviour
 
         GenerateRooms();
 
-        GeneratePaths();
+        CalculatePaths();
 
         MapNavigationScript.SetupForMapNav();
     }
@@ -63,7 +64,7 @@ public class MapGen : MonoBehaviour
         if (Lines != null)
         {
             // Delete each line
-            for (int i = 1; i < Lines.Length; i++)
+            for (int i = 0; i < Lines.Length; i++)
             {
                 if (Lines[i] != null)
                 {
@@ -80,7 +81,7 @@ public class MapGen : MonoBehaviour
 
     void GenerateRooms()
     {
-        System.Random rand = new System.Random();
+        System.Random rand = new();
 
         // Array for if each SpawnPoint has a room or not
         // 1 == Yes room, 0 == No room
@@ -130,8 +131,14 @@ public class MapGen : MonoBehaviour
         Rooms = MapRoomPrefabParent.GetComponentsInChildren<Transform>();
     }
 
-    void GeneratePaths()
+    // Function for calculating every path that is within spec
+    void CalculatePaths()
     {
+        List<KeyValuePair<Vector3, Vector3>> LineEndPoints = new();
+
+        Vector3 StartPoint;
+        Vector3 EndPoint;
+
         for (int i = 1; i < Rooms.Length; i++)
         {
             for (int j = 1; j < Rooms.Length; j++)
@@ -149,49 +156,167 @@ public class MapGen : MonoBehaviour
                     // Om de inte ligger övanför varandra och avståndet är mindre än roten ur 8
                     if (dX > 0 && Distance <= Math.Sqrt(8))
                     {
-                        // Skapar en klon av ett tomt objekt som håller en LineRenderer, detta då varje LineRenderer bara kan ha en linje
-                        GameObject LineHolder = Instantiate(MapLinePrefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0), MapLinePrefabParent);
-
-                        // Get the LineRenderer component of the newly created object
-                        LineRenderer LineRend = LineHolder.GetComponent<LineRenderer>();
-
-                        // Start-position for the Line
-                        LineRend.SetPosition(0, new Vector3(Rooms[i].position.x, Rooms[i].position.y, -1));
-
                         // Om 1:a eller 4:e kvadranten
                         if (Rooms[j].position.x > Rooms[i].position.x)
                         {
+                            // Start-position for the Line
+                            StartPoint = new(Rooms[i].position.x, Rooms[i].position.y, -1);
+
                             // Om 1:a kvadranten
                             if (Rooms[j].position.y > Rooms[i].position.y)
                             {
-                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x + dX, Rooms[i].position.y + dY, -1));
+                                EndPoint = new(Rooms[i].position.x + dX, Rooms[i].position.y + dY, -1);
                             }
                             // Om 4:e kvadranten
                             else
                             {
-                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x + dX, Rooms[i].position.y - dY, -1));
+                                EndPoint = new(Rooms[i].position.x + dX, Rooms[i].position.y - dY, -1);
                             }
                         }
                         // Om 2:a eller 3:e kvadranten
                         else
                         {
+                            // Start-position for the Line
+                            StartPoint = new(Rooms[i].position.x, Rooms[i].position.y, -1);
+
                             // Om 2:a kvadranten
                             if (Rooms[j].position.y > Rooms[i].position.y)
                             {
-                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x - dX, Rooms[i].position.y + dY, -1));
+                                EndPoint = new(Rooms[i].position.x - dX, Rooms[i].position.y + dY, -1);
                             }
                             // Om 3:e kvadranten
                             else
                             {
-                                LineRend.SetPosition(1, new Vector3(Rooms[i].position.x - dX, Rooms[i].position.y - dY, -1));
+                                EndPoint = new(Rooms[i].position.x - dX, Rooms[i].position.y - dY, -1);
                             }
                         }
+
+                        LineEndPoints.Add(new KeyValuePair<Vector3, Vector3>(StartPoint, EndPoint));
                     }
                 }
             }
         }
 
-        // Put all lines into an array
-        Lines = MapLinePrefabParent.GetComponentsInChildren<Transform>();
+        GeneratePaths(LineEndPoints);
+    }
+
+    void GeneratePaths(List<KeyValuePair<Vector3, Vector3>> LineEndPoints)
+    {
+        List<Transform> TempLineHolder = new();
+        List<KeyValuePair<Vector3, Vector3>> SpawnedLines = new();
+
+        // Randomize order of List
+        LineEndPoints = ShuffleList(LineEndPoints);
+
+        // Foreach EndPoints pair
+        for (int i = 0; i < LineEndPoints.Count; i++)
+        {
+            // Spawn a LineRend
+            GameObject LineHolder = Instantiate(MapLinePrefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0), MapLinePrefabParent);
+
+            // Get the LineRenderer component of the newly created object
+            LineRenderer LineRend = LineHolder.GetComponent<LineRenderer>();
+
+            // Set endpoints for the created LineRend
+            LineRend.SetPosition(0, LineEndPoints[i].Key);
+            LineRend.SetPosition(1, LineEndPoints[i].Value);
+
+            // #####################################################
+            // Logic to check if lines are duplicate or are crossing
+            // #####################################################
+
+            // Dumb shit to compare the current LineRend positions to each spawned LineRend
+            KeyValuePair<Vector3, Vector3> ToSpawnEndPoints = new(LineRend.GetPosition(1), LineRend.GetPosition(0));
+
+            bool DuplicateLine = false;
+
+            foreach (KeyValuePair<Vector3, Vector3> EndPoints in SpawnedLines)
+            {
+                // Check if the line has already been spawned by inverting positions on the new LineRend and referencing it to each spawned line
+                // Also check with the "non-inverted" positions to cover both cases
+                if ((EndPoints.Key == ToSpawnEndPoints.Key && EndPoints.Value == ToSpawnEndPoints.Value) || (EndPoints.Key == ToSpawnEndPoints.Value && EndPoints.Value == ToSpawnEndPoints.Key))
+                {
+                    // Destroy the spawned Line
+                    Destroy(LineHolder);
+
+                    DuplicateLine = true;
+
+                    break;
+                }
+
+                // Calc all vals
+                int k1 = ((int)EndPoints.Key.y - (int)EndPoints.Value.y) / ((int)EndPoints.Key.x - (int)EndPoints.Value.x);
+                int k2 = ((int)ToSpawnEndPoints.Key.y - (int)ToSpawnEndPoints.Value.y) / ((int)ToSpawnEndPoints.Key.x - (int)ToSpawnEndPoints.Value.x);
+
+                int x1old = (int)EndPoints.Key.x;
+                int x2old = (int)EndPoints.Value.x;
+                int x1new = (int)ToSpawnEndPoints.Value.x;
+                int x2new = (int)ToSpawnEndPoints.Key.x;
+
+                int dy1 = Math.Abs((int)EndPoints.Key.y - (int)ToSpawnEndPoints.Value.y);
+                int dy2 = Math.Abs((int)EndPoints.Value.y - (int)ToSpawnEndPoints.Key.y);
+
+                // Check if the line is intersecting an existing line (See "Line Cross Calc.png" for more info on how / why)
+                if (k1 != 0 && k1 == -k2 && x1old == x1new && x2old == x2new && dy1 == 2 && dy2 == 2)
+                {
+                    // Destroy the spawned Line
+                    Destroy(LineHolder);
+
+                    DuplicateLine = true;
+
+                    break;
+                }
+
+                // Re-calculate some values for the "flipped" positions
+                x1new = (int)ToSpawnEndPoints.Key.x;
+                x2new = (int)ToSpawnEndPoints.Value.x;
+
+                dy1 = Math.Abs((int)EndPoints.Key.y - (int)ToSpawnEndPoints.Key.y);
+                dy2 = Math.Abs((int)EndPoints.Value.y - (int)ToSpawnEndPoints.Value.y);
+
+                // Check again if the line is intersecting an existing line (See "Line Cross Calc.png" for more info on how / why)
+                if (k1 != 0 && k1 == -k2 && x1old == x1new && x2old == x2new && dy1 == 2 && dy2 == 2)
+                {
+                    // Destroy the spawned Line
+                    Destroy(LineHolder);
+
+                    DuplicateLine = true;
+
+                    break;
+                }
+            }
+
+            if (!DuplicateLine)
+            {
+                TempLineHolder.Add(LineHolder.transform);
+
+                SpawnedLines.Add(new KeyValuePair<Vector3, Vector3>(LineRend.GetPosition(0), LineRend.GetPosition(1)));
+            }
+        }
+
+        // Convert temp list into an array
+        // All lines are put into a temporary list cause if we just try to fill the array normally
+        // then the LineRends that are being deleted will be put into said array
+        Lines = new Transform[TempLineHolder.Count];
+        for (int i = 0; i < TempLineHolder.Count; i++)
+        {
+            Lines[i] = TempLineHolder[i];
+        }
+    }
+
+    // From https://code-maze.com/csharp-randomize-list/
+    public List<KeyValuePair<Vector3, Vector3>> ShuffleList(List<KeyValuePair<Vector3, Vector3>> listToShuffle)
+    {
+        System.Random Rand = new();
+
+        for (int i = listToShuffle.Count - 1; i > 0; i--)
+        {
+            var k = Rand.Next(i + 1);
+            var value = listToShuffle[k];
+            listToShuffle[k] = listToShuffle[i];
+            listToShuffle[i] = value;
+        }
+
+        return listToShuffle;
     }
 }

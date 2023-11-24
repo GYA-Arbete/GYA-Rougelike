@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,7 +35,7 @@ public class RoomProperties : MonoBehaviour
         }
         else
         {
-            System.Random rand = new System.Random();
+            System.Random rand = new();
 
             // Generates a random number 1 -> 3
             // Flat 1/3 chance for each room-type
@@ -76,15 +77,27 @@ public class RoomProperties : MonoBehaviour
         }
         else if (RoomType == 1)
         {
-            System.Random Rand = new System.Random();
+            System.Random Rand = new();
+
             // Slumpar ett tal mellan 1 till och med 4
             EnemyAmount = Rand.Next(1, 5);
 
             EnemyTypes = new int[EnemyAmount];
+
             for (int i = 0; i < EnemyAmount; i++)
             {
-                //EnemyTypes[i] = Rand.Next(1, 5);
-                EnemyTypes[i] = 1;
+                // Check that it doesnt already contain a Summoner
+                if (!EnemyTypes.Contains(3))
+                {
+                    // If a summoner hasnt been included, allow every enemy to be picked
+                    EnemyTypes[i] = Rand.Next(1, 5);
+                }
+                else
+                {
+                    int[] AllowedEnemyTypes = { 1, 2, 4 };
+
+                    EnemyTypes[i] = AllowedEnemyTypes[Rand.Next(0, AllowedEnemyTypes.Length)];
+                }
             }
         }
     }

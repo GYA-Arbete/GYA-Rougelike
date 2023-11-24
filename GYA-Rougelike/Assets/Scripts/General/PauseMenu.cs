@@ -16,8 +16,11 @@ public class PauseMenu : MonoBehaviour
     [Header("Other Scripts")]
     public MapGen MapGenScript;
     public StartRoom StartRoomScript;
+    public LootRoom LootRoomScript;
+    public CampRoom CampRoomScript;
     public CombatSystem CombatSystemScript;
     public CardSpawner CardSpawnerScript;
+    public PlayerManager PlayerManagerScript;
 
     void Start()
     {
@@ -62,10 +65,20 @@ public class PauseMenu : MonoBehaviour
             CombatSystemScript.EndCombat();
             CardSpawnerScript.DespawnCards();
         }
+        else if (LootRoomScript.InLootRoom)
+        {
+            LootRoomScript.ExitLootRoom();
+        }
+        else if (CampRoomScript.InCampRoom)
+        {
+            CampRoomScript.ExitCampRoom();
+        }
 
         MapGenScript.DeleteMap();
 
         StartRoomScript.EnterStartRoom();
+
+        PlayerManagerScript.ResetPlayers();
 
         Unpause();
     }
