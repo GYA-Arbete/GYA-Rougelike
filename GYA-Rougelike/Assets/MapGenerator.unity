@@ -1357,11 +1357,11 @@ MonoBehaviour:
   CardSprites:
   - {fileID: 21300000, guid: 0212de42c9a7c874693b106d2de5ff21, type: 3}
   - {fileID: 21300000, guid: d17d4f11a0a3b2140adec9ba538b0280, type: 3}
-  - {fileID: 21300000, guid: a3d6a385bf4235740ae066729b597727, type: 3}
+  - {fileID: 21300000, guid: d864d88ae80794348b750e74e704dc72, type: 3}
   - {fileID: 21300000, guid: 76224bcca127eff4dba17d3835e7b810, type: 3}
   - {fileID: 21300000, guid: 7f98f7d786d9ffb46bbf830fe63e4665, type: 3}
   - {fileID: 21300000, guid: a3d6a385bf4235740ae066729b597727, type: 3}
-  - {fileID: 21300000, guid: a3d6a385bf4235740ae066729b597727, type: 3}
+  - {fileID: 21300000, guid: bb3153ac42ebf0945a64f94180458f7e, type: 3}
   CardTypesJson: {fileID: 4900000, guid: c91cfe2f92e525c4895daec664eaa5d9, type: 3}
   CardTypes:
     cardList: []
