@@ -190,6 +190,7 @@ public class CombatSystem : MonoBehaviour
         {
             CardStats CardStatsScript = CardsInMoveQueue[i].gameObject.GetComponent<CardStats>();
 
+            // Cleave
             if (CardStatsScript.SplashDamage == true)
             {
                 foreach (Transform Enemy in Enemies)
@@ -200,6 +201,7 @@ public class CombatSystem : MonoBehaviour
                     }
                 }
             }
+            // Block
             else if (CardStatsScript.Defence > 0)
             {
                 foreach (Transform Player in Players)
@@ -210,6 +212,7 @@ public class CombatSystem : MonoBehaviour
                     }
                 }
             }
+            // Slash
             else
             {
                 foreach (Transform Enemy in Enemies)
