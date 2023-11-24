@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class CardChoice : MonoBehaviour
 {
@@ -31,14 +32,27 @@ public class CardChoice : MonoBehaviour
         Sender = SenderScript;
 
         System.Random Rand = new();
+
+        // Generate which cards to have as choices
+        int[] CardType = new int[3];
+        int[] AllowedCards = { 0, 1, 2, 3, 4, 5, 6 };
+        for (int i = 0; i < 3; i++)
+        {
+            int ChoosenCard = Rand.Next(0, AllowedCards.Length);
+
+            CardType[i] = AllowedCards[ChoosenCard];
+
+            // Remove the choosen number from array
+            AllowedCards = AllowedCards.Where(val => val != ChoosenCard).ToArray();
+        }
+
         for (int i = 0; i < 3; i++)
         {
             // Set which card-type is shown for each choice
-            int CardType = Rand.Next(0, 7);
-            CardChoices[i] = CardType;
+            CardChoices[i] = CardType[i];
 
             // Set correct image for each button
-            ChoiceButtons[i].gameObject.GetComponent<Image>().sprite = CardInventoryScript.CardSprites[CardType];
+            ChoiceButtons[i].gameObject.GetComponent<Image>().sprite = CardInventoryScript.CardSprites[CardType[i]];
 
             // Set text for the card-sprite
             Transform[] TextBoxes = ChoiceButtons[i].GetComponentsInChildren<Transform>();
@@ -49,17 +63,17 @@ public class CardChoice : MonoBehaviour
                 {
                     if (TextBox.name == "EnergyCount")
                     {
-                        Text.text = CardInventoryScript.CardTypes.cardList[CardType].Energy.ToString();
+                        Text.text = CardInventoryScript.CardTypes.cardList[CardType[i]].Energy.ToString();
                     }
                     else
                     {
-                        if (CardInventoryScript.CardTypes.cardList[CardType].Damage > 0)
+                        if (CardInventoryScript.CardTypes.cardList[CardType[i]].Damage > 0)
                         {
-                            Text.text = CardInventoryScript.CardTypes.cardList[CardType].Damage.ToString();
+                            Text.text = CardInventoryScript.CardTypes.cardList[CardType[i]].Damage.ToString();
                         }
-                        else if (CardInventoryScript.CardTypes.cardList[CardType].Defence > 0)
+                        else if (CardInventoryScript.CardTypes.cardList[CardType[i]].Defence > 0)
                         {
-                            Text.text = CardInventoryScript.CardTypes.cardList[CardType].Defence.ToString();
+                            Text.text = CardInventoryScript.CardTypes.cardList[CardType[i]].Defence.ToString();
                         }
                     }
                 }
