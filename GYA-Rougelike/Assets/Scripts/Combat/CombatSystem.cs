@@ -212,6 +212,17 @@ public class CombatSystem : MonoBehaviour
                     }
                 }
             }
+            // Thorns
+            else if (CardStatsScript.Thorns)
+            {
+                foreach (Transform Player in Players)
+                {
+                    if (Player.gameObject.activeSelf)
+                    {
+                        Player.GetComponent<HealthSystem>().Thorns = CardStatsScript.Thorns;
+                    }
+                }
+            }
             // Slash
             else
             {
@@ -253,7 +264,18 @@ public class CombatSystem : MonoBehaviour
                     {
                         if (Player.gameObject.activeSelf)
                         {
-                            Player.GetComponent<HealthSystem>().TakeDamage(Damage + DamageBuff[i]);
+                            HealthSystem HealthScript = Player.GetComponent<HealthSystem>();
+
+                            HealthScript.TakeDamage(Damage + DamageBuff[i]);
+
+                            // If thorns, reflect damage back to attacker
+                            if (HealthScript.Thorns)
+                            {
+                                Enemies[i].GetComponent<HealthSystem>().TakeDamage(Damage + DamageBuff[i]);
+
+                                // Reset Thorns when it has been used
+                                HealthScript.Thorns = false;
+                            }
                         }
                     }
 
@@ -275,7 +297,18 @@ public class CombatSystem : MonoBehaviour
                             {
                                 if (Player.gameObject.activeSelf)
                                 {
-                                    Player.GetComponent<HealthSystem>().TakeDamage(Damage + DamageBuff[i]);
+                                    HealthSystem HealthScript = Player.GetComponent<HealthSystem>();
+
+                                    HealthScript.TakeDamage(Damage + DamageBuff[i]);
+
+                                    // If thorns, reflect damage back to attacker
+                                    if (HealthScript.Thorns)
+                                    {
+                                        Enemies[i].GetComponent<HealthSystem>().TakeDamage(Damage + DamageBuff[i]);
+
+                                        // Reset Thorns when it has been used
+                                        HealthScript.Thorns = false;
+                                    }
 
                                     // Reset DamageBuff when it has been used
                                     DamageBuff[i] = 0;

@@ -7,6 +7,7 @@
       "Damage": 5,
       "SplashDamage": false,
       "Defence": 0,
+      "Thorns": false,
       "Cooldown": 1,
       "CardCooldown": 0
     },
@@ -17,6 +18,7 @@
       "Damage": 0,
       "SplashDamage": false,
       "Defence": 5,
+      "Thorns": false,
       "Cooldown": 1,
       "CardCooldown": 0
     },
@@ -27,6 +29,7 @@
       "Damage": 5,
       "SplashDamage": false,
       "Defence": 0,
+      "Thorns": true,
       "Cooldown": 1,
       "CardCooldown": 0
     },
@@ -37,6 +40,7 @@
       "Damage": 5,
       "SplashDamage": true,
       "Defence": 0,
+      "Thorns": false,
       "Cooldown": 2,
       "CardCooldown": 0
     },
@@ -47,6 +51,7 @@
       "Damage": 5,
       "SplashDamage": false,
       "Defence": 0,
+      "Thorns": false,
       "Cooldown": 1,
       "CardCooldown": 0
     },
@@ -57,6 +62,7 @@
       "Damage": 5,
       "SplashDamage": false,
       "Defence": 0,
+      "Thorns": false,
       "Cooldown": 1,
       "CardCooldown": 0
     },
@@ -67,6 +73,7 @@
       "Damage": 5,
       "SplashDamage": false,
       "Defence": 0,
+      "Thorns": false,
       "Cooldown": 3,
       "CardCooldown": 0
     }
