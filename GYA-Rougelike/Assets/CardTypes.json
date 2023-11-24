@@ -52,7 +52,7 @@
     },
     {
       "ID": 5,
-      "Name": "Adrenaline",
+      "Name": "Shielded Charge",
       "Energy": 1,
       "Damage": 5,
       "SplashDamage": false,
