@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,7 @@ public class CombatSystem : MonoBehaviour
     [Header("Combat Participants")]
     public Transform[] Players;
     public Transform[] Enemies;
+    public int[] EnemyType;
     public Transform[] Summons;
     public bool[] DeadEnemies;
 
@@ -65,6 +67,8 @@ public class CombatSystem : MonoBehaviour
         SplashDamage = new bool[EnemyAmount];
         DamageBuff = new int[EnemyAmount];
         StunDuration = new int[EnemyAmount];
+
+        EnemyType = EnemyTypes;
 
         EnergyBarScript.SetupBar(10, new Color32(252, 206, 82, 255));
 
@@ -196,11 +200,32 @@ public class CombatSystem : MonoBehaviour
             // Cleave
             if (CardStatsScript.SplashDamage == true)
             {
-                foreach (Transform Enemy in Enemies)
+                // If a tank is spawned
+                if (EnemyType.Contains(4))
                 {
-                    if (Enemy != null)
+                    int TankIndex = Array.IndexOf(EnemyType, 4);
+                    
+                    // Check how many enemies are alive
+                    int AliveEnemies = 0;
+                    foreach (Transform Enemy in Enemies)
                     {
-                        Enemy.GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage);
+                        if (Enemy != null)
+                        {
+                            AliveEnemies++;
+                        }
+                    }
+
+                    // Make tank absorb the damage meant for each enemy
+                    Enemies[TankIndex].GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage * AliveEnemies);
+                }
+                else
+                {
+                    foreach (Transform Enemy in Enemies)
+                    {
+                        if (Enemy != null)
+                        {
+                            Enemy.GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage);
+                        }
                     }
                 }
             }
@@ -229,25 +254,45 @@ public class CombatSystem : MonoBehaviour
             // Bash
             else if (CardStatsScript.Stun > 0)
             {
-                for (int j = 0; j < Enemies.Length; j++)
+                // If a tank is spawned
+                if (EnemyType.Contains(4))
                 {
-                    if (Enemies[j] != null)
+                    int TankIndex = Array.IndexOf(EnemyType, 4);
+
+                    StunDuration[TankIndex] = CardStatsScript.Stun;
+                }
+                else
+                {
+                    for (int j = 0; j < Enemies.Length; j++)
                     {
-                        // Stun attacked enemy
-                        StunDuration[j] = CardStatsScript.Stun;
-                        break;
+                        if (Enemies[j] != null)
+                        {
+                            // Stun attacked enemy
+                            StunDuration[j] = CardStatsScript.Stun;
+                            break;
+                        }
                     }
                 }
             }
             // Slash
             else
             {
-                foreach (Transform Enemy in Enemies)
+                // If a tank is spawned
+                if (EnemyType.Contains(4))
                 {
-                    if (Enemy != null)
+                    int TankIndex = Array.IndexOf(EnemyType, 4);
+
+                    Enemies[TankIndex].GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage);
+                }
+                else
+                {
+                    foreach (Transform Enemy in Enemies)
                     {
-                        Enemy.GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage);
-                        break;
+                        if (Enemy != null)
+                        {
+                            Enemy.GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage);
+                            break;
+                        }
                     }
                 }
             }
