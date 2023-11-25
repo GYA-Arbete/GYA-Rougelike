@@ -2618,6 +2618,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardInventoryScript: {fileID: 399353178}
   StartRoomScript: {fileID: 270984553}
+  PlayerManagerScript: {fileID: 2042664324}
 --- !u!4 &642181653
 Transform:
   m_ObjectHideFlags: 0
@@ -4555,6 +4556,7 @@ MonoBehaviour:
   Health: 0
   Defence: 0
   Player: 0
+  Thorns: 0
   HealthBarScript: {fileID: 0}
 --- !u!1 &1103261178
 GameObject:
@@ -4607,6 +4609,7 @@ MonoBehaviour:
   EnemyMove: 
   SplashDamage: 
   DamageBuff: 
+  StunDuration: 
   EnergyBarScript: {fileID: 1814719337306141361}
   EnemySpawnerScript: {fileID: 1209565286}
   CardSpawnerScript: {fileID: 2064234102}
@@ -8709,6 +8712,7 @@ MonoBehaviour:
   Health: 0
   Defence: 0
   Player: 0
+  Thorns: 0
   HealthBarScript: {fileID: 0}
 --- !u!1 &1959612796
 GameObject:

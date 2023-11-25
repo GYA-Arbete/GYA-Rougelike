@@ -11,13 +11,7 @@ public class PlayerManager : MonoBehaviour
     public Transform HealthBarParent;
     public Sprite HealthBarImage;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        SpawnPlayer();
-    }
-
-    void SpawnPlayer()
+    public void SpawnPlayer()
     {
         for (int i = 0; i < 2; i++)
         {
