@@ -30,6 +30,7 @@ public class CombatSystem : MonoBehaviour
     public int[] EnemyMove;
     public bool[] SplashDamage;
     public int[] DamageBuff;
+    public int[] StunDuration;
 
     [Header("Other Scripts")]
     public BarScript EnergyBarScript;
@@ -63,6 +64,7 @@ public class CombatSystem : MonoBehaviour
         EnemyMove = new int[EnemyAmount];
         SplashDamage = new bool[EnemyAmount];
         DamageBuff = new int[EnemyAmount];
+        StunDuration = new int[EnemyAmount];
 
         EnergyBarScript.SetupBar(10, new Color32(252, 206, 82, 255));
 
@@ -82,6 +84,7 @@ public class CombatSystem : MonoBehaviour
 
             // Set default value
             DamageBuff[i] = 0;
+            StunDuration[i] = 0;
         }
     }
 
@@ -223,6 +226,19 @@ public class CombatSystem : MonoBehaviour
                     }
                 }
             }
+            // Bash
+            else if (CardStatsScript.Stun > 0)
+            {
+                for (int j = 0; j < Enemies.Length; j++)
+                {
+                    if (Enemies[j] != null)
+                    {
+                        // Stun attacked enemy
+                        StunDuration[j] = CardStatsScript.Stun;
+                        break;
+                    }
+                }
+            }
             // Slash
             else
             {
@@ -253,7 +269,8 @@ public class CombatSystem : MonoBehaviour
         // Do each move in EnemyMoves
         for (int i = 0; i < EnemyMove.Length; i++)
         {
-            if (Enemies[i] != null)
+            // If enemy exists and isnt stunned
+            if (Enemies[i] != null && StunDuration[i] == 0)
             {
                 // Do Cleave (Normal Splash)
                 if (SplashDamage[i] == true)
@@ -329,6 +346,10 @@ public class CombatSystem : MonoBehaviour
                             break;
                     }
                 }
+            }
+            else
+            {
+                StunDuration[i]--;
             }
         }
     }

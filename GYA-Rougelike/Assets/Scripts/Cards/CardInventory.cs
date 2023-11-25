@@ -41,6 +41,7 @@ public class CardInventory : MonoBehaviour
         public bool SplashDamage;
         public int Defence;
         public bool Thorns;
+        public int Stun;
         public int Cooldown;
         public int CardCooldown;
     }
