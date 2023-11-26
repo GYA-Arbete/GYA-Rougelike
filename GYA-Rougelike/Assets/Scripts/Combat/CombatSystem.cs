@@ -229,6 +229,29 @@ public class CombatSystem : MonoBehaviour
                     }
                 }
             }
+            // Shielded Charge
+            else if (CardStatsScript.Defence > 0 && CardStatsScript.Damage > 0)
+            {
+                int Damage = CardStatsScript.Damage;
+
+                // Damage an enemy
+                foreach (Transform Enemy in Enemies)
+                {
+                    if (Enemy != null)
+                    {
+                        Enemy.GetComponent<HealthSystem>().TakeDamage(Damage);
+                    }
+                }
+
+                // Give block to self equal to damage dealt
+                foreach (Transform Player in Players)
+                {
+                    if (Player.gameObject.activeSelf)
+                    {
+                        Player.GetComponent<HealthSystem>().AddDefence(Damage);
+                    }
+                }
+            }
             // Block
             else if (CardStatsScript.Defence > 0)
             {
