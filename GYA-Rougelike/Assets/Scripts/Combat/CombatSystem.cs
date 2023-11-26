@@ -31,7 +31,8 @@ public class CombatSystem : MonoBehaviour
     public Sprite[] MoveIndicators;
     public int[] EnemyMove;
     public bool[] SplashDamage;
-    public int[] DamageBuff;
+    public int[] EnemyDamageBuff;
+    public int PlayerDamageBuff;
     public int[] StunDuration;
 
     [Header("Other Scripts")]
@@ -65,7 +66,7 @@ public class CombatSystem : MonoBehaviour
         DeadEnemies = new bool[EnemyAmount];
         EnemyMove = new int[EnemyAmount];
         SplashDamage = new bool[EnemyAmount];
-        DamageBuff = new int[EnemyAmount];
+        EnemyDamageBuff = new int[EnemyAmount];
         StunDuration = new int[EnemyAmount];
 
         EnemyType = EnemyTypes;
@@ -87,7 +88,7 @@ public class CombatSystem : MonoBehaviour
             SplashDamage[i] = ReturnedValues.Item2;
 
             // Set default value
-            DamageBuff[i] = 0;
+            EnemyDamageBuff[i] = 0;
             StunDuration[i] = 0;
         }
     }
@@ -192,6 +193,19 @@ public class CombatSystem : MonoBehaviour
     // Called when player has finished their turn, will play each card in the MoveQueue
     void PlayCards()
     {
+        // Check if a Roid-Rage card is in the "queue"
+        // Do that "move" first
+        PlayerDamageBuff = 0;
+        for (int i = 0; i < CardsInMoveQueue.Count; i++)
+        {
+            CardStats CardStatsScript = CardsInMoveQueue[i].gameObject.GetComponent<CardStats>();
+
+            if (CardStatsScript.DamageBuff > 0)
+            {
+                PlayerDamageBuff += 2;
+            }
+        }
+
         // Do each cards "thing"
         for (int i = 0; i < CardsInMoveQueue.Count; i++)
         {
@@ -216,7 +230,7 @@ public class CombatSystem : MonoBehaviour
                     }
 
                     // Make tank absorb the damage meant for each enemy
-                    Enemies[TankIndex].GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage * AliveEnemies);
+                    Enemies[TankIndex].GetComponent<HealthSystem>().TakeDamage((CardStatsScript.Damage + PlayerDamageBuff) * AliveEnemies);
                 }
                 else
                 {
@@ -224,15 +238,18 @@ public class CombatSystem : MonoBehaviour
                     {
                         if (Enemy != null)
                         {
-                            Enemy.GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage);
+                            Enemy.GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage + PlayerDamageBuff);
                         }
                     }
                 }
+
+                // Set damage buff to 0 when it has been used
+                PlayerDamageBuff = 0;
             }
             // Shielded Charge
             else if (CardStatsScript.Defence > 0 && CardStatsScript.Damage > 0)
             {
-                int Damage = CardStatsScript.Damage;
+                int Damage = CardStatsScript.Damage + PlayerDamageBuff;
 
                 // Damage an enemy
                 foreach (Transform Enemy in Enemies)
@@ -251,6 +268,9 @@ public class CombatSystem : MonoBehaviour
                         Player.GetComponent<HealthSystem>().AddDefence(Damage);
                     }
                 }
+
+                // Set damage buff to 0 when it has been used
+                PlayerDamageBuff = 0;
             }
             // Block
             else if (CardStatsScript.Defence > 0)
@@ -297,6 +317,11 @@ public class CombatSystem : MonoBehaviour
                     }
                 }
             }
+            // Roid-Rage
+            else if (CardStatsScript.DamageBuff > 0)
+            {
+                // Do nothing since any Roid-Rage cards where done first in queue
+            }
             // Slash
             else
             {
@@ -305,7 +330,7 @@ public class CombatSystem : MonoBehaviour
                 {
                     int TankIndex = Array.IndexOf(EnemyType, 4);
 
-                    Enemies[TankIndex].GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage);
+                    Enemies[TankIndex].GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage + PlayerDamageBuff);
                 }
                 else
                 {
@@ -313,11 +338,14 @@ public class CombatSystem : MonoBehaviour
                     {
                         if (Enemy != null)
                         {
-                            Enemy.GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage);
+                            Enemy.GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage + PlayerDamageBuff);
                             break;
                         }
                     }
                 }
+
+                // Set damage buff to 0 when it has been used
+                PlayerDamageBuff = 0;
             }
         }
     }
@@ -326,11 +354,12 @@ public class CombatSystem : MonoBehaviour
     void EnemyTurn()
     {
         // Check if a DamageBuff move is in the "queue"
+        // Do said move first
         if (EnemyMove.Contains(4))
         {
-            for (int i = 0; i < DamageBuff.Length; i++)
+            for (int i = 0; i < EnemyDamageBuff.Length; i++)
             {
-                DamageBuff[i] = 2;
+                EnemyDamageBuff[i] = 2;
             }
         }
 
@@ -351,12 +380,12 @@ public class CombatSystem : MonoBehaviour
                         {
                             HealthSystem HealthScript = Player.GetComponent<HealthSystem>();
 
-                            HealthScript.TakeDamage(Damage + DamageBuff[i]);
+                            HealthScript.TakeDamage(Damage + EnemyDamageBuff[i]);
 
                             // If thorns, reflect damage back to attacker
                             if (HealthScript.Thorns)
                             {
-                                Enemies[i].GetComponent<HealthSystem>().TakeDamage(Damage + DamageBuff[i]);
+                                Enemies[i].GetComponent<HealthSystem>().TakeDamage(Damage + EnemyDamageBuff[i]);
 
                                 // Reset Thorns when it has been used
                                 HealthScript.Thorns = false;
@@ -365,7 +394,7 @@ public class CombatSystem : MonoBehaviour
                     }
 
                     // Reset DamageBuff when it has been used
-                    DamageBuff[i] = 0;
+                    EnemyDamageBuff[i] = 0;
                 }
                 else
                 {
@@ -384,19 +413,19 @@ public class CombatSystem : MonoBehaviour
                                 {
                                     HealthSystem HealthScript = Player.GetComponent<HealthSystem>();
 
-                                    HealthScript.TakeDamage(Damage + DamageBuff[i]);
+                                    HealthScript.TakeDamage(Damage + EnemyDamageBuff[i]);
 
                                     // If thorns, reflect damage back to attacker
                                     if (HealthScript.Thorns)
                                     {
-                                        Enemies[i].GetComponent<HealthSystem>().TakeDamage(Damage + DamageBuff[i]);
+                                        Enemies[i].GetComponent<HealthSystem>().TakeDamage(Damage + EnemyDamageBuff[i]);
 
                                         // Reset Thorns when it has been used
                                         HealthScript.Thorns = false;
                                     }
 
                                     // Reset DamageBuff when it has been used
-                                    DamageBuff[i] = 0;
+                                    EnemyDamageBuff[i] = 0;
                                     break;
                                 }
                             }

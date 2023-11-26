@@ -42,6 +42,7 @@ public class CardInventory : MonoBehaviour
         public int Defence;
         public bool Thorns;
         public int Stun;
+        public int DamageBuff;
         public int Cooldown;
         public int CardCooldown;
     }
@@ -141,6 +142,10 @@ public class CardInventory : MonoBehaviour
                         else if (Inventory.cardList[i].Defence > 0)
                         {
                             Text.text = Inventory.cardList[i].Defence.ToString();
+                        }
+                        else if (Inventory.cardList[i].DamageBuff > 0)
+                        {
+                            Text.text = Inventory.cardList[i].DamageBuff.ToString();
                         }
                     }
                 }
