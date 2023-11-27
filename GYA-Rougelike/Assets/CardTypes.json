@@ -7,6 +7,9 @@
       "Damage": 5,
       "SplashDamage": false,
       "Defence": 0,
+      "Thorns": false,
+      "Stun": 0,
+      "DamageBuff": 0,
       "Cooldown": 1,
       "CardCooldown": 0
     },
@@ -17,6 +20,9 @@
       "Damage": 0,
       "SplashDamage": false,
       "Defence": 5,
+      "Thorns": false,
+      "Stun": 0,
+      "DamageBuff": 0,
       "Cooldown": 1,
       "CardCooldown": 0
     },
@@ -27,6 +33,9 @@
       "Damage": 5,
       "SplashDamage": false,
       "Defence": 0,
+      "Thorns": true,
+      "Stun": 0,
+      "DamageBuff": 0,
       "Cooldown": 1,
       "CardCooldown": 0
     },
@@ -37,6 +46,9 @@
       "Damage": 5,
       "SplashDamage": true,
       "Defence": 0,
+      "Thorns": false,
+      "Stun": 0,
+      "DamageBuff": 0,
       "Cooldown": 2,
       "CardCooldown": 0
     },
@@ -47,16 +59,22 @@
       "Damage": 5,
       "SplashDamage": false,
       "Defence": 0,
+      "Thorns": false,
+      "Stun": 2,
+      "DamageBuff": 0,
       "Cooldown": 1,
       "CardCooldown": 0
     },
     {
       "ID": 5,
-      "Name": "Adrenaline",
+      "Name": "Shielded Charge",
       "Energy": 1,
-      "Damage": 5,
+      "Damage": 3,
       "SplashDamage": false,
-      "Defence": 0,
+      "Defence": 3,
+      "Thorns": false,
+      "Stun": 0,
+      "DamageBuff": 0,
       "Cooldown": 1,
       "CardCooldown": 0
     },
@@ -67,6 +85,9 @@
       "Damage": 5,
       "SplashDamage": false,
       "Defence": 0,
+      "Thorns": false,
+      "Stun": 0,
+      "DamageBuff": 2,
       "Cooldown": 3,
       "CardCooldown": 0
     }

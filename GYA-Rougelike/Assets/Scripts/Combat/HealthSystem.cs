@@ -9,6 +9,9 @@ public class HealthSystem : MonoBehaviour
     public int Defence = 0;
     public bool Player = false;
 
+    [Header("Player Exclusive Variables")]
+    public bool Thorns = false;
+
     [Header("HealthBar Stuff")]
     public BarScript HealthBarScript;
 
