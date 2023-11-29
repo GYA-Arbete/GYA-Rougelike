@@ -43,7 +43,7 @@ public class CardChoice : MonoBehaviour
             CardType[i] = AllowedCards[ChoosenCard];
 
             // Remove the choosen number from array
-            AllowedCards = AllowedCards.Where(val => val != ChoosenCard).ToArray();
+            AllowedCards = AllowedCards.Where(val => val != AllowedCards[ChoosenCard]).ToArray();
         }
 
         for (int i = 0; i < 3; i++)
