@@ -100,6 +100,19 @@ public class CardSpawner : MonoBehaviour
                             {
                                 Text.text = CardStatsScript.Defence.ToString();
                             }
+                            else if (CardStatsScript.DamageBuff > 0)
+                            {
+                                Text.text = CardStatsScript.DamageBuff.ToString();
+                            }
+                            else if (CardStatsScript.Stun > 0)
+                            {
+                                Text.text = CardStatsScript.Stun.ToString();
+                            }
+                            else if (CardStatsScript.Thorns)
+                            {
+                                Text.text = "1x";
+                                Text.fontSize = 0.2f;
+                            }
                         }
                     }
                 }

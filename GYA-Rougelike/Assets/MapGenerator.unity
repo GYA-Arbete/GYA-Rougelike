@@ -1357,11 +1357,11 @@ MonoBehaviour:
   CardSprites:
   - {fileID: 21300000, guid: 0212de42c9a7c874693b106d2de5ff21, type: 3}
   - {fileID: 21300000, guid: d17d4f11a0a3b2140adec9ba538b0280, type: 3}
-  - {fileID: 21300000, guid: d864d88ae80794348b750e74e704dc72, type: 3}
+  - {fileID: 21300000, guid: 512fa5a80155f3e4693bf7c238bf4ed4, type: 3}
   - {fileID: 21300000, guid: 76224bcca127eff4dba17d3835e7b810, type: 3}
   - {fileID: 21300000, guid: 7f98f7d786d9ffb46bbf830fe63e4665, type: 3}
-  - {fileID: 21300000, guid: 143437b35aacea04ba8a2106ba17fa68, type: 3}
-  - {fileID: 21300000, guid: bb3153ac42ebf0945a64f94180458f7e, type: 3}
+  - {fileID: 21300000, guid: dc583dd3acd959d4c982e16f856b5e1e, type: 3}
+  - {fileID: 21300000, guid: 15e421e0e3ce6324facc8d2e98eeb108, type: 3}
   CardTypesJson: {fileID: 4900000, guid: c91cfe2f92e525c4895daec664eaa5d9, type: 3}
   CardTypes:
     cardList: []
@@ -1722,7 +1722,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.813, y: 0.13202}
+  m_AnchoredPosition: {x: 0.8, y: 0.13202}
   m_SizeDelta: {x: 0.5, y: 0.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &473075584
@@ -2833,7 +2833,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.813, y: 0.13202}
+  m_AnchoredPosition: {x: 0.8, y: 0.13202}
   m_SizeDelta: {x: 0.5, y: 0.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &666971120
@@ -4594,6 +4594,7 @@ MonoBehaviour:
   - {fileID: 1090164095}
   - {fileID: 1945140423}
   Enemies: []
+  EnemyType: 
   Summons: []
   DeadEnemies: 
   CombatRoomElements:
@@ -4608,7 +4609,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 632f0defc2513fa4785e7fb048a5ff6a, type: 3}
   EnemyMove: 
   SplashDamage: 
-  DamageBuff: 
+  EnemyDamageBuff: 
+  PlayerDamageBuff: 0
   StunDuration: 
   EnergyBarScript: {fileID: 1814719337306141361}
   EnemySpawnerScript: {fileID: 1209565286}
@@ -9040,7 +9042,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.813, y: 0.13202}
+  m_AnchoredPosition: {x: 0.8, y: 0.13202}
   m_SizeDelta: {x: 0.5, y: 0.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2030404809

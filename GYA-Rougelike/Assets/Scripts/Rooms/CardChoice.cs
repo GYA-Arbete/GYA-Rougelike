@@ -70,10 +70,27 @@ public class CardChoice : MonoBehaviour
                         if (CardInventoryScript.CardTypes.cardList[CardType[i]].Damage > 0)
                         {
                             Text.text = CardInventoryScript.CardTypes.cardList[CardType[i]].Damage.ToString();
+                            Text.fontSize = 0.3f;
                         }
                         else if (CardInventoryScript.CardTypes.cardList[CardType[i]].Defence > 0)
                         {
                             Text.text = CardInventoryScript.CardTypes.cardList[CardType[i]].Defence.ToString();
+                            Text.fontSize = 0.3f;
+                        }
+                        else if (CardInventoryScript.CardTypes.cardList[CardType[i]].DamageBuff > 0)
+                        {
+                            Text.text = CardInventoryScript.CardTypes.cardList[CardType[i]].DamageBuff.ToString();
+                            Text.fontSize = 0.3f;
+                        }
+                        else if (CardInventoryScript.CardTypes.cardList[CardType[i]].Stun > 0)
+                        {
+                            Text.text = CardInventoryScript.CardTypes.cardList[CardType[i]].Stun.ToString();
+                            Text.fontSize = 0.3f;
+                        }
+                        else if (CardInventoryScript.CardTypes.cardList[CardType[i]].Thorns)
+                        {
+                            Text.text = "1x";
+                            Text.fontSize = 0.2f;
                         }
                     }
                 }

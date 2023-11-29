@@ -30,7 +30,7 @@
       "ID": 2,
       "Name": "Thorns",
       "Energy": 1,
-      "Damage": 5,
+      "Damage": 0,
       "SplashDamage": false,
       "Defence": 0,
       "Thorns": true,

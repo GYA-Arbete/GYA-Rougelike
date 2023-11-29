@@ -129,10 +129,12 @@ public class CardInventory : MonoBehaviour
                 TextMeshProUGUI Text = TextBox.GetComponent<TextMeshProUGUI>();
                 if (Text != null)
                 {
+                    // If energy count
                     if (TextBox.name == "EnergyCount")
                     {
                         Text.text = Inventory.cardList[i].Energy.ToString();
                     }
+                    // If card-stat count
                     else
                     {
                         if (Inventory.cardList[i].Damage > 0)
@@ -146,6 +148,15 @@ public class CardInventory : MonoBehaviour
                         else if (Inventory.cardList[i].DamageBuff > 0)
                         {
                             Text.text = Inventory.cardList[i].DamageBuff.ToString();
+                        }
+                        else if (Inventory.cardList[i].Stun > 0)
+                        {
+                            Text.text = Inventory.cardList[i].Stun.ToString();
+                        }
+                        else if (Inventory.cardList[i].Thorns)
+                        {
+                            Text.text = "1x";
+                            Text.fontSize = 0.2f;
                         }
                     }
                 }
