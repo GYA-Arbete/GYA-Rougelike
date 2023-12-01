@@ -56,12 +56,12 @@ public class RoomProperties : MonoBehaviour
 
         if (HiddenType)
         {
-            RawImage RawImg = RoomImage.gameObject.GetComponent<RawImage>();
+            RawImage RawImg = RoomImage.GetComponent<RawImage>();
             RawImg.texture = RoomImages[5]; // 5 == HiddenTypeIcon
         }
         else
         {
-            RawImage RawImg = RoomImage.gameObject.GetComponent<RawImage>();
+            RawImage RawImg = RoomImage.GetComponent<RawImage>();
             RawImg.texture = RoomImages[RoomType];
         }
 

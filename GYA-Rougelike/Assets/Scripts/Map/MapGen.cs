@@ -14,6 +14,7 @@ public class MapGen : MonoBehaviour
     [Header("Line Stuff")]
     public Transform MapLinePrefabParent;
     public GameObject MapLinePrefab;
+    public List<KeyValuePair<Vector3, Vector3>> SpawnedLines = new();
 
     [Header("Arrays")]
     public Transform[] SpawnPoints;
@@ -42,7 +43,7 @@ public class MapGen : MonoBehaviour
 
         CalculatePaths();
 
-        MapNavigationScript.SetupForMapNav();
+        MapNavigationScript.SetupForMapNav(SpawnedLines);
     }
 
     public void DeleteMap()
@@ -77,6 +78,7 @@ public class MapGen : MonoBehaviour
         // Clear Lists
         Rooms = null;
         Lines = null;
+        SpawnedLines = new();
     }
 
     void GenerateRooms()
@@ -203,7 +205,6 @@ public class MapGen : MonoBehaviour
     void GeneratePaths(List<KeyValuePair<Vector3, Vector3>> LineEndPoints)
     {
         List<Transform> TempLineHolder = new();
-        List<KeyValuePair<Vector3, Vector3>> SpawnedLines = new();
 
         // Randomize order of List
         LineEndPoints = ShuffleList(LineEndPoints);
