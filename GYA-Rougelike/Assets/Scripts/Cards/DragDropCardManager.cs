@@ -4,6 +4,8 @@ using System.Linq;
 
 public class DragDropCardManager : MonoBehaviour
 {
+    public GameObject TargetLineRend;
+
     [Header("Variables for Snapping")]
     public double[] SnapPointsDistance;
     public bool[] CardInPoint;
@@ -120,5 +122,19 @@ public class DragDropCardManager : MonoBehaviour
         }
 
         return SnappedPoint;
+    }
+
+    public void HideTargetIndicator()
+    {
+        TargetLineRend.SetActive(false);
+    }
+
+    public void DrawTargetIndicator(Vector3[] Points)
+    {
+        TargetLineRend.SetActive(true);
+
+        LineRenderer LineRend = TargetLineRend.GetComponent<LineRenderer>();
+
+        LineRend.SetPositions(Points);
     }
 }

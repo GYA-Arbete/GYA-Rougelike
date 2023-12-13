@@ -35,6 +35,9 @@ public class CombatSystem : MonoBehaviour
     public int PlayerDamageBuff;
     public int[] StunDuration;
 
+    [Header("Stuff for drawing TargedIndicators (from DragDropCardComponent.cs)")]
+    public Transform EnemyTarget;
+
     [Header("Other Scripts")]
     public BarScript EnergyBarScript;
     public EnemySpawner EnemySpawnerScript;
@@ -91,6 +94,9 @@ public class CombatSystem : MonoBehaviour
             EnemyDamageBuff[i] = 0;
             StunDuration[i] = 0;
         }
+
+        // Save which enemy will be targeted by the players card
+        EnemyTarget = Enemies[0];
     }
 
     public void EndCombat()
@@ -167,6 +173,9 @@ public class CombatSystem : MonoBehaviour
                 SplashDamage[i] = ReturnedValues.Item2;
             }
         }
+
+        // Save which enemy will be targeted by the players card
+        EnemyTarget = Enemies[0];
     }
 
     void GetCardsInMoveQueue()
