@@ -135,6 +135,32 @@ public class DragDropCardManager : MonoBehaviour
 
         LineRenderer LineRend = TargetLineRend.GetComponent<LineRenderer>();
 
-        LineRend.SetPositions(Points);
+        LineRend.positionCount = 50;
+
+        int SegmentIndex = 0;
+
+        for (int i = 0; i < 100; i += 2)
+        {
+            float t = (float)i / 100;
+
+            Vector3 Position = CalcBezierPoint(Points, t);
+
+            LineRend.SetPosition(SegmentIndex, Position);
+
+            SegmentIndex++;
+        }
+    }
+
+    Vector3 CalcBezierPoint(Vector3[] Points, float t)
+    {
+        float u = 1 - t;
+        float tt = t * t;
+        float uu = u * u;
+
+        Vector3 Point = uu * Points[0];
+        Point += 2 * u * t * Points[1];
+        Point += tt * Points[2];
+
+        return Point;
     }
 }
