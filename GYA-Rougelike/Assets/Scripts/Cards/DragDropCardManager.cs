@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Linq;
+using System.Collections.Generic;
 
 public class DragDropCardManager : MonoBehaviour
 {
@@ -46,6 +47,14 @@ public class DragDropCardManager : MonoBehaviour
         CardInPoint = new bool[SnapPoints.Length];
     }
 
+    public void SetCardInPoint(List<int> Indexes)
+    {
+        foreach (int Index in Indexes)
+        {
+            CardInPoint[Index] = true;
+        }
+    }
+
     public void RemoveFromPoint(Transform Card, int SnappedToPoint)
     {
         // If in MoveQueue
@@ -53,9 +62,9 @@ public class DragDropCardManager : MonoBehaviour
         {
             // If removing card from MoveQueue, add back the energy
             EnergyBarScript.UpdateBar(Card.GetComponent<CardStats>().Energy);
-
-            CardInPoint[SnappedToPoint] = false;
         }
+
+        CardInPoint[SnappedToPoint] = false;
     }
 
     public int SnapToPoint(Transform Card)

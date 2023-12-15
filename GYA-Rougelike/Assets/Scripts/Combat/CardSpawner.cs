@@ -62,6 +62,8 @@ public class CardSpawner : MonoBehaviour
 
         SpawnedCards = new GameObject[CardsInInventory.cardList.Count];
 
+        List<int> SnappedToPoints = new();
+
         // i = 1 eftersom den ska ingorera parent
         for (int i = 1; i < CardsInInventory.cardList.Count + 1; i++)
         {
@@ -75,6 +77,10 @@ public class CardSpawner : MonoBehaviour
                 // Assign values to each created card
                 CardStats CardStatsScript = Card.GetComponent<CardStats>();
                 CardStatsScript.AssignValues(CardsInInventory.cardList[i - 1].Energy, CardsInInventory.cardList[i - 1].Damage, CardsInInventory.cardList[i - 1].SplashDamage, CardsInInventory.cardList[i - 1].Defence, CardsInInventory.cardList[i - 1].Thorns, CardsInInventory.cardList[i - 1].Stun, CardsInInventory.cardList[i - 1].DamageBuff, CardsInInventory.cardList[i - 1].Cooldown, i - 1);
+
+                // Setup stuff for snapping
+                Card.GetComponent<DragDropCardComponent>().Setup(i - 1);
+                SnappedToPoints.Add(i - 1);
 
                 // Change the cards image
                 Card.GetComponent<SpriteRenderer>().sprite = CardSprites[CardType[i - 1]];
@@ -118,6 +124,8 @@ public class CardSpawner : MonoBehaviour
                 }
 
                 SpawnedCards[i - 1] = Card;
+
+                DragDropCardManagerScript.SetCardInPoint(SnappedToPoints);
             }
             // If the card is on cooldown, reduce it by 1
             else

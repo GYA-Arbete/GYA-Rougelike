@@ -15,8 +15,7 @@ public class DragDropCardComponent : MonoBehaviour
     public DragDropCardManager DragDropCardManagerScript;
     public CombatSystem CombatSystemScript;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Setup(int SnappedPoint)
     {
         UnityEngine.Object[] temp = Resources.FindObjectsOfTypeAll(typeof(GameObject));
         for (int i = 0; i < temp.Length; i++)
@@ -29,6 +28,8 @@ public class DragDropCardComponent : MonoBehaviour
 
         DragDropCardManagerScript = FindObjectOfType<DragDropCardManager>();
         CombatSystemScript = FindObjectOfType<CombatSystem>();
+
+        SnappedToPoint = SnappedPoint;
     }
 
     public void OnMouseDown()
