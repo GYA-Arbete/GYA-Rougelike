@@ -154,12 +154,10 @@ public class DragDropCardManager : MonoBehaviour
     Vector3 CalcBezierPoint(Vector3[] Points, float t)
     {
         float u = 1 - t;
-        float tt = t * t;
-        float uu = u * u;
 
-        Vector3 Point = uu * Points[0];
+        Vector3 Point = u * u * Points[0];
         Point += 2 * u * t * Points[1];
-        Point += tt * Points[2];
+        Point += t * t * Points[2];
 
         return Point;
     }

@@ -52,15 +52,19 @@ public class DragDropCardComponent : MonoBehaviour
         // Update target indicator
         Vector3[] Points = new Vector3[3];
 
+        float Z = 2;
+
         // Calculate each point of line
         Points[0] = transform.position; // Card position
+        Points[0].z = Z;
 
-        float YOffset = 0.3f;
+        float YOffset = 0.8f;
         float X2 = Math.Min(transform.position.x, CombatSystemScript.EnemyTarget.position.x) + Math.Abs((transform.position.x - CombatSystemScript.EnemyTarget.position.x) / 2);
         float Y2 = Math.Min(transform.position.y, CombatSystemScript.EnemyTarget.position.y) + YOffset + Math.Abs((transform.position.y - CombatSystemScript.EnemyTarget.position.y) / 2);
-        Points[1] = new Vector3(X2, Y2, transform.position.z); // Middle point
+        Points[1] = new Vector3(X2, Y2, Z); // Middle point
 
         Points[2] = CombatSystemScript.EnemyTarget.position; // Enemy position
+        Points[2].z = Z;
 
         DragDropCardManagerScript.DrawTargetIndicator(Points);
     }
