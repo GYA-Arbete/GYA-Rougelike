@@ -149,6 +149,9 @@ public class DragDropCardManager : MonoBehaviour
 
             SegmentIndex++;
         }
+
+        // Set texture scale to avoid texture stretching
+        LineRend.material.mainTextureScale = new Vector2(1f / LineRend.startWidth, 1.0f);
     }
 
     Vector3 CalcBezierPoint(Vector3[] Points, float t)
