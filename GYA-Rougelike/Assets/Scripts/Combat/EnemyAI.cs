@@ -7,6 +7,11 @@ public class EnemyAI : MonoBehaviour
     public int Damage;
     public int Defence = 0;
 
+    [Header("Stun Stuff")]
+    public bool Stunned = false;
+    public int StunDuration = 0;
+    public GameObject StunIndicator;
+
     [Header("Other")]
     public int EnemyType;
 
@@ -20,6 +25,8 @@ public class EnemyAI : MonoBehaviour
     {
         EnemyType = Enemytype;
         MoveIndicators = Images;
+
+        StunIndicator.SetActive(false);
 
         switch (EnemyType)
         {
@@ -40,9 +47,32 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    public void Stun(int Duration)
+    {
+        Stunned = true;
+        StunDuration = Duration;
+        StunIndicator.SetActive(true);
+    }
+
     // Int for type of move, bool for if splash damage
     public (int, bool) GenerateMove()
     {
+        // If the enemy is stunned, do an early exit and send back an "out of range index" to it doesnt do anything later
+        if (Stunned)
+        {
+            // If StunDuration is 0, dont return a "stunned" val but instead do move generation as usual
+            if (StunDuration == 0)
+            {
+                Stunned = false;
+                StunIndicator.SetActive(false);
+            }
+            else
+            {
+                StunDuration--;
+                return (-1, false);
+            }
+        }
+
         Defence = 0;
 
         switch (EnemyType)

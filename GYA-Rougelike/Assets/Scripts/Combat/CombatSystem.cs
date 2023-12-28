@@ -312,6 +312,7 @@ public class CombatSystem : MonoBehaviour
                     int TankIndex = Array.IndexOf(EnemyType, 4);
 
                     StunDuration[TankIndex] = CardStatsScript.Stun;
+                    Enemies[TankIndex].GetComponent<EnemyAI>().Stun(CardStatsScript.Stun);
                 }
                 else
                 {
@@ -321,6 +322,7 @@ public class CombatSystem : MonoBehaviour
                         {
                             // Stun attacked enemy
                             StunDuration[j] = CardStatsScript.Stun;
+                            Enemies[j].GetComponent<EnemyAI>().Stun(CardStatsScript.Stun);
                             break;
                         }
                     }
