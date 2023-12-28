@@ -174,8 +174,16 @@ public class CombatSystem : MonoBehaviour
             }
         }
 
-        // Save which enemy will be targeted by the players card
-        EnemyTarget = Enemies[0];
+        int TankIndex = Array.IndexOf(EnemyMove, 4);
+        // If failed to find Tank
+        if (TankIndex == -1)
+        {
+            EnemyTarget = Enemies[0];
+        }
+        else
+        {
+            EnemyTarget = Enemies[TankIndex];
+        }
     }
 
     void GetCardsInMoveQueue()
