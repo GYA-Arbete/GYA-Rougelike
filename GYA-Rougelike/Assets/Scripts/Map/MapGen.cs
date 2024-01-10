@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MapGen : MonoBehaviour
@@ -93,12 +95,15 @@ public class MapGen : MonoBehaviour
         SpawnPoint[1] = 1;
         SpawnPoint[SpawnPoints.Length - 1] = 1;
 
+        List<int> AllowedCases = new() { 0, 1, 2 };
+        int LastCase = -1; // Set to an invalid case before start
         // Bestäm spawnpoints
         // 1 - 5 eftersom Column 1, 2, 3, 4 & 5
+        // Column 0 & 6 are start and end, not randomly generater layouts
         for (int i = 1; i < 6; i++)
         {
-            int temp = rand.Next(0, 3);
-            switch (temp)
+            int ChoosenCase = rand.Next(0, AllowedCases.Count);
+            switch (AllowedCases[ChoosenCase])
             {
                 case 0:
                     SpawnPoint[i * 3 - 1] = 1;
@@ -115,6 +120,18 @@ public class MapGen : MonoBehaviour
                     SpawnPoint[i * 3] = 1;
                     SpawnPoint[i * 3 + 1] = 1;
                     break;
+            }
+            // If the same case has been picked twice in a row, dont allow it to be picked next time
+            // This is done to not have the same case picked 3 or more times in a row
+            if (LastCase == ChoosenCase)
+            {
+                // Reset AllowedCases
+                AllowedCases = new List<int> { 0, 1, 2 };
+                AllowedCases.RemoveAt(ChoosenCase);
+            }
+            else
+            {
+                LastCase = ChoosenCase;
             }
         }
 
