@@ -8,7 +8,6 @@ public class RoomProperties : MonoBehaviour
 {
     [Header("Properties")]
     public int RoomID;
-    // 0 == StartRoom, 1 == EnemyRoom, 2 == LootRoom, 3 == CampRoom, 4 == BossRoom
     public int RoomType;
     public bool HiddenType;
 
@@ -17,53 +16,18 @@ public class RoomProperties : MonoBehaviour
     public int[] EnemyTypes;
 
     [Header("Children Objects")]
-    public GameObject RoomImage;
+    public GameObject RoomImageObject;
 
-    public void GenerateProperties(int ID, Texture[] RoomImages, GameObject ImagePrefab)
+    public void SetupRoom(int ID, int roomType, Texture RoomImage, GameObject ImagePrefab)
     {
         RoomID = ID;
+        RoomType = roomType;
 
-        // If StartRoom
-        if (ID == 0)
-        {
-            RoomType = 0;
-        }
-        // If EndRoom
-        else if (ID == 11)
-        {
-            RoomType = 4;
-        }
-        else
-        {
-            System.Random rand = new();
+        RoomImageObject = Instantiate(ImagePrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), new Quaternion(0, 0, 0, 0), transform);
+        RoomImageObject.name = transform.name;
 
-            // Generates a random number 1 -> 3
-            // Flat 1/3 chance for each room-type
-            RoomType = rand.Next(1, 4);
-
-            // 20% Chans att det är HiddenType
-            int temp = rand.Next(0, 6);
-            if (temp == 0)
-            {
-                HiddenType = true;
-            }
-        }
-
-        RoomImage = Instantiate(ImagePrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), new Quaternion(0, 0, 0, 0), transform);
-
-        // Same name as parent object
-        RoomImage.name = transform.name;
-
-        if (HiddenType)
-        {
-            RawImage RawImg = RoomImage.GetComponent<RawImage>();
-            RawImg.texture = RoomImages[5]; // 5 == HiddenTypeIcon
-        }
-        else
-        {
-            RawImage RawImg = RoomImage.GetComponent<RawImage>();
-            RawImg.texture = RoomImages[RoomType];
-        }
+        RawImage RawImg = RoomImageObject.GetComponent<RawImage>();
+        RawImg.texture = RoomImage;
 
         GenerateEnemies();
     }

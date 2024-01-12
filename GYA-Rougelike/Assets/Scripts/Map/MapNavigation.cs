@@ -30,13 +30,24 @@ public class MapNavigation : MonoBehaviour
     {
         Rooms = MapGenScript.Rooms;
 
+        var ReturnedVals = GenerateRoomProperties();
+        int[] RoomType = ReturnedVals.Item1;
+        bool[] HiddenType = ReturnedVals.Item2;
+
         for (int i = 1; i < Rooms.Length; i++)
         {
             Button Button = Rooms[i].GetComponent<Button>();
 
             Button.onClick.AddListener(delegate { RoomButtonPressed(Button); });
 
-            Rooms[i].GetComponent<RoomProperties>().GenerateProperties(i - 1, RoomImages, ImagePrefab);
+            if (HiddenType[i - 1])
+            {
+                Rooms[i].GetComponent<RoomProperties>().SetupRoom(i - 1, RoomType[i - 1], RoomImages[5], ImagePrefab);
+            }
+            else
+            {
+                Rooms[i].GetComponent<RoomProperties>().SetupRoom(i - 1, RoomType[i - 1], RoomImages[RoomType[i - 1]], ImagePrefab);
+            }
 
             RoomsButtons.Add(Button);
         }
@@ -46,6 +57,58 @@ public class MapNavigation : MonoBehaviour
         CurrentRoom = 0;
 
         ParseAllowedPaths(SpawnedLines);
+    }
+
+    private (int[], bool[]) GenerateRoomProperties()
+    {
+        int AllowedLootRooms = 2;
+        int AllowedCampRooms = 3;
+        int AllowedHiddenRooms = 2;
+
+        int[] RoomType = new int[12];
+        bool[] HiddenType = new bool[12];
+        List<int> UntakenIndexes = new() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+        // Choose type for each room
+        RoomType[0] = 0; // StartRoom
+        RoomType[11] = 4; // EndRoom
+
+        System.Random Rand = new();
+
+        // Choose 3 indexes for CampRoom
+        for (int i = 0; i < AllowedCampRooms; i++)
+        {
+            int ChoosenIndex = Rand.Next(0, UntakenIndexes.Count);
+            RoomType[UntakenIndexes[ChoosenIndex]] = 3;
+            UntakenIndexes.RemoveAt(ChoosenIndex);
+        }
+
+        // Choose 2 indexes for LootRoom
+        for (int i = 0; i < AllowedLootRooms; i++)
+        {
+            int ChoosenIndex = Rand.Next(0, UntakenIndexes.Count);
+            RoomType[UntakenIndexes[ChoosenIndex]] = 2;
+            UntakenIndexes.RemoveAt(ChoosenIndex);
+        }
+
+        // Set the rest to EnemyRoom
+        for (int i = 0; i < UntakenIndexes.Count; i++)
+        {
+            RoomType[UntakenIndexes[i]] = 1;
+        }
+
+        // Reset UntakenIndexes
+        UntakenIndexes = new() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+        // Choose 2 indexes for HiddenType
+        for (int i = 0; i < AllowedHiddenRooms; i++)
+        {
+            int ChoosenIndex = Rand.Next(0, UntakenIndexes.Count);
+            HiddenType[UntakenIndexes[ChoosenIndex]] = true;
+            UntakenIndexes.RemoveAt(ChoosenIndex);
+        }
+
+        return (RoomType, HiddenType);
     }
 
     void ParseAllowedPaths(List<KeyValuePair<Vector3, Vector3>> SpawnedLines)
@@ -91,8 +154,6 @@ public class MapNavigation : MonoBehaviour
     {
         int ID = Button.gameObject.GetComponent<RoomProperties>().RoomID;
 
-        bool AllowedToNav = true;
-
         // Check that a line is going between CurrentRoom and the room we want to navigate too
         for (int i = 0; i < AllowedNav.Count; i++)
         {
@@ -104,14 +165,8 @@ public class MapNavigation : MonoBehaviour
             else if (i == AllowedNav.Count - 1)
             {
                 // If have checked with every AllowedNav and every one failed, do not allow to keep going
-                AllowedToNav = false;
+                return;
             }
-        }
-
-        // When not allowed to nav, jump out of function
-        if (!AllowedToNav)
-        {
-            return;
         }
 
         // Check if navigation is allowed between current room and selected room
@@ -139,10 +194,10 @@ public class MapNavigation : MonoBehaviour
         RoomProperties Properties = Room.gameObject.GetComponent<RoomProperties>();
 
         // Set image showing selected room is current room
-        Properties.RoomImage.GetComponent<RawImage>().texture = RoomImages[7];
+        Properties.RoomImageObject.GetComponent<RawImage>().texture = RoomImages[7];
 
         // Update previous room image to show it has been cleared
-        PreviousRoom.GetComponent<RoomProperties>().RoomImage.GetComponent<RawImage>().texture = RoomImages[6];
+        PreviousRoom.GetComponent<RoomProperties>().RoomImageObject.GetComponent<RawImage>().texture = RoomImages[6];
 
         switch (Properties.RoomType)
         {
