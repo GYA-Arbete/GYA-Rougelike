@@ -31,6 +31,7 @@ public class EnemyAI : MonoBehaviour
         switch (EnemyType)
         {
             case 0:
+                Cooldown = 4;
                 break;
             case 1:
                 Cooldown = 5;
@@ -79,7 +80,24 @@ public class EnemyAI : MonoBehaviour
         {
             // Boss
             case 0:
-                break;
+                if (Cooldown == 0)
+                {
+                    Cooldown = 4;
+
+                    System.Random Rand = new();
+                    Defence = Rand.Next(3, 6); // Picks a random number between 3 and 5
+
+                    EnemyMoveIndicatorImage.sprite = MoveIndicators[2];
+                    return (2, false);
+                }
+                // Normal Attack
+                else
+                {
+                    Cooldown--;
+
+                    EnemyMoveIndicatorImage.sprite = MoveIndicators[1];
+                    return (1, false);
+                }
             // Basic Grunt
             case 1:
                 // Splash Attack
