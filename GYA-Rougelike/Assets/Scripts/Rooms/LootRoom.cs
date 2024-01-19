@@ -25,6 +25,8 @@ public class LootRoom : MonoBehaviour
 
     void UpgradeCard()
     {
+        CardChoiceScript.StartChoice("LootRoom", true);
+
         ExitLootRoom();
     }
 
@@ -36,7 +38,7 @@ public class LootRoom : MonoBehaviour
         }
         LootRoomCanvas.SetActive(false);
 
-        CardChoiceScript.StartChoice("LootRoom");
+        CardChoiceScript.StartChoice("LootRoom", false);
     }
 
     public void EnterLootRoom()

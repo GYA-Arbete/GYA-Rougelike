@@ -22,7 +22,7 @@ public class StartRoom : MonoBehaviour
 
         CardInventoryScript.ResetInventory();
 
-        CardChoiceScript.StartChoice("StartRoom");
+        CardChoiceScript.StartChoice("StartRoom", false);
     }
 
     public void ExitStartRoom()

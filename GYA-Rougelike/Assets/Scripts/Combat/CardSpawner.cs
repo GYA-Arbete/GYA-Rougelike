@@ -114,9 +114,9 @@ public class CardSpawner : MonoBehaviour
                             {
                                 Text.text = CardStatsScript.Stun.ToString();
                             }
-                            else if (CardStatsScript.Thorns)
+                            else if (CardStatsScript.Thorns > 0)
                             {
-                                Text.text = "1x";
+                                Text.text = $"{CardStatsScript.Thorns}x";
                                 Text.fontSize = 0.2f;
                             }
                         }

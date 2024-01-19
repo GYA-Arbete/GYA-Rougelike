@@ -10,7 +10,7 @@ public class HealthSystem : MonoBehaviour
     public bool Player = false;
 
     [Header("Player Exclusive Variables")]
-    public bool Thorns = false;
+    public int Thorns = 0;
 
     [Header("HealthBar Stuff")]
     public BarScript HealthBarScript;

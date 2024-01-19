@@ -301,7 +301,7 @@ public class CombatSystem : MonoBehaviour
                 }
             }
             // Thorns
-            else if (CardStatsScript.Thorns)
+            else if (CardStatsScript.Thorns > 0)
             {
                 foreach (Transform Player in Players)
                 {
@@ -402,12 +402,12 @@ public class CombatSystem : MonoBehaviour
                             HealthScript.TakeDamage(Damage + EnemyDamageBuff[i]);
 
                             // If thorns, reflect damage back to attacker
-                            if (HealthScript.Thorns)
+                            if (HealthScript.Thorns > 0)
                             {
-                                Enemies[i].GetComponent<HealthSystem>().TakeDamage(Damage + EnemyDamageBuff[i]);
+                                Enemies[i].GetComponent<HealthSystem>().TakeDamage(Damage + EnemyDamageBuff[i] * HealthScript.Thorns); // Thorns acts as a damage multiplier
 
                                 // Reset Thorns when it has been used
-                                HealthScript.Thorns = false;
+                                HealthScript.Thorns = 0;
                             }
                         }
                     }
@@ -435,12 +435,12 @@ public class CombatSystem : MonoBehaviour
                                     HealthScript.TakeDamage(Damage + EnemyDamageBuff[i]);
 
                                     // If thorns, reflect damage back to attacker
-                                    if (HealthScript.Thorns)
+                                    if (HealthScript.Thorns > 0)
                                     {
-                                        Enemies[i].GetComponent<HealthSystem>().TakeDamage(Damage + EnemyDamageBuff[i]);
+                                        Enemies[i].GetComponent<HealthSystem>().TakeDamage(Damage + EnemyDamageBuff[i] * HealthScript.Thorns); // Thorns acts as a damage multiplier
 
                                         // Reset Thorns when it has been used
-                                        HealthScript.Thorns = false;
+                                        HealthScript.Thorns = 0;
                                     }
 
                                     // Reset DamageBuff when it has been used

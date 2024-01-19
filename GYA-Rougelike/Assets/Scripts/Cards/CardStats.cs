@@ -8,7 +8,7 @@ public class CardStats : MonoBehaviour
     public int Damage;
     public bool SplashDamage;
     public int Defence;
-    public bool Thorns;
+    public int Thorns;
     public int Stun;
     public int DamageBuff;
     public int Cooldown;
@@ -16,7 +16,7 @@ public class CardStats : MonoBehaviour
     [Header("Other vars")]
     public int InventoryIndex;
 
-    public void AssignValues(int energy, int damage, bool splash, int defence, bool thorns, int stun, int buff, int cooldown, int index)
+    public void AssignValues(int energy, int damage, bool splash, int defence, int thorns, int stun, int buff, int cooldown, int index)
     {
         Energy = energy;
         Damage = damage;

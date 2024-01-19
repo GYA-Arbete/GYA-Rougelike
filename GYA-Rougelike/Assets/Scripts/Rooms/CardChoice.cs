@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using System.Collections.Generic;
 
 public class CardChoice : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class CardChoice : MonoBehaviour
     public StartRoom StartRoomScript;
     public LootRoom LootRoomScript;
 
+    private bool Upgrade = false;
+    private int[] ChoosenCardIndexes = new int[3];
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,24 +30,63 @@ public class CardChoice : MonoBehaviour
         ChoiceButtons[2].onClick.AddListener(Choose3);
     }
 
-    public void StartChoice(string SenderScript)
+    public void StartChoice(string SenderScript, bool upgrade)
     {
+        Upgrade = upgrade;
+
         // Remember which script called this function to exit said room correctly
         Sender = SenderScript;
 
         System.Random Rand = new();
 
-        // Generate which cards to have as choices
         int[] CardType = new int[3];
-        int[] AllowedCards = { 0, 1, 2, 3, 4, 5, 6 };
-        for (int i = 0; i < 3; i++)
+        ChoosenCardIndexes = new int[3]; // Only used if Upgrade
+
+        // If choice is which card to upgrade
+        if (Upgrade)
         {
-            int ChoosenCard = Rand.Next(0, AllowedCards.Length);
+            CardInventory.CardList PossibleCards = CardInventoryScript.Inventory;
+            List<int> CardTypes = CardInventoryScript.CardType;
 
-            CardType[i] = AllowedCards[ChoosenCard];
+            int IndexOffset = 0;
 
-            // Remove the choosen number from array
-            AllowedCards = AllowedCards.Where(val => val != AllowedCards[ChoosenCard]).ToArray();
+            for (int i = 0; i < 3; i++)
+            {
+                // Randomly choose 3 cards from the CardInventory
+                int ChoosenCard = Rand.Next(0, PossibleCards.cardList.Count);
+
+                CardType[i] = ChoosenCard;
+
+                // Compensate for indexes getting shifted when removing items from lists
+                if (i != 0)
+                {
+                    if (IndexOffset > ChoosenCardIndexes[i - 1])
+                    {
+                        IndexOffset++;
+                    }
+                }
+                
+                ChoosenCardIndexes[i] = ChoosenCard + IndexOffset;
+
+                // Remove the choosen card from each list
+                PossibleCards.cardList.RemoveAt(ChoosenCard);
+                CardTypes.RemoveAt(ChoosenCard);
+            }
+        }
+        // If choice is for a new card
+        else
+        {
+            // Generate which cards to offer as choice
+            int[] AllowedCards = { 0, 1, 2, 3, 4, 5, 6 };
+            for (int i = 0; i < 3; i++)
+            {
+                int ChoosenCard = Rand.Next(0, AllowedCards.Length);
+
+                CardType[i] = AllowedCards[ChoosenCard];
+
+                // Remove the choosen number from array
+                AllowedCards = AllowedCards.Where(val => val != AllowedCards[ChoosenCard]).ToArray();
+            }
         }
 
         for (int i = 0; i < 3; i++)
@@ -87,9 +130,9 @@ public class CardChoice : MonoBehaviour
                             Text.text = CardInventoryScript.CardTypes.cardList[CardType[i]].Stun.ToString();
                             Text.fontSize = 0.3f;
                         }
-                        else if (CardInventoryScript.CardTypes.cardList[CardType[i]].Thorns)
+                        else if (CardInventoryScript.CardTypes.cardList[CardType[i]].Thorns > 0)
                         {
-                            Text.text = "1x";
+                            Text.text = $"{CardInventoryScript.CardTypes.cardList[CardType[i]].Thorns}x";
                             Text.fontSize = 0.2f;
                         }
                     }
@@ -121,8 +164,15 @@ public class CardChoice : MonoBehaviour
         // Hide the choice buttons
         CardChoiceCanvas.SetActive(false);
 
-        // Update the players inventory
-        CardInventoryScript.AddCardToInventory(ChoosenCard);
+        if (Upgrade)
+        {
+            CardInventoryScript.UpgradeCard(ChoosenCardIndexes[ChoosenCard]);
+        }
+        else
+        {
+            // Update the players inventory
+            CardInventoryScript.AddCardToInventory(ChoosenCard);
+        }
 
         // Check which room the player is in and exit correctly
         if (Sender == "StartRoom")

@@ -40,7 +40,7 @@ public class CardInventory : MonoBehaviour
         public int Damage;
         public bool SplashDamage;
         public int Defence;
-        public bool Thorns;
+        public int Thorns;
         public int Stun;
         public int DamageBuff;
         public int Cooldown;
@@ -81,6 +81,35 @@ public class CardInventory : MonoBehaviour
         Inventory.cardList.Add(CardTypes.cardList[ChoosenCardType]);
 
         CardType.Add(ChoosenCardType);
+    }
+
+    public void UpgradeCard(int Index)
+    {
+        switch (CardType[Index])
+        {
+            case 0:
+                Inventory.cardList[Index].Damage += 2;
+                break;
+            case 1:
+                Inventory.cardList[Index].Defence += 2;
+                break;
+            case 2:
+                Inventory.cardList[Index].Thorns++; 
+                break;
+            case 3:
+                Inventory.cardList[Index].Damage += 2;
+                break;
+            case 4:
+                Inventory.cardList[Index].Stun++;
+                break;
+            case 5:
+                Inventory.cardList[Index].Damage++;
+                Inventory.cardList[Index].Defence++;
+                break;
+            case 6:
+                Inventory.cardList[Index].DamageBuff += 2;
+                break;
+        }
     }
 
     void SwitchInventory()
@@ -153,9 +182,9 @@ public class CardInventory : MonoBehaviour
                         {
                             Text.text = Inventory.cardList[i].Stun.ToString();
                         }
-                        else if (Inventory.cardList[i].Thorns)
+                        else if (Inventory.cardList[i].Thorns > 0)
                         {
-                            Text.text = "1x";
+                            Text.text = $"{Inventory.cardList[i].Thorns}x";
                             Text.fontSize = 0.2f;
                         }
                     }
