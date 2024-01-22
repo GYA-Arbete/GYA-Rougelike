@@ -147,7 +147,6 @@ GameObject:
   - component: {fileID: -5731033582394011124}
   - component: {fileID: 4494123491760093277}
   - component: {fileID: -7900355219064296573}
-  - component: {fileID: 2793561799070290025}
   m_Layer: 0
   m_Name: CardPrefab
   m_TagString: Untagged
@@ -302,26 +301,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8155be7156ba8e048a5df993ad418799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CardInfoHolder: {fileID: 6956709034973786622}
+  InfoTextElement: {fileID: 430363759672788666}
   RoomViewCamera: {fileID: 0}
   SnappedToPoint: 0
   CardManagerScript: {fileID: 0}
   CombatSystemScript: {fileID: 0}
---- !u!114 &2793561799070290025
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 541792869356932419}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df01b8b58277ef541bdd14c63a807827, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CardInfoHolder: {fileID: 6956709034973786622}
-  InfoTextElement: {fileID: 430363759672788666}
-  RoomViewCamera: {fileID: 0}
-  CardManagerScript: {fileID: 0}
 --- !u!1 &803180275042994014
 GameObject:
   m_ObjectHideFlags: 0
@@ -652,7 +637,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5017436154832017579
 RectTransform:
   m_ObjectHideFlags: 0
@@ -681,7 +666,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6956709034973786622}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 2
   m_Camera: {fileID: 0}

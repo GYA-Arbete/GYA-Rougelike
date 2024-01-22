@@ -13,7 +13,7 @@ public class CardSpawner : MonoBehaviour
 
     [Header("Other Scripts")]
     public CardInventory CardInventoryScript;
-    public CardManager DragDropCardManagerScript;
+    public CardManager CardManagerScript;
 
     // Start is called before the first frame update
     void Start()
@@ -31,9 +31,9 @@ public class CardSpawner : MonoBehaviour
         }
 
         // Reset CardInPoint array, no cards are in any point since they are all despawned
-        for (int i = 0; i < DragDropCardManagerScript.CardInPoint.Length; i++)
+        for (int i = 0; i < CardManagerScript.CardInPoint.Length; i++)
         {
-            DragDropCardManagerScript.CardInPoint[i] = false;
+            CardManagerScript.CardInPoint[i] = false;
         }
     }
 
@@ -46,9 +46,9 @@ public class CardSpawner : MonoBehaviour
         }
 
         // Reset CardInPoint array, no cards are in any point since they are all despawned
-        for (int i = 0; i < DragDropCardManagerScript.CardInPoint.Length; i++)
+        for (int i = 0; i < CardManagerScript.CardInPoint.Length; i++)
         {
-            DragDropCardManagerScript.CardInPoint[i] = false;
+            CardManagerScript.CardInPoint[i] = false;
         }
 
         SpawnCards();
@@ -79,7 +79,7 @@ public class CardSpawner : MonoBehaviour
                 CardStatsScript.AssignValues(CardsInInventory.cardList[i - 1].Energy, CardsInInventory.cardList[i - 1].Damage, CardsInInventory.cardList[i - 1].SplashDamage, CardsInInventory.cardList[i - 1].Defence, CardsInInventory.cardList[i - 1].Thorns, CardsInInventory.cardList[i - 1].Stun, CardsInInventory.cardList[i - 1].DamageBuff, CardsInInventory.cardList[i - 1].Cooldown, i - 1);
 
                 // Setup stuff for snapping
-                Card.GetComponent<DragDropCardComponent>().Setup(i - 1);
+                Card.GetComponent<CardComponent>().Setup(i - 1, CardManagerScript.CardTypesText.cardList[CardType[i - 1]].CardInfo);
                 SnappedToPoints.Add(i - 1);
 
                 // Change the cards image
@@ -125,7 +125,7 @@ public class CardSpawner : MonoBehaviour
 
                 SpawnedCards[i - 1] = Card;
 
-                DragDropCardManagerScript.SetCardInPoint(SnappedToPoints);
+                CardManagerScript.SetCardInPoint(SnappedToPoints);
             }
             // If the card is on cooldown, reduce it by 1
             else

@@ -1,9 +1,14 @@
 using System;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class DragDropCardComponent : MonoBehaviour
+public class CardComponent : MonoBehaviour
 {
+    [Header("Stuff for CardInfo")]
+    public GameObject CardInfoHolder;
+    public TextMeshProUGUI InfoTextElement;
+
     [Header("Camera")]
     public Camera RoomViewCamera;
 
@@ -15,7 +20,7 @@ public class DragDropCardComponent : MonoBehaviour
     public CardManager CardManagerScript;
     public CombatSystem CombatSystemScript;
 
-    public void Setup(int SnappedPoint)
+    public void Setup(int SnappedPoint, string InfoText)
     {
         UnityEngine.Object[] temp = Resources.FindObjectsOfTypeAll(typeof(GameObject));
         for (int i = 0; i < temp.Length; i++)
@@ -30,6 +35,7 @@ public class DragDropCardComponent : MonoBehaviour
         CombatSystemScript = FindObjectOfType<CombatSystem>();
 
         SnappedToPoint = SnappedPoint;
+        InfoTextElement.text = InfoText;
     }
 
     public void OnMouseDown()
@@ -68,5 +74,15 @@ public class DragDropCardComponent : MonoBehaviour
         Points[2].z = Z;
 
         CardManagerScript.DrawTargetIndicator(Points);
+    }
+
+    public void OnMouseOver()
+    {
+        CardInfoHolder.SetActive(true);
+    }
+
+    public void OnMouseExit()
+    {
+        CardInfoHolder.SetActive(false);
     }
 }

@@ -26,7 +26,13 @@ public class CardManager : MonoBehaviour
     [System.Serializable]
     public class CardList
     {
-        public List<string> CardInfo;
+        public List<Strings> cardList;
+    }
+
+    [System.Serializable]
+    public class Strings
+    {
+        public string CardInfo;
     }
 
     // Start is called before the first frame update
