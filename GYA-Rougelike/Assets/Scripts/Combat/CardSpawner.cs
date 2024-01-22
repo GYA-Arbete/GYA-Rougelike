@@ -13,7 +13,7 @@ public class CardSpawner : MonoBehaviour
 
     [Header("Other Scripts")]
     public CardInventory CardInventoryScript;
-    public DragDropCardManager DragDropCardManagerScript;
+    public CardManager DragDropCardManagerScript;
 
     // Start is called before the first frame update
     void Start()

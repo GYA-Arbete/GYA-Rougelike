@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 
-public class DragDropCardManager : MonoBehaviour
+public class CardManager : MonoBehaviour
 {
     public GameObject TargetLineRend;
 
@@ -16,8 +16,18 @@ public class DragDropCardManager : MonoBehaviour
     public Transform MoveQueueSnapPointsParent;
     public Transform[] SnapPoints;
 
+    [Header("Stuff for CardInfoText")]
+    public TextAsset CardInfoTextJson;
+    public CardList CardTypesText;
+
     [Header("Other Scripts")]
     public BarScript EnergyBarScript;
+
+    [System.Serializable]
+    public class CardList
+    {
+        public List<string> CardInfo;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -45,6 +55,8 @@ public class DragDropCardManager : MonoBehaviour
 
         SnapPointsDistance = new double[SnapPoints.Length];
         CardInPoint = new bool[SnapPoints.Length];
+
+        CardTypesText = JsonUtility.FromJson<CardList>(CardInfoTextJson.text);
     }
 
     public void SetCardInPoint(List<int> Indexes)

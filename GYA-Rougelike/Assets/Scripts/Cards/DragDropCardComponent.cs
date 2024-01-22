@@ -12,7 +12,7 @@ public class DragDropCardComponent : MonoBehaviour
     public int SnappedToPoint;
 
     [Header("Other Scripts")]
-    public DragDropCardManager DragDropCardManagerScript;
+    public CardManager CardManagerScript;
     public CombatSystem CombatSystemScript;
 
     public void Setup(int SnappedPoint)
@@ -26,7 +26,7 @@ public class DragDropCardComponent : MonoBehaviour
             }
         }
 
-        DragDropCardManagerScript = FindObjectOfType<DragDropCardManager>();
+        CardManagerScript = FindObjectOfType<CardManager>();
         CombatSystemScript = FindObjectOfType<CombatSystem>();
 
         SnappedToPoint = SnappedPoint;
@@ -34,14 +34,14 @@ public class DragDropCardComponent : MonoBehaviour
 
     public void OnMouseDown()
     {
-        DragDropCardManagerScript.RemoveFromPoint(transform, SnappedToPoint);
+        CardManagerScript.RemoveFromPoint(transform, SnappedToPoint);
     }
 
     public void OnMouseUp()
     {
-        SnappedToPoint = DragDropCardManagerScript.SnapToPoint(transform);
+        SnappedToPoint = CardManagerScript.SnapToPoint(transform);
 
-        DragDropCardManagerScript.HideTargetIndicator();
+        CardManagerScript.HideTargetIndicator();
     }
 
     public void OnMouseDrag()
@@ -67,6 +67,6 @@ public class DragDropCardComponent : MonoBehaviour
         Points[2] = CombatSystemScript.EnemyTarget.position; // Enemy position
         Points[2].z = Z;
 
-        DragDropCardManagerScript.DrawTargetIndicator(Points);
+        CardManagerScript.DrawTargetIndicator(Points);
     }
 }

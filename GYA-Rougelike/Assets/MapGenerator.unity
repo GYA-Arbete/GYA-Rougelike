@@ -9602,6 +9602,9 @@ MonoBehaviour:
   CardViewSnapPointsParent: {fileID: 1799097175}
   MoveQueueSnapPointsParent: {fileID: 489942777}
   SnapPoints: []
+  CardInfoTextJson: {fileID: 4900000, guid: 1c858830df2604745b246321bf47b651, type: 3}
+  CardTypesText:
+    CardInfo: []
   EnergyBarScript: {fileID: 1814719337306141361}
 --- !u!1 &2081934848
 GameObject:
