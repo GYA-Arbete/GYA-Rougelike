@@ -1,6 +1,6 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Mirror;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -8,7 +8,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject PauseMenuCanvas;
     public Button UnpauseButton;
     public Button RestartButton;
-    public Button MainMenuButton;
+    public Button QuitButton;
 
     [Header("Variables")]
     public bool IsPaused = false;
@@ -26,7 +26,7 @@ public class PauseMenu : MonoBehaviour
     {
         UnpauseButton.onClick.AddListener(Unpause);
         RestartButton.onClick.AddListener(Restart);
-        MainMenuButton.onClick.AddListener(ToMainMenu);
+        QuitButton.onClick.AddListener(Quit);
     }
 
     // Update is called once per frame
@@ -83,8 +83,17 @@ public class PauseMenu : MonoBehaviour
         Unpause();
     }
 
-    void ToMainMenu()
+    void Quit()
     {
-        SceneManager.LoadScene("MainMenu");
+        NetworkManager NetworkManager = FindAnyObjectByType<NetworkManager>();
+
+        if (NetworkManager.mode == NetworkManagerMode.Host)
+        {
+            NetworkManager.StopHost();
+        }
+        else
+        {
+            NetworkManager.StopClient();
+        }
     }
 }
