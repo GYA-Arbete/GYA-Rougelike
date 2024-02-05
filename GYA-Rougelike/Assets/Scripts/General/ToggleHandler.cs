@@ -1,9 +1,8 @@
-using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
 // Custom script for setting background for Toggle as I didnt like the built in Unity way
-public class ToggleHandler : NetworkBehaviour
+public class ToggleHandler : MonoBehaviour
 {
     [Header("Options")]
     public Color OnColor;

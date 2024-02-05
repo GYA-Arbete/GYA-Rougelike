@@ -5,6 +5,8 @@ using Mirror;
 
 public class LobbyMenu : NetworkBehaviour
 {
+    LobbyMenuUI LobbyUI;
+
     [Header("Ready Toggles")]
     public Toggle[] Toggles;
     [SyncVar(hook = nameof(HandleReadyPlayersChanged))]
@@ -28,9 +30,9 @@ public class LobbyMenu : NetworkBehaviour
     public NetworkIdentity Identity;
 
     // Start is called before the first frame update
+    [Client]
     void Start()
     {
-        transform.position = FindAnyObjectByType<CameraSwitch>().MapViewCamera.transform.position;
         MainCanvas.worldCamera = FindAnyObjectByType<CameraSwitch>().MapViewCamera;
 
         Toggles[0].onValueChanged.AddListener(delegate { OnReadyToggled(Toggles[0]); });
@@ -115,4 +117,15 @@ public class LobbyMenu : NetworkBehaviour
         Toggles[0].GetComponent<ToggleHandler>().ValueChanged(null, ToggleState1);
         Toggles[1].GetComponent<ToggleHandler>().ValueChanged(null, ToggleState2);
     }
+
+    #region Client
+
+    public override void OnStartLocalPlayer()
+    {
+        MainCanvas.gameObject.SetActive(false);
+
+        LobbyUI.SetLocalPlayer();
+    }
+
+    #endregion
 }

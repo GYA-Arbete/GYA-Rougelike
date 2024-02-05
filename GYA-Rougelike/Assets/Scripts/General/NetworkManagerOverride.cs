@@ -8,12 +8,15 @@ public class NetworkManagerOverride : NetworkManager
     public GameObject LobbyPrefab;
     public List<LobbyMenu> ClientsLobbyMenuScripts;
 
+    [Server]
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        GameObject roomPlayerInstance = Instantiate(LobbyPrefab);
+        GameObject LobbyInstance = Instantiate(LobbyPrefab);
 
-        ClientsLobbyMenuScripts.Add(roomPlayerInstance.GetComponent<LobbyMenu>());
+        ClientsLobbyMenuScripts.Add(LobbyInstance.GetComponent<LobbyMenu>());
 
-        NetworkServer.Spawn(roomPlayerInstance.gameObject, conn);
+        NetworkServer.Spawn(LobbyInstance, conn);
+
+        base.OnServerAddPlayer(conn);
     }
 }
