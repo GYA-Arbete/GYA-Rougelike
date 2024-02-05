@@ -7,48 +7,95 @@ public class LobbyMenu : NetworkBehaviour
 {
     [Header("Ready Toggles")]
     public Toggle[] Toggles;
+    [SyncVar(hook = nameof(HandleReadyPlayersChanged))]
     public int ReadyPlayers = 0;
+    // SyncLists suck mega ass, so heres 2 SyncVars instead
+    [SyncVar(hook = nameof(HandleToggleStateChanged))]
+    public bool ToggleState1 = false;
+    public bool OldState1 = false;
+    [SyncVar(hook = nameof(HandleToggleStateChanged))]
+    public bool ToggleState2 = false;
+    public bool OldState2 = false;
 
-    [Header("StartButton")]
+    [Header("Elements")]
+    public GameObject LobbyMenuHolder;
     public Button StartButton;
     public TextMeshProUGUI ButtonText;
+    public Canvas MainCanvas;
 
-    public NetworkManager NetworkManager;
+    [Space]
+    public NetworkManagerOverride NetworkManager;
+    public NetworkIdentity Identity;
 
     // Start is called before the first frame update
     void Start()
     {
+        transform.position = FindAnyObjectByType<CameraSwitch>().MapViewCamera.transform.position;
+        MainCanvas.worldCamera = FindAnyObjectByType<CameraSwitch>().MapViewCamera;
+
         Toggles[0].onValueChanged.AddListener(delegate { OnReadyToggled(Toggles[0]); });
         Toggles[1].onValueChanged.AddListener(delegate { OnReadyToggled(Toggles[1]); });
 
-        Toggles[0].GetComponent<NetworkIdentity>().RemoveClientAuthority();
-        Toggles[1].GetComponent<NetworkIdentity>().RemoveClientAuthority();
+        NetworkManager = FindAnyObjectByType<NetworkManagerOverride>();
 
-        UpdateButtonText();
-    }
-
-    // Give authority to the connected player over its own elements
-    public void PlayerConnected()
-    {
-        Toggles[NetworkServer.connections.Count - 1].GetComponent<NetworkIdentity>().AssignClientAuthority(NetworkServer.connections[NetworkServer.connections.Count - 1]);
+        UpdateLobbyUi();
     }
 
     void OnReadyToggled(Toggle toggle)
     {
-        if (toggle.isOn)
-        {
-            ReadyPlayers++;
-        }
-        else
-        {
-            ReadyPlayers--;
-        }
+        int ID = toggle.GetComponent<ToggleHandler>().ID;
 
-        UpdateButtonText();
+        // Yes this sucks but idk how to make it not suck
+        if (ID == 0)
+        {
+            if (toggle.isOn)
+            {
+                ReadyPlayers++;
+                ToggleState1 = true;
+            }
+            else
+            {
+                ReadyPlayers--;
+                ToggleState1 = false;
+            }
+        }
+        else // ID == 1
+        {
+            if (toggle.isOn)
+            {
+                ReadyPlayers++;
+                ToggleState2 = true;
+            }
+            else
+            {
+                ReadyPlayers--;
+                ToggleState2 = false;
+            }
+        }
     }
 
-    void UpdateButtonText()
+    // DO NOT REMOVE ANY VARIABLES, IT WILL CAUSE ERRORS
+    public void HandleReadyPlayersChanged(int oldValue, int newValue) => UpdateLobbyUi();
+    public void HandleToggleStateChanged(bool oldValue, bool newValue) => UpdateLobbyUi();
+
+    public void UpdateLobbyUi()
     {
+        /*
+        if (!Identity.isOwned)
+        {
+            foreach (LobbyMenu Script in NetworkManager.ClientsLobbyMenuScripts)
+            {
+                if (Script.Identity.isOwned)
+                {
+                    Script.UpdateLobbyUi();
+                    break;
+                }
+            }
+
+            return;
+        }
+        */
+
         switch (ReadyPlayers)
         {
             case 0:
@@ -64,5 +111,8 @@ public class LobbyMenu : NetworkBehaviour
                 StartButton.interactable = true;
                 break;
         }
+
+        Toggles[0].GetComponent<ToggleHandler>().ValueChanged(null, ToggleState1);
+        Toggles[1].GetComponent<ToggleHandler>().ValueChanged(null, ToggleState2);
     }
 }

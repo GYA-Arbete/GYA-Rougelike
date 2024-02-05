@@ -1,21 +1,19 @@
 using Mirror;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NetworkManagerOverride : NetworkManager
 {
     [Header("Override Vars")]
-    public LobbyMenu LobbyMenuScript;
+    public GameObject LobbyPrefab;
+    public List<LobbyMenu> ClientsLobbyMenuScripts;
 
-    // If join as client, give you authority to 2nd players objects
-    public override void OnClientConnect()
+    public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        if (LobbyMenuScript == null)
-        {
-            LobbyMenuScript = FindAnyObjectByType<LobbyMenu>();
-        }
+        GameObject roomPlayerInstance = Instantiate(LobbyPrefab);
 
-        LobbyMenuScript.PlayerConnected();
+        ClientsLobbyMenuScripts.Add(roomPlayerInstance.GetComponent<LobbyMenu>());
 
-        base.OnClientConnect();
+        NetworkServer.Spawn(roomPlayerInstance.gameObject, conn);
     }
 }
