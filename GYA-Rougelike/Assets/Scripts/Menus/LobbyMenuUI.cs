@@ -19,9 +19,6 @@ public class LobbyMenuUI : MonoBehaviour
 
         Toggles[0].onValueChanged.AddListener(delegate { LobbyMenuScript.OnReadyToggled(Toggles[0], OverwritingToggleState); });
         Toggles[1].onValueChanged.AddListener(delegate { LobbyMenuScript.OnReadyToggled(Toggles[1], OverwritingToggleState); });
-
-        // Sets initial state for StartButton, is called later cause it works idk
-        UpdateButtonText(0);
     }
 
     public void SetupUI()

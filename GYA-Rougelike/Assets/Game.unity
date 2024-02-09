@@ -2257,7 +2257,7 @@ Transform:
   m_GameObject: {fileID: 539326590}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.061709065, y: -0.11149357, z: 10.199406}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2280,12 +2280,9 @@ MonoBehaviour:
   syncInterval: 0
   UIPrefab: {fileID: 6971692781053369416, guid: 4780148cdbf74284abbded0742c888b3, type: 3}
   LobbyUI: {fileID: 0}
-  Toggles: []
   ReadyPlayers: 0
   ToggleState1: 0
-  OldState1: 0
   ToggleState2: 0
-  OldState2: 0
   NetworkManager: {fileID: 0}
   Identity: {fileID: 539326593}
 --- !u!114 &539326593

@@ -5,7 +5,7 @@ using Mirror;
 public class LobbyMenu : NetworkBehaviour
 {
     public GameObject UIPrefab;
-    public LobbyMenuUI LobbyUI;
+    public LobbyMenuUI LobbyUI = null;
 
     [Header("Ready Toggles")]
     [SyncVar(hook = nameof(HandleReadyPlayersChanged))]
@@ -19,6 +19,10 @@ public class LobbyMenu : NetworkBehaviour
     [Space]
     public NetworkManagerOverride NetworkManager;
     public NetworkIdentity Identity;
+
+    // Events that the PlayerUI will subscribe to
+    public event System.Action<int> OnReadyPlayersChanged;
+    public event System.Action<bool, bool> OnToggleStateChanged;
 
     // Start is called before the first frame update
     void Start()
@@ -63,8 +67,8 @@ public class LobbyMenu : NetworkBehaviour
     }
 
     // DO NOT REMOVE ANY VARIABLES, IT WILL CAUSE ERRORS
-    public void HandleReadyPlayersChanged(int oldValue, int newValue) => LobbyUI.UpdateButtonText(ReadyPlayers);
-    public void HandleToggleStateChanged(bool oldValue, bool newValue) => LobbyUI.UpdateToggles(ToggleState1, ToggleState2);
+    public void HandleReadyPlayersChanged(int oldValue, int newValue) { OnReadyPlayersChanged?.Invoke(ReadyPlayers); }
+    public void HandleToggleStateChanged(bool oldValue, bool newValue) { OnToggleStateChanged?.Invoke(ToggleState1, ToggleState2); }
 
     // Called on every NetworkBehaviour when it is activated on a client.
     // Objects on the host have this function called, as there is a local client on the host.
@@ -72,9 +76,17 @@ public class LobbyMenu : NetworkBehaviour
     public override void OnStartClient()
     {
         // Spawn a seperate instance of the UI on each Client
-        GameObject ClientSideUI = Instantiate(UIPrefab);
+        GameObject ClientSideUI = Instantiate(UIPrefab, transform);
 
         LobbyUI = ClientSideUI.GetComponent<LobbyMenuUI>();
+
+        // wire up all events to handlers in PlayerUI
+        OnReadyPlayersChanged = LobbyUI.UpdateButtonText;
+        OnToggleStateChanged = LobbyUI.UpdateToggles;
+
+        // Invoke all event handlers with the initial data
+        OnReadyPlayersChanged.Invoke(ReadyPlayers);
+        OnToggleStateChanged.Invoke(ToggleState1, ToggleState2);
     }
 
     // Called when the local player object has been set up.
