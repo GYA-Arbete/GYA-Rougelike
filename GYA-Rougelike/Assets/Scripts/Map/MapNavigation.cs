@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using Mirror;
 
-public class MapNavigation : MonoBehaviour
+public class MapNavigation : NetworkBehaviour
 {
     public Transform[] Rooms;
     public List<Button> RoomsButtons;
@@ -26,9 +27,9 @@ public class MapNavigation : MonoBehaviour
     public CombatSystem CombatSystemScript;
 
     // Simple function that is called when map is generated to setup everything needed for MapNav to work
-    public void SetupForMapNav(List<KeyValuePair<Vector3, Vector3>> SpawnedLines)
+    public void SetupForMapNav(List<KeyValuePair<Vector3, Vector3>> SpawnedLines, Transform[] RoomArray)
     {
-        Rooms = MapGenScript.Rooms;
+        Rooms = RoomArray;
 
         var ReturnedVals = GenerateRoomProperties();
         int[] RoomType = ReturnedVals.Item1;
@@ -123,7 +124,7 @@ public class MapNavigation : MonoBehaviour
 
             for (int j = 1; j < Rooms.Length; j++)
             {
-                Vector3 RoomPosition = new Vector3(Rooms[j].position.x, Rooms[j].position.y, -1);
+                Vector3 RoomPosition = new(Rooms[j].position.x, Rooms[j].position.y, -1);
 
                 if (SpawnedLines[i].Key == RoomPosition)
                 {

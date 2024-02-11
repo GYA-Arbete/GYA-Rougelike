@@ -1,11 +1,10 @@
+using Mirror;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class MapGen : MonoBehaviour
+public class MapGen : NetworkBehaviour
 {
     public GameObject SpawnPointsParent;
 
@@ -34,18 +33,19 @@ public class MapGen : MonoBehaviour
     }
 
     // FatPerson115 saving my ass
+    [Client]
     public IEnumerator CreateMap()
     {
         DeleteMap();
 
-        // yield on a new YieldInstruction that waits for 0.05 seconds
+        // Wait for 0.05 seconds cause it works then, unity dumb ig
         yield return new WaitForSeconds(0.05f);
 
         GenerateRooms();
 
         CalculatePaths();
 
-        MapNavigationScript.SetupForMapNav(SpawnedLines);
+        MapNavigationScript.SetupForMapNav(SpawnedLines, Rooms);
     }
 
     public void DeleteMap()
@@ -83,6 +83,7 @@ public class MapGen : MonoBehaviour
         SpawnedLines = new();
     }
 
+    [Command(requiresAuthority=false)]
     void GenerateRooms()
     {
         System.Random rand = new();
@@ -140,9 +141,8 @@ public class MapGen : MonoBehaviour
         {
             if (SpawnPoint[i] == 1)
             {
-                // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
-                // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
-                Instantiate(MapRoomPrefab, new Vector3(SpawnPoints[i].position.x, SpawnPoints[i].position.y, SpawnPoints[i].position.z), new Quaternion(0, 0, 0, 0), MapRoomPrefabParent);
+                GameObject Room = Instantiate(MapRoomPrefab, new Vector3(SpawnPoints[i].position.x, SpawnPoints[i].position.y, SpawnPoints[i].position.z), new Quaternion(0, 0, 0, 0), MapRoomPrefabParent);
+                NetworkServer.Spawn(Room);
             }
         }
 
@@ -151,6 +151,7 @@ public class MapGen : MonoBehaviour
     }
 
     // Function for calculating every path that is within spec
+    [Command(requiresAuthority=false)]
     void CalculatePaths()
     {
         List<KeyValuePair<Vector3, Vector3>> LineEndPoints = new();
@@ -216,11 +217,6 @@ public class MapGen : MonoBehaviour
             }
         }
 
-        GeneratePaths(LineEndPoints);
-    }
-
-    void GeneratePaths(List<KeyValuePair<Vector3, Vector3>> LineEndPoints)
-    {
         List<Transform> TempLineHolder = new();
 
         // Randomize order of List
@@ -308,7 +304,9 @@ public class MapGen : MonoBehaviour
             {
                 TempLineHolder.Add(LineHolder.transform);
 
-                SpawnedLines.Add(new KeyValuePair<Vector3, Vector3>(LineRend.GetPosition(0), LineRend.GetPosition(1)));
+                SpawnedLines.Add(new(LineRend.GetPosition(0), LineRend.GetPosition(1)));
+
+                NetworkServer.Spawn(LineHolder);
             }
         }
 

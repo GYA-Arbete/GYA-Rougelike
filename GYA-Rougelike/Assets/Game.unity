@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 72757723}
   - component: {fileID: 72757722}
   - component: {fileID: 72757721}
+  - component: {fileID: 72757725}
   m_Layer: 5
   m_Name: MapRooms
   m_TagString: Untagged
@@ -248,13 +249,31 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 679690434}
+  m_Father: {fileID: 1766066484}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &72757725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72757720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clientStarted: 0
+  sceneId: 3457336127
+  _assetId: 0
+  serverOnly: 0
+  visible: 0
+  hasSpawned: 0
 --- !u!1 &104416404
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,6 +1175,7 @@ GameObject:
   m_Component:
   - component: {fileID: 288843431}
   - component: {fileID: 288843432}
+  - component: {fileID: 288843433}
   m_Layer: 0
   m_Name: MapNavigation
   m_TagString: Untagged
@@ -1190,6 +1210,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7abc25bc44ee0634b80d74b38a27b15d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   Rooms: []
   RoomsButtons: []
   CurrentRoom: 0
@@ -1208,6 +1231,24 @@ MonoBehaviour:
   CampRoomScript: {fileID: 905317487}
   LootRoomScript: {fileID: 1865235714}
   CombatSystemScript: {fileID: 1103261179}
+--- !u!114 &288843433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288843430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clientStarted: 0
+  sceneId: 3917597959
+  _assetId: 0
+  serverOnly: 0
+  visible: 0
+  hasSpawned: 0
 --- !u!1 &330661237
 GameObject:
   m_ObjectHideFlags: 0
@@ -2283,8 +2324,6 @@ MonoBehaviour:
   ReadyPlayers: 0
   ToggleState1: 0
   ToggleState2: 0
-  NetworkManager: {fileID: 0}
-  Identity: {fileID: 539326593}
 --- !u!114 &539326593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3120,6 +3159,7 @@ GameObject:
   m_Component:
   - component: {fileID: 679690434}
   - component: {fileID: 679690435}
+  - component: {fileID: 679690436}
   m_Layer: 0
   m_Name: MapGeneration
   m_TagString: Untagged
@@ -3141,8 +3181,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 279262562}
-  - {fileID: 72757724}
-  - {fileID: 1192632115}
   m_Father: {fileID: 1766066484}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &679690435
@@ -3157,6 +3195,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1edbf46f6619b14fa601ab56ff5b84c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   SpawnPointsParent: {fileID: 279262561}
   MapRoomPrefabParent: {fileID: 72757724}
   MapRoomPrefab: {fileID: 4631270058164154296, guid: 15a7b3d7c37a41349b52b94dc2bf2c7d, type: 3}
@@ -3166,6 +3207,24 @@ MonoBehaviour:
   Rooms: []
   Lines: []
   MapNavigationScript: {fileID: 288843432}
+--- !u!114 &679690436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 679690433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clientStarted: 0
+  sceneId: 211010786
+  _assetId: 0
+  serverOnly: 0
+  visible: 0
+  hasSpawned: 0
 --- !u!1 &686461444
 GameObject:
   m_ObjectHideFlags: 0
@@ -4748,6 +4807,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1192632115}
+  - component: {fileID: 1192632116}
   m_Layer: 0
   m_Name: MapLines
   m_TagString: Untagged
@@ -4768,8 +4828,26 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 679690434}
+  m_Father: {fileID: 1766066484}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1192632116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1192632114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clientStarted: 0
+  sceneId: 47321327
+  _assetId: 0
+  serverOnly: 0
+  visible: 0
+  hasSpawned: 0
 --- !u!1 &1205778421
 GameObject:
   m_ObjectHideFlags: 0
@@ -7182,6 +7260,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 679690434}
+  - {fileID: 72757724}
+  - {fileID: 1192632115}
   - {fileID: 288843431}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
