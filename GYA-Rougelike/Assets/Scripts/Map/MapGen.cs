@@ -51,6 +51,7 @@ public class MapGen : NetworkBehaviour
         MapNavigationScript.SetupForMapNav(SpawnedLines, Rooms);
     }
 
+    [Command(requiresAuthority=false)]
     public void DeleteMap()
     {
         // If there are any rooms
@@ -62,6 +63,7 @@ public class MapGen : NetworkBehaviour
                 if (Rooms[i] != null)
                 {
                     Destroy(Rooms[i].gameObject);
+                    NetworkServer.Destroy(Rooms[i].gameObject);
                 }
             }
         }
@@ -76,6 +78,7 @@ public class MapGen : NetworkBehaviour
                 {
                     // Destroy object
                     Destroy(Lines[i].gameObject);
+                    NetworkServer.Destroy(Lines[i].gameObject);
                 }
             }
         }
@@ -146,6 +149,7 @@ public class MapGen : NetworkBehaviour
             {
                 GameObject Room = Instantiate(MapRoomPrefab, new Vector3(SpawnPoints[i].position.x, SpawnPoints[i].position.y, SpawnPoints[i].position.z), new Quaternion(0, 0, 0, 0), MapRoomPrefabParent);
                 NetworkServer.Spawn(Room);
+                SetItemParent(Room, MapRoomPrefabParent);
             }
         }
 
@@ -228,22 +232,15 @@ public class MapGen : NetworkBehaviour
         // Foreach EndPoints pair
         for (int i = 0; i < LineEndPoints.Count; i++)
         {
-            // Spawn a LineRend
-            GameObject LineHolder = Instantiate(MapLinePrefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0), MapLinePrefabParent);
-
-            // Get the LineRenderer component of the newly created object
-            LineRenderer LineRend = LineHolder.GetComponent<LineRenderer>();
-
-            // Set endpoints for the created LineRend
-            LineRend.SetPosition(0, LineEndPoints[i].Key);
-            LineRend.SetPosition(1, LineEndPoints[i].Value);
+            Vector3 StartPos = LineEndPoints[i].Key;
+            Vector3 EndPos = LineEndPoints[i].Value;
 
             // #####################################################
             // Logic to check if lines are duplicate or are crossing
             // #####################################################
 
             // Dumb shit to compare the current LineRend positions to each spawned LineRend
-            KeyValuePair<Vector3, Vector3> ToSpawnEndPoints = new(LineRend.GetPosition(1), LineRend.GetPosition(0));
+            //KeyValuePair<Vector3, Vector3> ToSpawnEndPoints = new(EndPos, StartPos);
 
             bool DuplicateLine = false;
 
@@ -251,11 +248,8 @@ public class MapGen : NetworkBehaviour
             {
                 // Check if the line has already been spawned by inverting positions on the new LineRend and referencing it to each spawned line
                 // Also check with the "non-inverted" positions to cover both cases
-                if ((EndPoints.Key == ToSpawnEndPoints.Key && EndPoints.Value == ToSpawnEndPoints.Value) || (EndPoints.Key == ToSpawnEndPoints.Value && EndPoints.Value == ToSpawnEndPoints.Key))
+                if ((EndPoints.Key == EndPos && EndPoints.Value == StartPos) || (EndPoints.Key == StartPos && EndPoints.Value == EndPos))
                 {
-                    // Destroy the spawned Line
-                    Destroy(LineHolder);
-
                     DuplicateLine = true;
 
                     break;
@@ -263,40 +257,34 @@ public class MapGen : NetworkBehaviour
 
                 // Calc all vals
                 int k1 = ((int)EndPoints.Key.y - (int)EndPoints.Value.y) / ((int)EndPoints.Key.x - (int)EndPoints.Value.x);
-                int k2 = ((int)ToSpawnEndPoints.Key.y - (int)ToSpawnEndPoints.Value.y) / ((int)ToSpawnEndPoints.Key.x - (int)ToSpawnEndPoints.Value.x);
+                int k2 = ((int)EndPos.y - (int)StartPos.y) / ((int)EndPos.x - (int)StartPos.x);
 
                 int x1old = (int)EndPoints.Key.x;
                 int x2old = (int)EndPoints.Value.x;
-                int x1new = (int)ToSpawnEndPoints.Value.x;
-                int x2new = (int)ToSpawnEndPoints.Key.x;
+                int x1new = (int)StartPos.x;
+                int x2new = (int)EndPos.x;
 
-                int dy1 = Math.Abs((int)EndPoints.Key.y - (int)ToSpawnEndPoints.Value.y);
-                int dy2 = Math.Abs((int)EndPoints.Value.y - (int)ToSpawnEndPoints.Key.y);
+                int dy1 = Math.Abs((int)EndPoints.Key.y - (int)StartPos.y);
+                int dy2 = Math.Abs((int)EndPoints.Value.y - (int)EndPos.y);
 
                 // Check if the line is intersecting an existing line (See "Line Cross Calc.png" for more info on how / why)
                 if (k1 != 0 && k1 == -k2 && x1old == x1new && x2old == x2new && dy1 == 2 && dy2 == 2)
                 {
-                    // Destroy the spawned Line
-                    Destroy(LineHolder);
-
                     DuplicateLine = true;
 
                     break;
                 }
 
                 // Re-calculate some values for the "flipped" positions
-                x1new = (int)ToSpawnEndPoints.Key.x;
-                x2new = (int)ToSpawnEndPoints.Value.x;
+                x1new = (int)EndPos.x;
+                x2new = (int)StartPos.x;
 
-                dy1 = Math.Abs((int)EndPoints.Key.y - (int)ToSpawnEndPoints.Key.y);
-                dy2 = Math.Abs((int)EndPoints.Value.y - (int)ToSpawnEndPoints.Value.y);
+                dy1 = Math.Abs((int)EndPoints.Key.y - (int)EndPos.y);
+                dy2 = Math.Abs((int)EndPoints.Value.y - (int)StartPos.y);
 
                 // Check again if the line is intersecting an existing line (See "Line Cross Calc.png" for more info on how / why)
                 if (k1 != 0 && k1 == -k2 && x1old == x1new && x2old == x2new && dy1 == 2 && dy2 == 2)
                 {
-                    // Destroy the spawned Line
-                    Destroy(LineHolder);
-
                     DuplicateLine = true;
 
                     break;
@@ -305,11 +293,22 @@ public class MapGen : NetworkBehaviour
 
             if (!DuplicateLine)
             {
+                GameObject LineHolder = Instantiate(MapLinePrefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0), MapLinePrefabParent);
+
                 TempLineHolder.Add(LineHolder.transform);
 
-                SpawnedLines.Add(new(LineRend.GetPosition(0), LineRend.GetPosition(1)));
+                SpawnedLines.Add(new(StartPos, EndPos));
 
                 NetworkServer.Spawn(LineHolder);
+
+                // Get the LineRenderer component of the newly created object
+                LineRenderer LineRend = LineHolder.GetComponent<LineRenderer>();
+
+                // Set endpoints for the created LineRend
+                LineRend.SetPosition(0, StartPos);
+                LineRend.SetPosition(1, EndPos);
+
+                SetItemParent(LineHolder, MapLinePrefabParent);
             }
         }
 
@@ -337,5 +336,11 @@ public class MapGen : NetworkBehaviour
         }
 
         return listToShuffle;
+    }
+
+    [ClientRpc]
+    void SetItemParent(GameObject Room, Transform Parent)
+    {
+        Room.transform.SetParent(Parent, false);
     }
 }
