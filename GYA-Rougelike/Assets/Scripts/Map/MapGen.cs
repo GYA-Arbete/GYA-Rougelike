@@ -239,9 +239,6 @@ public class MapGen : NetworkBehaviour
             // Logic to check if lines are duplicate or are crossing
             // #####################################################
 
-            // Dumb shit to compare the current LineRend positions to each spawned LineRend
-            //KeyValuePair<Vector3, Vector3> ToSpawnEndPoints = new(EndPos, StartPos);
-
             bool DuplicateLine = false;
 
             foreach (KeyValuePair<Vector3, Vector3> EndPoints in SpawnedLines)
@@ -301,14 +298,10 @@ public class MapGen : NetworkBehaviour
 
                 NetworkServer.Spawn(LineHolder);
 
-                // Get the LineRenderer component of the newly created object
-                LineRenderer LineRend = LineHolder.GetComponent<LineRenderer>();
+                SetItemParent(LineHolder, MapLinePrefabParent);
 
                 // Set endpoints for the created LineRend
-                LineRend.SetPosition(0, StartPos);
-                LineRend.SetPosition(1, EndPos);
-
-                SetItemParent(LineHolder, MapLinePrefabParent);
+                SetLineRendEndpoints(LineHolder, StartPos, EndPos);
             }
         }
 
@@ -338,9 +331,20 @@ public class MapGen : NetworkBehaviour
         return listToShuffle;
     }
 
+    // The following stuff has to be done on clients for reasons (funy unity and mirror quirks)
+
     [ClientRpc]
     void SetItemParent(GameObject Room, Transform Parent)
     {
         Room.transform.SetParent(Parent, false);
+    }
+
+    [ClientRpc]
+    void SetLineRendEndpoints(GameObject LineRenderObject, Vector3 StartPoint,  Vector3 EndPoint)
+    {
+        LineRenderer LineRend = LineRenderObject.GetComponent<LineRenderer>();
+
+        LineRend.SetPosition(0, StartPoint);
+        LineRend.SetPosition(1, EndPoint);
     }
 }
