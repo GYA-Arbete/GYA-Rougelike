@@ -45,6 +45,9 @@ public class MapGen : NetworkBehaviour
 
         CalculatePaths();
 
+        // Wait for 0.05 seconds cause otherwise Rooms will be null when required, unity dumb ig
+        yield return new WaitForSeconds(0.05f);
+
         MapNavigationScript.SetupForMapNav(SpawnedLines, Rooms);
     }
 
