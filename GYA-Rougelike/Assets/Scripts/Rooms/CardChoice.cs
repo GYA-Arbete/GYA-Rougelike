@@ -3,12 +3,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using System.Collections.Generic;
+using Mirror;
 
-public class CardChoice : MonoBehaviour
+public class CardChoice : NetworkBehaviour
 {
     [Header("Viewable Elements")]
     public Button[] ChoiceButtons = new Button[3];
     public GameObject CardChoiceCanvas;
+    public Button ExitRoomButton;
 
     [Header("Variables for Choice")]
     public int[] CardChoices = new int[3];
@@ -22,14 +24,42 @@ public class CardChoice : MonoBehaviour
     private bool Upgrade = false;
     private int[] ChoosenCardIndexes = new int[3];
 
+    [SyncVar(hook = nameof(HandleReadyPlayersChanged))]
+    public int ReadyPlayers = 0;
+
     // Start is called before the first frame update
     void Start()
     {
-        ChoiceButtons[0].onClick.AddListener(Choose1);
-        ChoiceButtons[1].onClick.AddListener(Choose2);
-        ChoiceButtons[2].onClick.AddListener(Choose3);
+        ChoiceButtons[0].onClick.AddListener(delegate { ChooseCard(CardChoices[0]); });
+        ChoiceButtons[1].onClick.AddListener(delegate { ChooseCard(CardChoices[1]); });
+        ChoiceButtons[2].onClick.AddListener(delegate { ChooseCard(CardChoices[2]); });
+        ExitRoomButton.onClick.AddListener(ExitRoom);
     }
 
+    // DO NOT REMOVE ANY VARIABLES, IT WILL CAUSE ERRORS
+    public void HandleReadyPlayersChanged(int oldValue, int newValue) => UpdateExitRoomButton();
+
+    [ClientRpc]
+    void UpdateExitRoomButton()
+    {
+        switch (ReadyPlayers)
+        {
+            case 0:
+                ExitRoomButton.interactable = false;
+                ExitRoomButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "0/2 Finished";
+                break;
+            case 1:
+                ExitRoomButton.interactable = false;
+                ExitRoomButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "1/2 Finished";
+                break;
+            case 2:
+                ExitRoomButton.interactable = true;
+                ExitRoomButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Continue";
+                break;
+        }
+    }
+
+    [ClientRpc]
     public void StartChoice(string SenderScript, bool upgrade)
     {
         Upgrade = upgrade;
@@ -140,29 +170,25 @@ public class CardChoice : MonoBehaviour
             }
         }
 
+        // Set starting state of ExitRoomButton
+        UpdateExitRoomButton();
+
         // Show the choice buttons
         CardChoiceCanvas.SetActive(true);
     }
 
-    void Choose1()
+    void ChooseCard(int Choice)
     {
-        EndChoice(CardChoices[0]);
-    }
-
-    void Choose2()
-    {
-        EndChoice(CardChoices[1]);
-    }
-
-    void Choose3()
-    {
-        EndChoice(CardChoices[2]);
+        EndChoice(Choice);
     }
 
     void EndChoice(int ChoosenCard)
     {
-        // Hide the choice buttons
-        CardChoiceCanvas.SetActive(false);
+        // Remove the buttons as player has already choosen
+        foreach (Button ChoiceButton in ChoiceButtons)
+        {
+            Destroy(ChoiceButton.gameObject);
+        }
 
         if (Upgrade)
         {
@@ -173,6 +199,21 @@ public class CardChoice : MonoBehaviour
             // Update the players inventory
             CardInventoryScript.AddCardToInventory(ChoosenCard);
         }
+
+        // Calls a command to update the SyncVar cause otherwise it wont be synced between clients
+        UpdateReadyPlayers();
+    }
+
+    [Command(requiresAuthority=false)]
+    void UpdateReadyPlayers()
+    {
+        ReadyPlayers++;
+    }
+
+    [ClientRpc]
+    void ExitRoom()
+    {
+        CardChoiceCanvas.SetActive(false);
 
         // Check which room the player is in and exit correctly
         if (Sender == "StartRoom")

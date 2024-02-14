@@ -118,6 +118,7 @@ public class MapNavigation : NetworkBehaviour
         return (RoomType, HiddenType);
     }
 
+    [Server]
     void ParseAllowedPaths(List<KeyValuePair<Vector3, Vector3>> SpawnedLines)
     {
         // Clear AllowedNav to avoid old entries being kept

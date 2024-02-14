@@ -16,6 +16,9 @@ public class LobbyMenu : NetworkBehaviour
     [SyncVar(hook = nameof(HandleToggleStateChanged))]
     public bool ToggleState2 = false;
 
+    [Header("Other Scripts")]
+    public StartRoom StartRoomScript;
+
     // Events that the LobbyUI will subscribe to
     public event System.Action<int> OnReadyPlayersChanged;
     public event System.Action<bool, bool> OnToggleStateChanged;
@@ -24,6 +27,7 @@ public class LobbyMenu : NetworkBehaviour
     public void StartGame()
     {
         LobbyUI.MainCanvas.gameObject.SetActive(false);
+        StartRoomScript.EnterStartRoom();
     }
 
     public void OnReadyToggled(Toggle toggle, bool OverwritingState, int PlayerNumber)
