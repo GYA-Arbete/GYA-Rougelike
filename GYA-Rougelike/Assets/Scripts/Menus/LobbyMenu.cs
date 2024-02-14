@@ -16,52 +16,66 @@ public class LobbyMenu : NetworkBehaviour
     [SyncVar(hook = nameof(HandleToggleStateChanged))]
     public bool ToggleState2 = false;
 
-    [Space]
-    public NetworkManagerOverride NetworkManager;
-    public NetworkIdentity Identity;
-
-    // Events that the PlayerUI will subscribe to
+    // Events that the LobbyUI will subscribe to
     public event System.Action<int> OnReadyPlayersChanged;
     public event System.Action<bool, bool> OnToggleStateChanged;
 
-    // Start is called before the first frame update
-    void Start()
+    [ClientRpc]
+    public void StartGame()
     {
-        NetworkManager = FindAnyObjectByType<NetworkManagerOverride>();
+        LobbyUI.MainCanvas.gameObject.SetActive(false);
     }
 
-    public void OnReadyToggled(Toggle toggle, bool OverwritingState)
+    public void OnReadyToggled(Toggle toggle, bool OverwritingState, int PlayerNumber)
     {
         if (!OverwritingState)
         {
-            int ID = toggle.GetComponent<ToggleHandler>().ID;
+            ToggleHandler Handler = toggle.GetComponent<ToggleHandler>();
+            int ID = Handler.ID;
 
-            // Yes this sucks but idk how to make it not suck
-            if (ID == 0)
+            if (ID == PlayerNumber - 1)
             {
-                if (toggle.isOn)
-                {
-                    ReadyPlayers++;
-                    ToggleState1 = true;
-                }
-                else
-                {
-                    ReadyPlayers--;
-                    ToggleState1 = false;
-                }
+                UpdateSyncvars(ID, toggle.isOn);
             }
-            else // ID == 1
+            else
             {
-                if (toggle.isOn)
-                {
-                    ReadyPlayers++;
-                    ToggleState2 = true;
-                }
-                else
-                {
-                    ReadyPlayers--;
-                    ToggleState2 = false;
-                }
+                // When player doesnt have authority, reset toggle to previous state
+                LobbyUI.OverwritingToggleState = true;
+                Handler.ValueChanged(toggle, !toggle.isOn);
+                LobbyUI.OverwritingToggleState = false;
+            }
+        }
+    }
+
+    // Changes syncvar values in command so it updates for every user no matter which user caused the change
+    [Command(requiresAuthority=false)]
+    public void UpdateSyncvars(int ID, bool State)
+    {
+        // Yes this sucks but idk how to make it not suck
+        if (ID == 0)
+        {
+            if (State)
+            {
+                ReadyPlayers++;
+                ToggleState1 = true;
+            }
+            else
+            {
+                ReadyPlayers--;
+                ToggleState1 = false;
+            }
+        }
+        else // ID == 1
+        {
+            if (State)
+            {
+                ReadyPlayers++;
+                ToggleState2 = true;
+            }
+            else
+            {
+                ReadyPlayers--;
+                ToggleState2 = false;
             }
         }
     }
