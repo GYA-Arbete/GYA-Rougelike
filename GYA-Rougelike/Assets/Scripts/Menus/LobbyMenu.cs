@@ -7,7 +7,7 @@ public class LobbyMenu : NetworkBehaviour
     public GameObject UIPrefab;
     public LobbyMenuUI LobbyUI = null;
 
-    [Header("Ready Toggles")]
+    [Header("SyncVars")]
     [SyncVar(hook = nameof(HandleReadyPlayersChanged))]
     public int ReadyPlayers = 0;
     // SyncLists suck mega ass, so heres 2 SyncVars instead
@@ -23,11 +23,19 @@ public class LobbyMenu : NetworkBehaviour
     public event System.Action<int> OnReadyPlayersChanged;
     public event System.Action<bool, bool> OnToggleStateChanged;
 
-    [ClientRpc]
     public void StartGame()
     {
-        LobbyUI.MainCanvas.gameObject.SetActive(false);
+        // Yes this is dumb but it has to be done because:
+        // 1. We want to hide the LobbyUI for all players
+        // 2. We only want to call EnterStartRoom once
+        HideLobbyUI();
         StartRoomScript.EnterStartRoom();
+    }
+
+    [ClientRpc]
+    void HideLobbyUI()
+    {
+        LobbyUI.MainCanvas.gameObject.SetActive(false);
     }
 
     public void OnReadyToggled(Toggle toggle, bool OverwritingState, int PlayerNumber)

@@ -24,8 +24,9 @@ public class CardChoice : NetworkBehaviour
     private bool Upgrade = false;
     private int[] ChoosenCardIndexes = new int[3];
 
+    [Header("SyncVars")]
     [SyncVar(hook = nameof(HandleReadyPlayersChanged))]
-    public int ReadyPlayers = 0;
+    public int ReadyPlayers;
 
     // Start is called before the first frame update
     void Start()
@@ -39,7 +40,6 @@ public class CardChoice : NetworkBehaviour
     // DO NOT REMOVE ANY VARIABLES, IT WILL CAUSE ERRORS
     public void HandleReadyPlayersChanged(int oldValue, int newValue) => UpdateExitRoomButton();
 
-    [ClientRpc]
     void UpdateExitRoomButton()
     {
         switch (ReadyPlayers)
@@ -70,14 +70,14 @@ public class CardChoice : NetworkBehaviour
         System.Random Rand = new();
 
         int[] CardType = new int[3];
-        ChoosenCardIndexes = new int[3]; // Only used if Upgrade
 
         // If choice is which card to upgrade
         if (Upgrade)
         {
+            ChoosenCardIndexes = new int[3];
+
             CardInventory.CardList PossibleCards = CardInventoryScript.Inventory;
             List<int> CardTypes = CardInventoryScript.CardType;
-
             int IndexOffset = 0;
 
             for (int i = 0; i < 3; i++)
@@ -171,7 +171,7 @@ public class CardChoice : NetworkBehaviour
         }
 
         // Set starting state of ExitRoomButton
-        UpdateExitRoomButton();
+        ReadyPlayers = 0;
 
         // Show the choice buttons
         CardChoiceCanvas.SetActive(true);
@@ -210,10 +210,12 @@ public class CardChoice : NetworkBehaviour
         ReadyPlayers++;
     }
 
-    [ClientRpc]
     void ExitRoom()
     {
-        CardChoiceCanvas.SetActive(false);
+        // Yes this is dumb but it has to be done because:
+        // 1. We want to hide the Canvas for all players
+        // 2. We only want to call the exit room function once
+        HideCardChoiceCanvas();
 
         // Check which room the player is in and exit correctly
         if (Sender == "StartRoom")
@@ -224,5 +226,11 @@ public class CardChoice : NetworkBehaviour
         {
             LootRoomScript.ExitLootRoom();
         }
+    }
+
+    [ClientRpc]
+    void HideCardChoiceCanvas()
+    {
+        CardChoiceCanvas.SetActive(false);
     }
 }
