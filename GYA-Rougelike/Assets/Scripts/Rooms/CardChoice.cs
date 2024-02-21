@@ -210,12 +210,13 @@ public class CardChoice : NetworkBehaviour
         ReadyPlayers++;
     }
 
-    [Command(requiresAuthority = false)]
+    [Command(requiresAuthority=false)]
     void ResetReadyPlayers()
     {
         ReadyPlayers = 0;
     }
 
+    [Command(requiresAuthority=false)]
     void ExitRoom()
     {
         // Yes this is dumb but it has to be done because:

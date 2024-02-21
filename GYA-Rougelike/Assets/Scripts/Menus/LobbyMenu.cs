@@ -23,6 +23,7 @@ public class LobbyMenu : NetworkBehaviour
     public event System.Action<int> OnReadyPlayersChanged;
     public event System.Action<bool, bool> OnToggleStateChanged;
 
+    [Command(requiresAuthority=false)]
     public void StartGame()
     {
         // Yes this is dumb but it has to be done because:
