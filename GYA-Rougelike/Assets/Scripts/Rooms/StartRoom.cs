@@ -1,6 +1,7 @@
+using Mirror;
 using UnityEngine;
 
-public class StartRoom : MonoBehaviour
+public class StartRoom : NetworkBehaviour
 {
     [Header("Viewable Elements")]
     public GameObject[] ElementsToHide;
@@ -13,10 +14,7 @@ public class StartRoom : MonoBehaviour
 
     public void EnterStartRoom()
     {
-        foreach (GameObject Element in ElementsToHide)
-        {
-            Element.SetActive(false);
-        }
+        ToggleOtherElementsVisibility();
 
         CameraSwitchScript.SetViewToRoom();
 
@@ -27,13 +25,19 @@ public class StartRoom : MonoBehaviour
 
     public void ExitStartRoom()
     {
-        foreach (GameObject Element in ElementsToHide)
-        {
-            Element.SetActive(true);
-        }
+        ToggleOtherElementsVisibility();
 
         StartCoroutine(MapGenScript.CreateMap());
 
         CameraSwitchScript.SetViewToMap();
+    }
+
+    [ClientRpc]
+    void ToggleOtherElementsVisibility()
+    {
+        foreach (GameObject Element in ElementsToHide)
+        {
+            Element.SetActive(!Element.activeSelf);
+        }
     }
 }

@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-public class CameraSwitch : MonoBehaviour
+public class CameraSwitch : NetworkBehaviour
 {
     [Header("Viewable Elements")]
     public Canvas PauseMenuCanvas;
@@ -32,6 +33,7 @@ public class CameraSwitch : MonoBehaviour
         }
     }
 
+    [ClientRpc]
     public void SetViewToRoom()
     {
         MapViewCamera.enabled = false;
@@ -44,6 +46,7 @@ public class CameraSwitch : MonoBehaviour
         PauseMenuCanvas.worldCamera = RoomViewCamera;
     }
 
+    [ClientRpc]
     public void SetViewToMap()
     {
         MapViewCamera.enabled = true;

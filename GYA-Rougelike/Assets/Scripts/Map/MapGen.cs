@@ -33,7 +33,6 @@ public class MapGen : NetworkBehaviour
     }
 
     // FatPerson115 saving my ass
-    [Client]
     public IEnumerator CreateMap()
     {
         DeleteMap();

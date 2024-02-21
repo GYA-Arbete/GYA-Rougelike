@@ -27,16 +27,12 @@ public class MapNavigation : NetworkBehaviour
     public CombatSystem CombatSystemScript;
 
     // Simple function that is called when map is generated to setup everything needed for MapNav to work
-    [Server]
     public void SetupForMapNav(List<KeyValuePair<Vector3, Vector3>> SpawnedLines)
     {
         var ReturnedVals = GenerateRoomProperties();
 
         // Set room properties to show up for all clients, hence why its a seperate function and ClientRpc
         SetRoomProperties(ReturnedVals.Item1, ReturnedVals.Item2);
-
-        PreviousRoom = Rooms[1].gameObject;
-        CurrentRoom = 0;
 
         ParseAllowedPaths(SpawnedLines);
     }
@@ -45,6 +41,9 @@ public class MapNavigation : NetworkBehaviour
     void SetRoomProperties(int[] RoomType, bool[] HiddenType)
     {
         Rooms = MapGenScript.MapRoomPrefabParent.GetComponentsInChildren<Transform>();
+
+        PreviousRoom = Rooms[1].gameObject;
+        CurrentRoom = 0;
 
         for (int i = 1; i < Rooms.Length; i++)
         {
@@ -118,7 +117,6 @@ public class MapNavigation : NetworkBehaviour
         return (RoomType, HiddenType);
     }
 
-    [Server]
     void ParseAllowedPaths(List<KeyValuePair<Vector3, Vector3>> SpawnedLines)
     {
         // Clear AllowedNav to avoid old entries being kept

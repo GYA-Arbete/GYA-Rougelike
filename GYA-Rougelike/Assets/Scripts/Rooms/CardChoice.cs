@@ -26,7 +26,7 @@ public class CardChoice : NetworkBehaviour
 
     [Header("SyncVars")]
     [SyncVar(hook = nameof(HandleReadyPlayersChanged))]
-    public int ReadyPlayers;
+    public int ReadyPlayers = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -171,7 +171,7 @@ public class CardChoice : NetworkBehaviour
         }
 
         // Set starting state of ExitRoomButton
-        ReadyPlayers = 0;
+        UpdateExitRoomButton();
 
         // Show the choice buttons
         CardChoiceCanvas.SetActive(true);
@@ -210,12 +210,20 @@ public class CardChoice : NetworkBehaviour
         ReadyPlayers++;
     }
 
+    [Command(requiresAuthority = false)]
+    void ResetReadyPlayers()
+    {
+        ReadyPlayers = 0;
+    }
+
     void ExitRoom()
     {
         // Yes this is dumb but it has to be done because:
         // 1. We want to hide the Canvas for all players
         // 2. We only want to call the exit room function once
         HideCardChoiceCanvas();
+
+        ResetReadyPlayers();
 
         // Check which room the player is in and exit correctly
         if (Sender == "StartRoom")
