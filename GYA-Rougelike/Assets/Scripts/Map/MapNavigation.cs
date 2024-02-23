@@ -20,6 +20,11 @@ public class MapNavigation : NetworkBehaviour
 
     public GameObject PreviousRoom;
 
+    [Header("Room Limits")]
+    const int AllowedLootRooms = 2;
+    const int AllowedCampRooms = 3;
+    const int AllowedHiddenRooms = 2;
+
     [Header("Other Scripts")]
     public MapGen MapGenScript;
     public CampRoom CampRoomScript;
@@ -75,10 +80,6 @@ public class MapNavigation : NetworkBehaviour
     [Server]
     private (int[], bool[]) GenerateRoomProperties()
     {
-        int AllowedLootRooms = 2;
-        int AllowedCampRooms = 3;
-        int AllowedHiddenRooms = 2;
-
         int[] RoomType = new int[12];
         bool[] HiddenType = new bool[12];
         List<int> UntakenIndexes = new() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
