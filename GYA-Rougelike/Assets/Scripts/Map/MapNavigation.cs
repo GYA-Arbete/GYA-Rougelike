@@ -29,6 +29,8 @@ public class MapNavigation : NetworkBehaviour
     // Simple function that is called when map is generated to setup everything needed for MapNav to work
     public void SetupForMapNav(List<KeyValuePair<Vector3, Vector3>> SpawnedLines)
     {
+        GetRooms();
+
         var ReturnedVals = GenerateRoomProperties();
 
         // Set room properties to show up for all clients, hence why its a seperate function and ClientRpc
@@ -37,10 +39,16 @@ public class MapNavigation : NetworkBehaviour
         ParseAllowedPaths(SpawnedLines);
     }
 
+    // Function called from Clients and Server
+    void GetRooms()
+    {
+        Rooms = MapGenScript.MapRoomPrefabParent.GetComponentsInChildren<Transform>();
+    }
+
     [ClientRpc]
     void SetRoomProperties(int[] RoomType, bool[] HiddenType)
     {
-        Rooms = MapGenScript.MapRoomPrefabParent.GetComponentsInChildren<Transform>();
+        GetRooms();
 
         PreviousRoom = Rooms[1].gameObject;
         CurrentRoom = 0;
