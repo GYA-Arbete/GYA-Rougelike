@@ -35,7 +35,7 @@ public class CampRoom : NetworkBehaviour
     [ClientRpc]
     void ToggleCanvasVisibility()
     {
-        CampRoomCanvas.SetActive(CampRoomCanvas.activeSelf);
+        CampRoomCanvas.SetActive(!CampRoomCanvas.activeSelf);
     }
 
     void Rest()
