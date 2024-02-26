@@ -8,12 +8,12 @@ public class LootRoom : NetworkBehaviour
     public GameObject LootRoomCanvas;
     public Button UpgradeButton;
     public Button NewCardButton;
-    public GameObject[] ElementsToHide;
 
     [Header("Other Scripts")]
     public CameraSwitch CameraSwitchScript;
     public CardInventory CardInventoryScript;
     public CardChoice CardChoiceScript;
+    public PlayerManager PlayerManagerScript;
 
     // Start is called before the first frame update
     void Start()
@@ -31,10 +31,8 @@ public class LootRoom : NetworkBehaviour
 
     void ChooseCard()
     {
-        foreach (GameObject Element in ElementsToHide)
-        {
-            Element.SetActive(false);
-        }
+        PlayerManagerScript.SetPlayerSpriteVisibility(false);
+
         SetCanvasVisibility(false);
 
         CardChoiceScript.StartChoice("LootRoom", false);
@@ -48,17 +46,14 @@ public class LootRoom : NetworkBehaviour
     }
 
     [ClientRpc]
-    void SetCanvasVisibility(bool Override)
+    void SetCanvasVisibility(bool State)
     {
-        LootRoomCanvas.SetActive(Override);
+        LootRoomCanvas.SetActive(State);
     }
 
     public void ExitLootRoom()
     {
-        foreach (GameObject Element in ElementsToHide)
-        {
-            Element.SetActive(true);
-        }
+        PlayerManagerScript.SetPlayerSpriteVisibility(true);
 
         SetCanvasVisibility(false);
 

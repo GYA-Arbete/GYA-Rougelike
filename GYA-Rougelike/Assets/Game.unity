@@ -1228,12 +1228,11 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  ElementsToHide:
-  - {fileID: 2042664322}
   CameraSwitchScript: {fileID: 628599124}
   CardInventoryScript: {fileID: 399353178}
   MapGenScript: {fileID: 679690435}
   CardChoiceScript: {fileID: 143774139}
+  PlayerManagerScript: {fileID: 2042664324}
 --- !u!114 &270984554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2729,6 +2728,7 @@ MonoBehaviour:
   ToggleState1: 0
   ToggleState2: 0
   StartRoomScript: {fileID: 270984553}
+  PlayerManagerScript: {fileID: 2042664324}
 --- !u!114 &539326593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3231,7 +3231,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CardInventoryScript: {fileID: 399353178}
-  PlayerManagerScript: {fileID: 2042664324}
 --- !u!4 &642181653
 Transform:
   m_ObjectHideFlags: 0
@@ -5285,8 +5284,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2042664323}
+  m_Children: []
   m_Father: {fileID: 961711411}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1113121491
@@ -8734,11 +8732,10 @@ MonoBehaviour:
   LootRoomCanvas: {fileID: 1863287361}
   UpgradeButton: {fileID: 813013870}
   NewCardButton: {fileID: 1634301148}
-  ElementsToHide:
-  - {fileID: 2042664322}
   CameraSwitchScript: {fileID: 628599124}
   CardInventoryScript: {fileID: 399353178}
   CardChoiceScript: {fileID: 143774139}
+  PlayerManagerScript: {fileID: 2042664324}
 --- !u!4 &1865235715
 Transform:
   m_ObjectHideFlags: 0
@@ -8805,6 +8802,7 @@ Transform:
   - {fileID: 2131780079}
   - {fileID: 143774138}
   - {fileID: 1839729334}
+  - {fileID: 2042664323}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1895503200
@@ -9946,6 +9944,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2042664323}
   - component: {fileID: 2042664324}
+  - component: {fileID: 2042664325}
   m_Layer: 0
   m_Name: Players
   m_TagString: Untagged
@@ -9969,7 +9968,7 @@ Transform:
   - {fileID: 1090164095}
   - {fileID: 1945140423}
   - {fileID: 630011473}
-  m_Father: {fileID: 1103261180}
+  m_Father: {fileID: 1893337796}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2042664324
 MonoBehaviour:
@@ -9983,12 +9982,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51c128aea5567d347aa01a3afab3b92c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   Players:
   - {fileID: 1090164095}
   - {fileID: 1945140423}
   HealthBarPrefab: {fileID: 217100119776245005, guid: 04be38165f6b43345ac65d696d13cff5, type: 3}
   HealthBarParent: {fileID: 630011473}
   HealthBarImage: {fileID: 21300000, guid: 317917b0c2d2247448892afcf98bd54c, type: 3}
+--- !u!114 &2042664325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042664322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clientStarted: 0
+  sceneId: 3013658356
+  _assetId: 0
+  serverOnly: 0
+  visible: 0
+  hasSpawned: 0
 --- !u!1 &2048057013
 GameObject:
   m_ObjectHideFlags: 0

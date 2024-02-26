@@ -18,6 +18,7 @@ public class LobbyMenu : NetworkBehaviour
 
     [Header("Other Scripts")]
     public StartRoom StartRoomScript;
+    public PlayerManager PlayerManagerScript;
 
     // Events that the LobbyUI will subscribe to
     public event System.Action<int> OnReadyPlayersChanged;
@@ -26,6 +27,8 @@ public class LobbyMenu : NetworkBehaviour
     [Command(requiresAuthority=false)]
     public void StartGame()
     {
+        PlayerManagerScript.SetupPlayers();
+
         // Yes this is dumb but it has to be done because:
         // 1. We want to hide the LobbyUI for all players
         // 2. We only want to call EnterStartRoom once

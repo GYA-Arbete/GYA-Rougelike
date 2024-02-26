@@ -3,18 +3,16 @@ using UnityEngine;
 
 public class StartRoom : NetworkBehaviour
 {
-    [Header("Viewable Elements")]
-    public GameObject[] ElementsToHide;
-
     [Header("Other Scripts")]
     public CameraSwitch CameraSwitchScript;
     public CardInventory CardInventoryScript;
     public MapGen MapGenScript;
     public CardChoice CardChoiceScript;
+    public PlayerManager PlayerManagerScript;
 
     public void EnterStartRoom()
     {
-        ToggleOtherElementsVisibility();
+        PlayerManagerScript.SetPlayerSpriteVisibility(false);
 
         CameraSwitchScript.SetViewToRoom();
 
@@ -26,19 +24,10 @@ public class StartRoom : NetworkBehaviour
     [Command(requiresAuthority=false)]
     public void ExitStartRoom()
     {
-        ToggleOtherElementsVisibility();
+        PlayerManagerScript.SetPlayerSpriteVisibility(true);
 
         StartCoroutine(MapGenScript.CreateMap());
 
         CameraSwitchScript.SetViewToMap();
-    }
-
-    [ClientRpc]
-    void ToggleOtherElementsVisibility()
-    {
-        foreach (GameObject Element in ElementsToHide)
-        {
-            Element.SetActive(!Element.activeSelf);
-        }
     }
 }
