@@ -10,7 +10,6 @@ public class CombatSystem : MonoBehaviour
 
     [Header("Buttons")]
     public Button EndTurnButton;
-    public Button ExitRoomButton;
 
     [Header("Combat Participants")]
     public Transform[] Players;
@@ -49,8 +48,6 @@ public class CombatSystem : MonoBehaviour
     void Start()
     {
         EndTurnButton.onClick.AddListener(EndTurn);
-
-        ExitRoomButton.onClick.AddListener(EndCombat);
     }
 
     public void StartCombat(int EnemyAmount, int[] EnemyTypes)

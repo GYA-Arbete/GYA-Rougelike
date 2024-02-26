@@ -5,6 +5,7 @@ public class CameraSwitch : NetworkBehaviour
 {
     [Header("Viewable Elements")]
     public Canvas PauseMenuCanvas;
+    public Canvas DebugMenuCanvas;
     public GameObject Map;
 
     [Header("Cameras")]
@@ -28,6 +29,7 @@ public class CameraSwitch : NetworkBehaviour
 
         // Set which camera is used to render PauseMenu
         PauseMenuCanvas.worldCamera = RoomViewCamera;
+        DebugMenuCanvas.worldCamera = RoomViewCamera;
     }
 
     [ClientRpc]
@@ -41,5 +43,6 @@ public class CameraSwitch : NetworkBehaviour
 
         // Set which camera is used to render PauseMenu
         PauseMenuCanvas.worldCamera = MapViewCamera;
+        DebugMenuCanvas.worldCamera = MapViewCamera;
     }
 }
