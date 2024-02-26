@@ -1,12 +1,10 @@
 using UnityEngine;
-using UnityEngine.UI;
 using Mirror;
 
 public class CameraSwitch : NetworkBehaviour
 {
     [Header("Viewable Elements")]
     public Canvas PauseMenuCanvas;
-    public Button PullMapUpDownButton;
     public GameObject Map;
 
     [Header("Cameras")]
@@ -16,21 +14,7 @@ public class CameraSwitch : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PullMapUpDownButton.onClick.AddListener(SwitchView);
-
         MapViewCamera.enabled = false;
-    }
-
-    public void SwitchView()
-    {
-        if (MapViewCamera.enabled == true)
-        {
-            SetViewToRoom();
-        }
-        else
-        {
-            SetViewToMap();
-        }
     }
 
     [ClientRpc]
