@@ -18,7 +18,13 @@ public class RoomProperties : MonoBehaviour
     [Header("Children Objects")]
     public GameObject RoomImageObject;
 
-    public void SetupRoom(int ID, int roomType, Texture RoomImage, GameObject ImagePrefab)
+    public void SetupRoomServerSide(int ID, int roomType)
+    {
+        RoomID = ID;
+        RoomType = roomType;
+    }
+
+    public void SetupRoomClientSide(int ID, int roomType, Texture RoomImage, GameObject ImagePrefab)
     {
         RoomID = ID;
         RoomType = roomType;

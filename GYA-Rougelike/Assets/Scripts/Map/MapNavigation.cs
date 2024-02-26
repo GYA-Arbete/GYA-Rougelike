@@ -8,16 +8,18 @@ public class MapNavigation : NetworkBehaviour
     public Transform[] Rooms;
     public List<Button> RoomsButtons;
 
-    public int CurrentRoom;
-
     // Each int is StartRoom / EndRoom id for a line
-    public List<KeyValuePair<int, int>> AllowedNav;
+    public List<KeyValuePair<int, int>> AllowedNav = new();
 
     // 0 == StartRoom, 1 == EnemyRoom, 2 == LootRoom, 3 == CampRoom, 4 == BossRoom
     // 5 == HiddenType, 6 == ClearedRoom, 7 == CurrentRoom
     public Texture[] RoomImages;
     public GameObject ImagePrefab;
 
+    [Header("SyncVars")]
+    [SyncVar]
+    public int CurrentRoom = 0;
+    [SyncVar]
     public GameObject PreviousRoom;
 
     [Header("Room Limits")]
@@ -32,14 +34,30 @@ public class MapNavigation : NetworkBehaviour
     public CombatSystem CombatSystemScript;
 
     // Simple function that is called when map is generated to setup everything needed for MapNav to work
+    [Server]
     public void SetupForMapNav(List<KeyValuePair<Vector3, Vector3>> SpawnedLines)
     {
         GetRooms();
+
+        ResetNavigation();
 
         var ReturnedVals = GenerateRoomProperties();
 
         // Set room properties to show up for all clients, hence why its a seperate function and ClientRpc
         SetRoomProperties(ReturnedVals.Item1, ReturnedVals.Item2);
+
+        // Setup rooms server-side
+        for (int i = 1; i < Rooms.Length; i++)
+        {
+            if (ReturnedVals.Item2[i - 1])
+            {
+                Rooms[i].GetComponent<RoomProperties>().SetupRoomServerSide(i - 1, ReturnedVals.Item1[i - 1]);
+            }
+            else
+            {
+                Rooms[i].GetComponent<RoomProperties>().SetupRoomServerSide(i - 1, ReturnedVals.Item1[i - 1]);
+            }
+        }
 
         ParseAllowedPaths(SpawnedLines);
     }
@@ -55,9 +73,6 @@ public class MapNavigation : NetworkBehaviour
     {
         GetRooms();
 
-        PreviousRoom = Rooms[1].gameObject;
-        CurrentRoom = 0;
-
         for (int i = 1; i < Rooms.Length; i++)
         {
             Button Button = Rooms[i].GetComponent<Button>();
@@ -66,11 +81,11 @@ public class MapNavigation : NetworkBehaviour
 
             if (HiddenType[i - 1])
             {
-                Rooms[i].GetComponent<RoomProperties>().SetupRoom(i - 1, RoomType[i - 1], RoomImages[5], ImagePrefab);
+                Rooms[i].GetComponent<RoomProperties>().SetupRoomClientSide(i - 1, RoomType[i - 1], RoomImages[5], ImagePrefab);
             }
             else
             {
-                Rooms[i].GetComponent<RoomProperties>().SetupRoom(i - 1, RoomType[i - 1], RoomImages[RoomType[i - 1]], ImagePrefab);
+                Rooms[i].GetComponent<RoomProperties>().SetupRoomClientSide(i - 1, RoomType[i - 1], RoomImages[RoomType[i - 1]], ImagePrefab);
             }
 
             RoomsButtons.Add(Button);
@@ -126,6 +141,7 @@ public class MapNavigation : NetworkBehaviour
         return (RoomType, HiddenType);
     }
 
+    [Server]
     void ParseAllowedPaths(List<KeyValuePair<Vector3, Vector3>> SpawnedLines)
     {
         // Clear AllowedNav to avoid old entries being kept
@@ -169,6 +185,12 @@ public class MapNavigation : NetworkBehaviour
     {
         int ID = Button.gameObject.GetComponent<RoomProperties>().RoomID;
 
+        CheckNavIsAllowed(ID);
+    }
+
+    [Command(requiresAuthority=false)]
+    void CheckNavIsAllowed(int ID)
+    {
         // Check that a line is going between CurrentRoom and the room we want to navigate too
         for (int i = 0; i < AllowedNav.Count; i++)
         {
@@ -202,6 +224,7 @@ public class MapNavigation : NetworkBehaviour
         }
     }
 
+    [Command(requiresAuthority=false)]
     void EnterRoom(int ID)
     {
         Transform Room = Rooms[ID + 1];
@@ -233,5 +256,12 @@ public class MapNavigation : NetworkBehaviour
         CurrentRoom = ID;
 
         PreviousRoom = Room.gameObject;
+    }
+
+    [Command(requiresAuthority=false)]
+    void ResetNavigation()
+    {
+        CurrentRoom = 0;
+        PreviousRoom = Rooms[1].gameObject;
     }
 }

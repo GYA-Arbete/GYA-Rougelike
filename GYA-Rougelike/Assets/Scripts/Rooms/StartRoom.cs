@@ -23,6 +23,7 @@ public class StartRoom : NetworkBehaviour
         CardChoiceScript.StartChoice("StartRoom", false);
     }
 
+    [Command(requiresAuthority=false)]
     public void ExitStartRoom()
     {
         ToggleOtherElementsVisibility();
