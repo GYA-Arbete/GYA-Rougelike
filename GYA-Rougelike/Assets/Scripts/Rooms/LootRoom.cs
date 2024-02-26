@@ -1,7 +1,8 @@
+using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LootRoom : MonoBehaviour
+public class LootRoom : NetworkBehaviour
 {
     [Header("Viewable Elements")]
     public GameObject LootRoomCanvas;
@@ -34,16 +35,22 @@ public class LootRoom : MonoBehaviour
         {
             Element.SetActive(false);
         }
-        LootRoomCanvas.SetActive(false);
+        SetCanvasVisibility(false);
 
         CardChoiceScript.StartChoice("LootRoom", false);
     }
 
     public void EnterLootRoom()
     {
-        LootRoomCanvas.SetActive(true);
+        SetCanvasVisibility(true);
 
         CameraSwitchScript.SetViewToRoom();
+    }
+
+    [ClientRpc]
+    void SetCanvasVisibility(bool Override)
+    {
+        LootRoomCanvas.SetActive(Override);
     }
 
     public void ExitLootRoom()
@@ -53,7 +60,7 @@ public class LootRoom : MonoBehaviour
             Element.SetActive(true);
         }
 
-        LootRoomCanvas.SetActive(false);
+        SetCanvasVisibility(false);
 
         CameraSwitchScript.SetViewToMap();
     }
