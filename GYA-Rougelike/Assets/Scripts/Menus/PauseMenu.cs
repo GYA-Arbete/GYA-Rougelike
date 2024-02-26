@@ -69,7 +69,8 @@ public class PauseMenu : MonoBehaviour
         {
             LootRoomScript.ExitLootRoom();
         }
-        else if (CampRoomScript.InCampRoom)
+        // If CampRoomCanvas is active, meaning currently in CampRoom
+        else if (CampRoomScript.CampRoomCanvas.activeSelf)
         {
             CampRoomScript.ExitCampRoom();
         }
