@@ -31,14 +31,14 @@ public class EnemySpawner : NetworkBehaviour
             GameObject Enemy = Instantiate(EnemyPrefabs[EnemyTypes[i]], new Vector3(EnemySpawnPoints[i].position.x, EnemySpawnPoints[i].position.y, EnemySpawnPoints[i].position.z), new Quaternion(0, 0, 0, 0), EnemyParent);
             Enemy.transform.localScale = new Vector3(108, 108, 1);
             NetworkServer.Spawn(Enemy);
-            SetItemParent(Enemy, EnemyParent);
+            SetItemParent(Enemy, "EnemyParent");
 
             Enemies[i] = Enemy.transform;
 
             // Generate EnemyStats
             Enemy.GetComponent<EnemyStatsGen>().GenerateStats(EnemyTypes[i]);
 
-            CreateHealthBar(Enemy, HealthBarParent);
+            CreateHealthBar(Enemy, "HealthBarParent");
         }
 
         // Return an array containing all enemies
@@ -57,14 +57,14 @@ public class EnemySpawner : NetworkBehaviour
             GameObject Summon = Instantiate(SummonPrefab, SummonSpawnPoints[i].position, new Quaternion(0, 0, 0, 0), SummonParent);
             Summon.transform.localScale = new Vector3(80, 80, 1);
             NetworkServer.Spawn(Summon);
-            SetItemParent(Summon, SummonParent);
+            SetItemParent(Summon, "SummonParent");
 
             Summons[i] = Summon.transform;
 
             // Generate EnemyStats
             Summon.GetComponent<EnemyStatsGen>().GenerateStats(5); // 5 == Summon in EnemyIndex
 
-            CreateHealthBar(Summon, SummonHealthBarParent);
+            CreateHealthBar(Summon, "SummonHealthBarParent");
         }
 
         // Return an array containing all summons
@@ -72,8 +72,19 @@ public class EnemySpawner : NetworkBehaviour
     }
 
     [ClientRpc]
-    void CreateHealthBar(GameObject Enemy, Transform Parent)
+    void CreateHealthBar(GameObject Enemy, string ParentName)
     {
+        // Workaround so game correctly sets parent on each client, suspect its because function isnt called from command
+        Transform Parent;
+        if (ParentName == "HealthBarParent")
+        {
+            Parent = HealthBarParent;
+        }
+        else
+        {
+            Parent = SummonHealthBarParent;
+        }
+
         // Create a HealthBar
         GameObject HealthBar = Instantiate(HealthBarPrefab, new Vector3(Enemy.transform.position.x, Enemy.transform.position.y - 1, Enemy.transform.position.z), new Quaternion(0, 0, 0, 0), Parent);
         HealthBar.transform.localScale = new Vector3(0.5f, 0.5f, 1);
@@ -100,8 +111,19 @@ public class EnemySpawner : NetworkBehaviour
     }
 
     [ClientRpc]
-    void SetItemParent(GameObject Element, Transform Parent)
+    void SetItemParent(GameObject Element, string ParentName)
     {
+        // Workaround so game correctly sets parent on each client, suspect its because function isnt called from command
+        Transform Parent;
+        if (ParentName == "EnemyParent")
+        {
+            Parent = EnemyParent;
+        }
+        else
+        {
+            Parent = SummonParent;
+        }
+
         Element.transform.SetParent(Parent, false);
     }
 }
