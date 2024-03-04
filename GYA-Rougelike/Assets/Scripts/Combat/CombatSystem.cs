@@ -1,11 +1,13 @@
+using Mirror;
 using System.Collections.Generic;
 using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CombatSystem : MonoBehaviour
+public class CombatSystem : NetworkBehaviour
 {
+    [SyncVar]
     public bool InCombat = false;
 
     [Header("Buttons")]
@@ -50,14 +52,12 @@ public class CombatSystem : MonoBehaviour
         EndTurnButton.onClick.AddListener(EndTurn);
     }
 
+    [Command(requiresAuthority = false)]
     public void StartCombat(int EnemyAmount, int[] EnemyTypes)
     {
         InCombat = true;
 
-        foreach (GameObject Element in CombatRoomElements)
-        {
-            Element.SetActive(true);
-        }
+        ToggleCombatElementsVisibility();
 
         Enemies = EnemySpawnerScript.SpawnEnemies(EnemyAmount, EnemyTypes);
 
@@ -96,14 +96,12 @@ public class CombatSystem : MonoBehaviour
         EnemyTarget = Enemies[0];
     }
 
+    [Command(requiresAuthority = false)]
     public void EndCombat()
     {
         InCombat = false;
 
-        foreach (GameObject Element in CombatRoomElements)
-        {
-            Element.SetActive(false);
-        }
+        ToggleCombatElementsVisibility();
 
         // If enemy still exists, remove it
         foreach (Transform Enemy in Enemies)
@@ -126,6 +124,15 @@ public class CombatSystem : MonoBehaviour
 
         // Exit the room
         CameraSwitchScript.SetViewToMap();
+    }
+
+    [ClientRpc]
+    void ToggleCombatElementsVisibility()
+    {
+        foreach (GameObject Element in CombatRoomElements)
+        {
+            Element.SetActive(!Element.activeSelf);
+        }
     }
 
     void EndTurn()

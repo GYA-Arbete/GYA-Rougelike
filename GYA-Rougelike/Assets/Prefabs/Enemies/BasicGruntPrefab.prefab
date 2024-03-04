@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 1539530751561675886}
   - component: {fileID: -542717157986030916}
   - component: {fileID: 8193067010983780955}
+  - component: {fileID: 7039267571704663945}
   m_Layer: 0
   m_Name: BasicGruntPrefab
   m_TagString: Untagged
@@ -254,11 +255,30 @@ MonoBehaviour:
   Damage: 0
   Defence: 0
   Stunned: 0
+  StunDuration: 0
   StunIndicator: {fileID: 3190202403200276677}
   EnemyType: 0
   EnemyMoveIndicatorImage: {fileID: 9175321605058792683}
   MoveIndicators: []
   Cooldown: 0
+--- !u!114 &7039267571704663945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3980382679749795476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clientStarted: 0
+  sceneId: 0
+  _assetId: 984701790
+  serverOnly: 0
+  visible: 0
+  hasSpawned: 0
 --- !u!1 &5177287349954136809
 GameObject:
   m_ObjectHideFlags: 0
