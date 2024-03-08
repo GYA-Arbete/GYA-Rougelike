@@ -1,15 +1,21 @@
 using UnityEngine;
 using System;
+using Mirror;
 
-public class HealthSystem : MonoBehaviour
+public class HealthSystem : NetworkBehaviour
 {
     [Header("Variables")]
+    [SyncVar]
     public int MaxHealth;
+    [SyncVar]
     public int Health;
+    [SyncVar]
     public int Defence = 0;
+    [SyncVar]
     public bool Player = false;
 
     [Header("Player Exclusive Variables")]
+    [SyncVar]
     public int Thorns = 0;
 
     [Header("HealthBar Stuff")]

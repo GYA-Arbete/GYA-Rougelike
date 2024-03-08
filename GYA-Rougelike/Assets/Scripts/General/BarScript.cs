@@ -33,6 +33,9 @@ public class BarScript : MonoBehaviour
 
         FillGradient.SetKeys(GradientColor, Alpha);
 
+        // Set displayed color to what its meant to be
+        Fill.color = FillGradient.Evaluate(Slider.normalizedValue);
+
         ResetBar();
     }
 
@@ -73,7 +76,7 @@ public class BarScript : MonoBehaviour
 
         Slider.value = CurrentValue;
 
-        Fill.color = FillGradient.Evaluate(Slider.normalizedValue); ;
+        Fill.color = FillGradient.Evaluate(Slider.normalizedValue);
 
         Text.text = $"{CurrentValue} / {MaxValue}";
     }

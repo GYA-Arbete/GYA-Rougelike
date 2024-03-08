@@ -135,6 +135,7 @@ public class CombatSystem : NetworkBehaviour
         }
     }
 
+    [Command(requiresAuthority = false)]
     void EndTurn()
     {
         GetCardsInMoveQueue();
@@ -190,6 +191,7 @@ public class CombatSystem : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
     void GetCardsInMoveQueue()
     {
         CardsInMoveQueue.Clear();
@@ -212,6 +214,7 @@ public class CombatSystem : NetworkBehaviour
     }
 
     // Called when player has finished their turn, will play each card in the MoveQueue
+    [ClientRpc]
     void PlayCards()
     {
         // Check if a Roid-Rage card is in the "queue"
@@ -374,6 +377,7 @@ public class CombatSystem : NetworkBehaviour
     }
 
     // Called when its the enemies turn, they do stuff then
+    [ClientRpc]
     void EnemyTurn()
     {
         // Check if a DamageBuff move is in the "queue"

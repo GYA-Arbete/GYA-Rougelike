@@ -94,11 +94,6 @@ public class EnemySpawner : NetworkBehaviour
         Image ImageItem = BarImageItem.GetComponent<Image>();
         ImageItem.sprite = HealthBarImage;
 
-        // Set color of HealthBar
-        Transform BarFillItem = HealthBar.transform.Find("Fill");
-        Image FillItem = BarFillItem.GetComponent<Image>();
-        FillItem.color = Color.red;
-
         // Get HealthSystemScript of the spawned enemy
         HealthSystem HealthSystemScript = Enemy.GetComponent<HealthSystem>();
 
