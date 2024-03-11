@@ -11,7 +11,7 @@ public class LobbyMenuUI : MonoBehaviour
     public LobbyMenu LobbyMenuScript;
 
     public bool OverwritingToggleState;
-    public int PlayerNumber;
+    public int PlayerNumber = 0;
 
     void Start()
     {
