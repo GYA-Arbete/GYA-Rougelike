@@ -71,7 +71,7 @@ public class CombatSystem : NetworkBehaviour
 
         EnemyType = EnemyTypes;
 
-        EnergyBarScript.SetupBar(10, new Color32(252, 206, 82, 255));
+        SetupEnergyBar();
 
         CameraSwitchScript.SetViewToRoom();
 
@@ -80,7 +80,7 @@ public class CombatSystem : NetworkBehaviour
         {
             EnemyAI EnemyAIScript = Enemies[i].gameObject.GetComponent<EnemyAI>();
 
-            EnemyAIScript.SetupEnemy(EnemyTypes[i], MoveIndicators);
+            EnemyAIScript.SetupEnemy(EnemyTypes[i]);
 
             // Get each enemies move
             var ReturnedValues = EnemyAIScript.GenerateMove();
@@ -94,6 +94,12 @@ public class CombatSystem : NetworkBehaviour
 
         // Save which enemy will be targeted by the players card
         EnemyTarget = Enemies[0];
+    }
+
+    [ClientRpc]
+    void SetupEnergyBar()
+    {
+        EnergyBarScript.SetupBar(10, new Color32(252, 206, 82, 255));
     }
 
     [Command(requiresAuthority = false)]
@@ -164,8 +170,8 @@ public class CombatSystem : NetworkBehaviour
 
         EnemyTurn();
 
-        // Set back energy to 10 / 10
-        EnergyBarScript.ResetBar();
+        // Set back energy to max
+        ResetEnergyBar();
 
         // Generate each enemies next turn
         for (int i = 0; i < Enemies.Length; i++)
@@ -189,6 +195,12 @@ public class CombatSystem : NetworkBehaviour
         {
             EnemyTarget = Enemies[TankIndex];
         }
+    }
+
+    [ClientRpc]
+    void ResetEnergyBar()
+    {
+        EnergyBarScript.ResetBar();
     }
 
     [ClientRpc]

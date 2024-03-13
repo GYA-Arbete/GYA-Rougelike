@@ -19,6 +19,12 @@ public class EnemySpawner : NetworkBehaviour
     public Transform SummonHealthBarParent;
     public Sprite HealthBarImage;
 
+    [Header("Stat Generation")]
+    public readonly int[] HealthMin = { 10, 10, 10, 10, 10, 5 };
+    public readonly int[] HealthMax = { 50, 50, 50, 50, 50, 25 };
+    public readonly int[] DamageMin = { 1, 1, 1, 1, 1, 1 };
+    public readonly int[] DamageMax = { 5, 5, 5, 5, 5, 3 };
+
     [Server]
     public Transform[] SpawnEnemies(int NumberOfEnemies, int[] EnemyTypes)
     {
@@ -36,9 +42,15 @@ public class EnemySpawner : NetworkBehaviour
             Enemies[i] = Enemy.transform;
 
             // Generate EnemyStats
-            Enemy.GetComponent<EnemyStatsGen>().GenerateStats(EnemyTypes[i]);
+            System.Random Rand = new();
 
-            CreateHealthBar(Enemy, "HealthBarParent");
+            int MaxHealth = Rand.Next(HealthMin[EnemyTypes[i]], HealthMax[EnemyTypes[i]]);
+            Enemy.GetComponent<HealthSystem>().SetupEnemy(MaxHealth);
+
+            EnemyAI EnemyAIScript = Enemy.GetComponent<EnemyAI>();
+            EnemyAIScript.Damage = Rand.Next(DamageMin[EnemyTypes[i]], DamageMax[EnemyTypes[i]]);
+
+            CreateHealthBar(Enemy, "HealthBarParent", MaxHealth);
         }
 
         // Return an array containing all enemies
@@ -61,10 +73,16 @@ public class EnemySpawner : NetworkBehaviour
 
             Summons[i] = Summon.transform;
 
-            // Generate EnemyStats
-            Summon.GetComponent<EnemyStatsGen>().GenerateStats(5); // 5 == Summon in EnemyIndex
+            // Generate EnemyStats (5 == Summon in EnemyIndex)
+            System.Random Rand = new();
 
-            CreateHealthBar(Summon, "SummonHealthBarParent");
+            int MaxHealth = Rand.Next(HealthMin[5], HealthMax[5]);
+            Summon.GetComponent<HealthSystem>().SetupEnemy(MaxHealth);
+
+            EnemyAI EnemyAIScript = Summon.GetComponent<EnemyAI>();
+            EnemyAIScript.Damage = Rand.Next(DamageMin[5], DamageMax[5]);
+
+            CreateHealthBar(Summon, "SummonHealthBarParent", MaxHealth);
         }
 
         // Return an array containing all summons
@@ -72,7 +90,7 @@ public class EnemySpawner : NetworkBehaviour
     }
 
     [ClientRpc]
-    void CreateHealthBar(GameObject Enemy, string ParentName)
+    void CreateHealthBar(GameObject Enemy, string ParentName, int MaxHealth)
     {
         // Workaround so game correctly sets parent on each client, suspect its because function isnt called from command
         Transform Parent;
@@ -99,10 +117,10 @@ public class EnemySpawner : NetworkBehaviour
 
         // Set values of the HealthBar
         BarScript HealthBarScript = HealthBar.GetComponent<BarScript>();
-        HealthBarScript.SetupBar(HealthSystemScript.MaxHealth, Color.red);
+        HealthBarScript.SetupBar(MaxHealth, Color.red);
 
         // Setup HealthSystem
-        HealthSystemScript.SetupEnemy(HealthBarScript);
+        HealthSystemScript.SetBarScript(HealthBarScript);
     }
 
     [ClientRpc]

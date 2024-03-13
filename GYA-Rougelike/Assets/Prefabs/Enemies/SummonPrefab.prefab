@@ -169,7 +169,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4474561849258048479}
   - component: {fileID: 9065397919746484782}
-  - component: {fileID: 854709317735202257}
   - component: {fileID: 3964847923032435649}
   - component: {fileID: 9101210620283883820}
   - component: {fileID: 5485699049779994774}
@@ -249,22 +248,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &854709317735202257
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3154492315323482717}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8550f3b1ffb2f354092faeb6ed42ab48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HealthMin: 0a0000000a0000000a0000000a0000000a00000005000000
-  HealthMax: 320000003200000032000000320000003200000019000000
-  DamageMin: 010000000100000001000000010000000100000001000000
-  DamageMax: 050000000500000005000000050000000500000003000000
 --- !u!114 &3964847923032435649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,6 +260,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b3ea4e4f8f36354a88d971bda2e38c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   MaxHealth: 0
   Health: 0
   Defence: 0

@@ -1,7 +1,8 @@
+using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : NetworkBehaviour
 {
     [Header("Enemy Stats")]
     public int Damage;
@@ -17,16 +18,14 @@ public class EnemyAI : MonoBehaviour
 
     public Image EnemyMoveIndicatorImage;
 
-    public Sprite[] MoveIndicators;
-
     public int Cooldown;
 
-    public void SetupEnemy(int Enemytype, Sprite[] Images)
+    [Server]
+    public void SetupEnemy(int Enemytype)
     {
         EnemyType = Enemytype;
-        MoveIndicators = Images;
 
-        StunIndicator.SetActive(false);
+        StunIndicatorVisibility(false);
 
         switch (EnemyType)
         {
@@ -48,14 +47,16 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    [Command(requiresAuthority = false)]
     public void Stun(int Duration)
     {
         Stunned = true;
         StunDuration = Duration;
-        StunIndicator.SetActive(true);
+        StunIndicatorVisibility(true);
     }
 
     // Int for type of move, bool for if splash damage
+    [Server]
     public (int, bool) GenerateMove()
     {
         // If the enemy is stunned, do an early exit and send back an "out of range index" to it doesnt do anything later
@@ -65,7 +66,7 @@ public class EnemyAI : MonoBehaviour
             if (StunDuration == 0)
             {
                 Stunned = false;
-                StunIndicator.SetActive(false);
+                StunIndicatorVisibility(false);
             }
             else
             {
@@ -87,7 +88,7 @@ public class EnemyAI : MonoBehaviour
                     System.Random Rand = new();
                     Defence = Rand.Next(3, 6); // Picks a random number between 3 and 5
 
-                    EnemyMoveIndicatorImage.sprite = MoveIndicators[2];
+                    SetMoveIndicator(2);
                     return (2, false);
                 }
                 // Normal Attack
@@ -95,7 +96,7 @@ public class EnemyAI : MonoBehaviour
                 {
                     Cooldown--;
 
-                    EnemyMoveIndicatorImage.sprite = MoveIndicators[1];
+                    SetMoveIndicator(1);
                     return (1, false);
                 }
             // Basic Grunt
@@ -105,7 +106,7 @@ public class EnemyAI : MonoBehaviour
                 {
                     Cooldown = 5;
 
-                    EnemyMoveIndicatorImage.sprite = MoveIndicators[0];
+                    SetMoveIndicator(0);
                     return (0, true);
                 }
                 // Normal Attack
@@ -113,7 +114,7 @@ public class EnemyAI : MonoBehaviour
                 {
                     Cooldown--;
 
-                    EnemyMoveIndicatorImage.sprite = MoveIndicators[1];
+                    SetMoveIndicator(1);
                     return (1, false);
                 }
             // Buff / Debuff
@@ -131,7 +132,7 @@ public class EnemyAI : MonoBehaviour
                 {
                     Cooldown--;
 
-                    EnemyMoveIndicatorImage.sprite = MoveIndicators[1];
+                    SetMoveIndicator(1);
                     return (1, false);
                 }
             // Summoner
@@ -149,7 +150,7 @@ public class EnemyAI : MonoBehaviour
                 {
                     Cooldown--;
 
-                    EnemyMoveIndicatorImage.sprite = MoveIndicators[1];
+                    SetMoveIndicator(1);
                     return (1, false);
                 }
             // Tank
@@ -162,7 +163,7 @@ public class EnemyAI : MonoBehaviour
                     System.Random Rand = new();
                     Defence = Rand.Next(2, 5); // Picks a random number between 2 and 4
 
-                    EnemyMoveIndicatorImage.sprite = MoveIndicators[2];
+                    SetMoveIndicator(2);
                     return (2, false);
                 }
                 // Normal Attack
@@ -170,15 +171,27 @@ public class EnemyAI : MonoBehaviour
                 {
                     Cooldown--;
 
-                    EnemyMoveIndicatorImage.sprite = MoveIndicators[1];
+                    SetMoveIndicator(1);
                     return (1, false);
                 }
             // Summon (Enemy spawned by Summoner)
             case 5:
                 // Only has normal attack
-                EnemyMoveIndicatorImage.sprite = MoveIndicators[1];
+                SetMoveIndicator(1);
                 return (1, false);
         }
         return (0, true);
+    }
+
+    [ClientRpc]
+    void SetMoveIndicator(int ImageIndex)
+    {
+        EnemyMoveIndicatorImage.sprite = FindAnyObjectByType<CombatSystem>().MoveIndicators[ImageIndex];
+    }
+
+    [ClientRpc]
+    void StunIndicatorVisibility(bool Visibility)
+    {
+        StunIndicator.SetActive(Visibility);
     }
 }

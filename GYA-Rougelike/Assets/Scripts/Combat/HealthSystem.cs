@@ -32,12 +32,18 @@ public class HealthSystem : NetworkBehaviour
         Player = true;
     }
 
-    public void SetupEnemy(BarScript Script)
+    [Command(requiresAuthority = false)]
+    public void SetupEnemy(int MaxHp)
+    {
+        MaxHealth = MaxHp;
+        Health = MaxHp;
+        Defence = 0;
+    }
+
+    // Called from ClientRpc
+    public void SetBarScript(BarScript Script)
     {
         HealthBarScript = Script;
-
-        Health = MaxHealth;
-        Defence = 0;
     }
 
     public void ResetHealth()
