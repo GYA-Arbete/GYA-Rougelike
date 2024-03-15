@@ -84,8 +84,8 @@ public class CardComponent : MonoBehaviour
 
     public void OnMouseOver()
     {
-        // Dont show CardInfo when dragging card
-        if (Dragging)
+        // Dont show CardInfo when dragging card or when in MoveQueue (top edge of CardView object is y = -12, hence the value)
+        if (Dragging || transform.position.y > -12)
         {
             CardInfoHolder.SetActive(false);
         }
