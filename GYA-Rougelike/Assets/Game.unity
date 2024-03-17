@@ -5750,6 +5750,7 @@ MonoBehaviour:
   Enemies: []
   EnemyType: 
   Summons: []
+  DeadEnemies: 
   CombatRoomElements:
   - {fileID: 330661237}
   - {fileID: 1210741368}
