@@ -23,7 +23,6 @@ public class CardSpawner : NetworkBehaviour
         CardSpawnPoints = CardSpawnPointsParent.GetComponentsInChildren<Transform>();
     }
 
-    [ClientRpc]
     public void DespawnCards()
     {
         // Remove cards
@@ -39,7 +38,7 @@ public class CardSpawner : NetworkBehaviour
         }
     }
 
-    [Command(requiresAuthority = false)]
+    [ClientRpc]
     public void ResetCards()
     {
         DespawnCards();
@@ -47,7 +46,7 @@ public class CardSpawner : NetworkBehaviour
         SpawnCards();
     }
 
-    [ClientRpc]
+    [Client]
     void SpawnCards()
     {
         CardInventory.CardList CardsInInventory = CardInventoryScript.Inventory;

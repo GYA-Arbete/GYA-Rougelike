@@ -46,7 +46,7 @@ public class HealthSystem : NetworkBehaviour
         HealthBarScript = Script;
     }
 
-    public void ResetHealth()
+    public void ResetPlayerHealth()
     {
         Health = MaxHealth;
         Defence = 0;
@@ -57,6 +57,7 @@ public class HealthSystem : NetworkBehaviour
         HealthBarScript.ResetBar();
     }
 
+    [Command(requiresAuthority = false)]
     public void Heal(int HealAmount)
     {
         Health += HealAmount;
@@ -65,23 +66,31 @@ public class HealthSystem : NetworkBehaviour
         if (Health > MaxHealth)
         {
             Health = MaxHealth;
-            HealthBarScript.UpdateBar(Health - (int)HealthBarScript.Slider.value);
+            UpdateHealthBar(Health - (int)HealthBarScript.Slider.value);
         }
         else
         {
-            HealthBarScript.UpdateBar(HealAmount);
+            UpdateHealthBar(HealAmount);
         }
     }
 
+    [Command(requiresAuthority = false)]
     public void AddDefence(int DefenceToAdd)
     {
         Defence += DefenceToAdd;
 
-        HealthBarScript.UpdateDefence(Defence);
+        UpdateHealthBarDefence(Defence);
+    }
+
+    [Command(requiresAuthority = false)]
+    public void AddThorns(int ThornsToAdd)
+    {
+        Thorns += ThornsToAdd;
     }
 
     // Function that returns a bool for if dead
-    public bool TakeDamage(int Damage)
+    [Command(requiresAuthority = false)]
+    public void TakeDamage(int Damage)
     {
         if (Defence > 0)
         {
@@ -89,32 +98,39 @@ public class HealthSystem : NetworkBehaviour
             if (Defence < 0)
             {
                 Health -= Math.Abs(Defence);
-                HealthBarScript.UpdateBar(-Math.Abs(Defence));
+                UpdateHealthBar(-Math.Abs(Defence));
 
                 Defence = 0;
             }
 
-            HealthBarScript.UpdateDefence(Defence);
+            UpdateHealthBarDefence(Defence);
         }
         else
         {
             Health -= Damage;
-            HealthBarScript.UpdateBar(-Damage);
+            UpdateHealthBar(-Damage);
         }
 
         // Check if dead
-        if (Health  <= 0)
+        if (Health <= 0)
         {
             Die();
-
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
+    [ClientRpc]
+    void UpdateHealthBar(int ChangeFactor)
+    {
+        HealthBarScript.UpdateBar(ChangeFactor);
+    }
+
+    [ClientRpc]
+    void UpdateHealthBarDefence(int ChangeFactor)
+    {
+        HealthBarScript.UpdateDefence(ChangeFactor);
+    }
+
+    [Command(requiresAuthority = false)]
     public void Die()
     {
         if (Player)
@@ -125,11 +141,17 @@ public class HealthSystem : NetworkBehaviour
         // If an Enemy
         else
         {
-            // Removes self
-            Destroy(gameObject);
+            RemoveHealthBar();
 
-            // Removes the attached HealthBar
-            Destroy(HealthBarScript.gameObject);
+            // Removes self
+            NetworkServer.Destroy(gameObject);
         }
+    }
+
+    [ClientRpc]
+    void RemoveHealthBar()
+    {
+        // Removes the attached HealthBar
+        Destroy(HealthBarScript.gameObject);
     }
 }

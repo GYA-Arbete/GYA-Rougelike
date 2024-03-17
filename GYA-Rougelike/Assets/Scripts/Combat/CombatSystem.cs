@@ -9,6 +9,8 @@ public class CombatSystem : NetworkBehaviour
 {
     [SyncVar]
     public bool InCombat = false;
+    [SyncVar]
+    public int FinishedPlayers = 0;
 
     [Header("Buttons")]
     public Button EndTurnButton;
@@ -18,10 +20,10 @@ public class CombatSystem : NetworkBehaviour
     public Transform[] Enemies;
     public int[] EnemyType;
     public Transform[] Summons;
-    public bool[] DeadEnemies;
 
     [Header("CombatRoom-Exclusive Elements")]
     public GameObject[] CombatRoomElements;
+    public GameObject WaitingText;
 
     [Header("Stuff for checking card position")]
     public Transform CardParent;
@@ -59,11 +61,14 @@ public class CombatSystem : NetworkBehaviour
 
         ToggleCombatElementsVisibility();
 
+        HideWaitingText();
+
+        ResetFinishedPlayers();
+
         Enemies = EnemySpawnerScript.SpawnEnemies(EnemyAmount, EnemyTypes);
 
         CardSpawnerScript.ResetCards();
 
-        DeadEnemies = new bool[EnemyAmount];
         EnemyMove = new int[EnemyAmount];
         SplashDamage = new bool[EnemyAmount];
         EnemyDamageBuff = new int[EnemyAmount];
@@ -93,7 +98,13 @@ public class CombatSystem : NetworkBehaviour
         }
 
         // Save which enemy will be targeted by the players card
-        EnemyTarget = Enemies[0];
+        SetEnemyTarget(Enemies[0]);
+    }
+
+    [ClientRpc]
+    void SetEnemyTarget(Transform Enemy)
+    {
+        EnemyTarget = Enemy;
     }
 
     [ClientRpc]
@@ -108,6 +119,8 @@ public class CombatSystem : NetworkBehaviour
         InCombat = false;
 
         ToggleCombatElementsVisibility();
+
+        HideWaitingText();
 
         // If enemy still exists, remove it
         foreach (Transform Enemy in Enemies)
@@ -141,21 +154,26 @@ public class CombatSystem : NetworkBehaviour
         }
     }
 
-    [Command(requiresAuthority = false)]
+    [Client]
     void EndTurn()
     {
         GetCardsInMoveQueue();
 
         PlayCards();
 
-        CardSpawnerScript.ResetCards();
+        CardSpawnerScript.DespawnCards();
+    }
 
+    [Command(requiresAuthority = false)]
+    void CheckCombatEnded()
+    {
         // Check if all Enemies are dead, eg combat has ended
         int DeadEnemiesAmount = 0;
 
         for (int i = 0; i < Enemies.Length; i++)
         {
-            if (DeadEnemies[i] == true)
+            // If enemy is null, it is dead
+            if (Enemies[i] == null)
             {
                 DeadEnemiesAmount++;
             }
@@ -165,13 +183,22 @@ public class CombatSystem : NetworkBehaviour
             EndCombat();
             return;
         }
+    }
 
-        // Enemies turn
-
+    [Command(requiresAuthority = false)]
+    void ContinueEndTurn()
+    {
         EnemyTurn();
+
+        // When both players have finished their turn, spawn the "new" cards
+        CardSpawnerScript.ResetCards();
 
         // Set back energy to max
         ResetEnergyBar();
+
+        EnableEndTurnButtons();
+
+        HideWaitingText();
 
         // Generate each enemies next turn
         for (int i = 0; i < Enemies.Length; i++)
@@ -185,15 +212,24 @@ public class CombatSystem : NetworkBehaviour
             }
         }
 
+        // Set info for TargetIndicator
         int TankIndex = Array.IndexOf(EnemyMove, 4);
         // If failed to find Tank
         if (TankIndex == -1)
         {
-            EnemyTarget = Enemies[0];
+            // Set target to first alive enemy
+            for (int i = 0; i < Enemies.Length; i++)
+            {
+                if (Enemies[i] != null)
+                {
+                    SetEnemyTarget(Enemies[i]);
+                    break;
+                }
+            }
         }
         else
         {
-            EnemyTarget = Enemies[TankIndex];
+            SetEnemyTarget(Enemies[TankIndex]);
         }
     }
 
@@ -203,7 +239,7 @@ public class CombatSystem : NetworkBehaviour
         EnergyBarScript.ResetBar();
     }
 
-    [ClientRpc]
+    [Client]
     void GetCardsInMoveQueue()
     {
         CardsInMoveQueue.Clear();
@@ -226,7 +262,7 @@ public class CombatSystem : NetworkBehaviour
     }
 
     // Called when player has finished their turn, will play each card in the MoveQueue
-    [ClientRpc]
+    [Client]
     void PlayCards()
     {
         // Check if a Roid-Rage card is in the "queue"
@@ -250,63 +286,21 @@ public class CombatSystem : NetworkBehaviour
             // Cleave
             if (CardStatsScript.SplashDamage == true)
             {
-                // If a tank is spawned
-                if (EnemyType.Contains(4))
-                {
-                    int TankIndex = Array.IndexOf(EnemyType, 4);
-                    
-                    // Check how many enemies are alive
-                    int AliveEnemies = 0;
-                    foreach (Transform Enemy in Enemies)
-                    {
-                        if (Enemy != null)
-                        {
-                            AliveEnemies++;
-                        }
-                    }
-
-                    // Make tank absorb the damage meant for each enemy
-                    Enemies[TankIndex].GetComponent<HealthSystem>().TakeDamage((CardStatsScript.Damage + PlayerDamageBuff) * AliveEnemies);
-                }
-                else
-                {
-                    foreach (Transform Enemy in Enemies)
-                    {
-                        if (Enemy != null)
-                        {
-                            Enemy.GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage + PlayerDamageBuff);
-                        }
-                    }
-                }
-
-                // Set damage buff to 0 when it has been used
-                PlayerDamageBuff = 0;
+                Attack(CardStatsScript.SplashDamage, CardStatsScript.Damage);
             }
             // Shielded Charge
             else if (CardStatsScript.Defence > 0 && CardStatsScript.Damage > 0)
             {
-                int Damage = CardStatsScript.Damage + PlayerDamageBuff;
-
-                // Damage an enemy
-                foreach (Transform Enemy in Enemies)
-                {
-                    if (Enemy != null)
-                    {
-                        Enemy.GetComponent<HealthSystem>().TakeDamage(Damage);
-                    }
-                }
-
                 // Give block to self equal to damage dealt
                 foreach (Transform Player in Players)
                 {
                     if (Player.gameObject.activeSelf)
                     {
-                        Player.GetComponent<HealthSystem>().AddDefence(Damage);
+                        Player.GetComponent<HealthSystem>().AddDefence(CardStatsScript.Damage + PlayerDamageBuff);
                     }
                 }
 
-                // Set damage buff to 0 when it has been used
-                PlayerDamageBuff = 0;
+                Attack(CardStatsScript.SplashDamage, CardStatsScript.Damage);
             }
             // Block
             else if (CardStatsScript.Defence > 0)
@@ -326,7 +320,7 @@ public class CombatSystem : NetworkBehaviour
                 {
                     if (Player.gameObject.activeSelf)
                     {
-                        Player.GetComponent<HealthSystem>().Thorns = CardStatsScript.Thorns;
+                        Player.GetComponent<HealthSystem>().AddThorns(CardStatsScript.Thorns);
                     }
                 }
             }
@@ -363,33 +357,103 @@ public class CombatSystem : NetworkBehaviour
             // Slash
             else
             {
-                // If a tank is spawned
-                if (EnemyType.Contains(4))
-                {
-                    int TankIndex = Array.IndexOf(EnemyType, 4);
-
-                    Enemies[TankIndex].GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage + PlayerDamageBuff);
-                }
-                else
-                {
-                    foreach (Transform Enemy in Enemies)
-                    {
-                        if (Enemy != null)
-                        {
-                            Enemy.GetComponent<HealthSystem>().TakeDamage(CardStatsScript.Damage + PlayerDamageBuff);
-                            break;
-                        }
-                    }
-                }
-
-                // Set damage buff to 0 when it has been used
-                PlayerDamageBuff = 0;
+                Attack(CardStatsScript.SplashDamage, CardStatsScript.Damage);
             }
+        }
+
+        // When players moves has been done, check if combat has ended
+        CheckCombatEnded();
+
+        // Check if the other player is finished
+        if (FinishedPlayers == 1)
+        {
+            ResetFinishedPlayers();
+            ContinueEndTurn();
+        }
+        else
+        {
+            EndTurnButton.interactable = false;
+            WaitingText.SetActive(true);
+            // Suboptimal since theoreticly we can get stuck here if both finish at exactly the same time with no way to end combat
+            UpdateFinishedPlayers();
         }
     }
 
-    // Called when its the enemies turn, they do stuff then
+    [Command(requiresAuthority = false)]
+    void Attack(bool SplashDamage, int Damage)
+    {
+        // If a tank is spawned & not dead, attack it first
+        if (EnemyType.Contains(4) && Enemies[Array.IndexOf(EnemyType, 4)] != null)
+        {
+            int TankIndex = Array.IndexOf(EnemyType, 4);
+            int AliveEnemies = 0;
+
+            if (SplashDamage)
+            {
+                // Check how many enemies are alive
+                foreach (Transform Enemy in Enemies)
+                {
+                    if (Enemy != null)
+                    {
+                        AliveEnemies++;
+                    }
+                }
+            }
+            else
+            {
+                // If not SplashDamage, set AliveEnemies to 1 as its only meant to attack one enemy (basicly nullifying the multiplier)
+                AliveEnemies = 1;
+            }
+
+            // Make tank absorb the damage meant for enemy
+            Enemies[TankIndex].GetComponent<HealthSystem>().TakeDamage((Damage + PlayerDamageBuff) * AliveEnemies);
+        }
+        else
+        {
+            foreach (Transform Enemy in Enemies)
+            {
+                if (Enemy != null)
+                {
+                    Enemy.GetComponent<HealthSystem>().TakeDamage(Damage + PlayerDamageBuff);
+
+                    if (!SplashDamage)
+                    {
+                        // If not SplashDamage, break loop since it should only attack first enemy
+                        break;
+                    }
+                }
+            }
+        }
+
+        PlayerDamageBuff = 0;
+    }
+
+    [Command(requiresAuthority = false)]
+    void UpdateFinishedPlayers()
+    {
+        FinishedPlayers++;
+    }
+
+    [Command(requiresAuthority = false)]
+    void ResetFinishedPlayers()
+    {
+        FinishedPlayers = 0;
+    }
+
     [ClientRpc]
+    void EnableEndTurnButtons()
+    {
+        EndTurnButton.interactable = true;
+    }
+
+    [ClientRpc]
+    void HideWaitingText()
+    {
+        WaitingText.SetActive(false);
+    }
+
+    // Called when its the enemies turn, they do stuff then
+    [Command(requiresAuthority = false)]
     void EnemyTurn()
     {
         // Check if a DamageBuff move is in the "queue"

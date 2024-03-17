@@ -55,7 +55,7 @@ public class PlayerManager : NetworkBehaviour
         {
             HealthSystem HealthSystemScript = Players[i].GetComponent<HealthSystem>();
 
-            HealthSystemScript.ResetHealth();
+            HealthSystemScript.ResetPlayerHealth();
         }
     }
 
