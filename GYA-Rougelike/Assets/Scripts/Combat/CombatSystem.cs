@@ -20,6 +20,7 @@ public class CombatSystem : NetworkBehaviour
     public Transform[] Enemies;
     public int[] EnemyType;
     public Transform[] Summons;
+    public bool[] DeadEnemies;
 
     [Header("CombatRoom-Exclusive Elements")]
     public GameObject[] CombatRoomElements;
@@ -73,6 +74,7 @@ public class CombatSystem : NetworkBehaviour
         SplashDamage = new bool[EnemyAmount];
         EnemyDamageBuff = new int[EnemyAmount];
         StunDuration = new int[EnemyAmount];
+        DeadEnemies = new bool[EnemyAmount];
 
         EnemyType = EnemyTypes;
 
@@ -98,7 +100,7 @@ public class CombatSystem : NetworkBehaviour
         }
 
         // Save which enemy will be targeted by the players card
-        SetEnemyTarget(Enemies[0]);
+        UpdateEnemyTarget();
     }
 
     [ClientRpc]
@@ -154,7 +156,6 @@ public class CombatSystem : NetworkBehaviour
         }
     }
 
-    [Client]
     void EndTurn()
     {
         GetCardsInMoveQueue();
@@ -162,6 +163,9 @@ public class CombatSystem : NetworkBehaviour
         PlayCards();
 
         CardSpawnerScript.DespawnCards();
+
+        // Set info for TargetIndicator
+        UpdateEnemyTarget();
     }
 
     [Command(requiresAuthority = false)]
@@ -173,7 +177,7 @@ public class CombatSystem : NetworkBehaviour
         for (int i = 0; i < Enemies.Length; i++)
         {
             // If enemy is null, it is dead
-            if (Enemies[i] == null)
+            if (DeadEnemies[i])
             {
                 DeadEnemiesAmount++;
             }
@@ -188,6 +192,12 @@ public class CombatSystem : NetworkBehaviour
     [Command(requiresAuthority = false)]
     void ContinueEndTurn()
     {
+        // If has exited combat dont do enemy turn logic
+        if (!InCombat)
+        {
+            return;
+        }
+
         EnemyTurn();
 
         // When both players have finished their turn, spawn the "new" cards
@@ -213,6 +223,12 @@ public class CombatSystem : NetworkBehaviour
         }
 
         // Set info for TargetIndicator
+        UpdateEnemyTarget();
+    }
+
+    [Command(requiresAuthority = false)]
+    void UpdateEnemyTarget()
+    {
         int TankIndex = Array.IndexOf(EnemyMove, 4);
         // If failed to find Tank
         if (TankIndex == -1)
@@ -220,7 +236,7 @@ public class CombatSystem : NetworkBehaviour
             // Set target to first alive enemy
             for (int i = 0; i < Enemies.Length; i++)
             {
-                if (Enemies[i] != null)
+                if (!DeadEnemies[i])
                 {
                     SetEnemyTarget(Enemies[i]);
                     break;
@@ -391,9 +407,9 @@ public class CombatSystem : NetworkBehaviour
             if (SplashDamage)
             {
                 // Check how many enemies are alive
-                foreach (Transform Enemy in Enemies)
+                for (int i = 0; i < Enemies.Length; i++)
                 {
-                    if (Enemy != null)
+                    if (!DeadEnemies[i])
                     {
                         AliveEnemies++;
                     }
@@ -406,15 +422,15 @@ public class CombatSystem : NetworkBehaviour
             }
 
             // Make tank absorb the damage meant for enemy
-            Enemies[TankIndex].GetComponent<HealthSystem>().TakeDamage((Damage + PlayerDamageBuff) * AliveEnemies);
+            DeadEnemies[TankIndex] = Enemies[TankIndex].GetComponent<HealthSystem>().TakeDamage((Damage + PlayerDamageBuff) * AliveEnemies);
         }
         else
         {
-            foreach (Transform Enemy in Enemies)
+            for (int i = 0; i < Enemies.Length; i++)
             {
-                if (Enemy != null)
+                if (!DeadEnemies[i])
                 {
-                    Enemy.GetComponent<HealthSystem>().TakeDamage(Damage + PlayerDamageBuff);
+                    DeadEnemies[i] = Enemies[i].GetComponent<HealthSystem>().TakeDamage(Damage + PlayerDamageBuff);
 
                     if (!SplashDamage)
                     {

@@ -89,8 +89,8 @@ public class HealthSystem : NetworkBehaviour
     }
 
     // Function that returns a bool for if dead
-    [Command(requiresAuthority = false)]
-    public void TakeDamage(int Damage)
+    [Server]
+    public bool TakeDamage(int Damage)
     {
         if (Defence > 0)
         {
@@ -115,6 +115,12 @@ public class HealthSystem : NetworkBehaviour
         if (Health <= 0)
         {
             Die();
+
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
