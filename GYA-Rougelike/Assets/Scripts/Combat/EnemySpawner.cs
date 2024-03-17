@@ -1,6 +1,5 @@
 using Mirror;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class EnemySpawner : NetworkBehaviour
 {
@@ -17,7 +16,6 @@ public class EnemySpawner : NetworkBehaviour
     public GameObject HealthBarPrefab;
     public Transform HealthBarParent;
     public Transform SummonHealthBarParent;
-    public Sprite HealthBarImage;
 
     [Header("Stat Generation")]
     public readonly int[] HealthMin = { 10, 10, 10, 10, 10, 5 };
@@ -37,7 +35,7 @@ public class EnemySpawner : NetworkBehaviour
             GameObject Enemy = Instantiate(EnemyPrefabs[EnemyTypes[i]], new Vector3(EnemySpawnPoints[i].position.x, EnemySpawnPoints[i].position.y, EnemySpawnPoints[i].position.z), new Quaternion(0, 0, 0, 0), EnemyParent);
             Enemy.transform.localScale = new Vector3(108, 108, 1);
             NetworkServer.Spawn(Enemy);
-            SetItemParent(Enemy, "EnemyParent");
+            SetItemParent(Enemy, EnemyParent);
 
             Enemies[i] = Enemy.transform;
 
@@ -69,7 +67,7 @@ public class EnemySpawner : NetworkBehaviour
             GameObject Summon = Instantiate(SummonPrefab, SummonSpawnPoints[i].position, new Quaternion(0, 0, 0, 0), SummonParent);
             Summon.transform.localScale = new Vector3(80, 80, 1);
             NetworkServer.Spawn(Summon);
-            SetItemParent(Summon, "SummonParent");
+            SetItemParent(Summon, SummonParent);
 
             Summons[i] = Summon.transform;
 
@@ -89,7 +87,7 @@ public class EnemySpawner : NetworkBehaviour
         return Summons;
     }
 
-    [ClientRpc]
+    [Command(requiresAuthority = false)]
     void CreateHealthBar(GameObject Enemy, string ParentName, int MaxHealth)
     {
         // Workaround so game correctly sets parent on each client, suspect its because function isnt called from command
@@ -105,13 +103,15 @@ public class EnemySpawner : NetworkBehaviour
 
         // Create a HealthBar
         GameObject HealthBar = Instantiate(HealthBarPrefab, new Vector3(Enemy.transform.position.x, Enemy.transform.position.y - 1, Enemy.transform.position.z), new Quaternion(0, 0, 0, 0), Parent);
-        HealthBar.transform.localScale = new Vector3(0.5f, 0.5f, 1);
+        NetworkServer.Spawn(HealthBar);
+        SetItemParent(HealthBar, Parent);
 
-        // Set image on HealthBar
-        Transform BarImageItem = HealthBar.transform.Find("ResourceImage");
-        Image ImageItem = BarImageItem.GetComponent<Image>();
-        ImageItem.sprite = HealthBarImage;
+        SetupHealthbar(Enemy, HealthBar, MaxHealth);
+    }
 
+    [ClientRpc]
+    void SetupHealthbar(GameObject Enemy, GameObject HealthBar, int MaxHealth)
+    {
         // Get HealthSystemScript of the spawned enemy
         HealthSystem HealthSystemScript = Enemy.GetComponent<HealthSystem>();
 
@@ -124,19 +124,8 @@ public class EnemySpawner : NetworkBehaviour
     }
 
     [ClientRpc]
-    void SetItemParent(GameObject Element, string ParentName)
+    void SetItemParent(GameObject Element, Transform Parent)
     {
-        // Workaround so game correctly sets parent on each client, suspect its because function isnt called from command
-        Transform Parent;
-        if (ParentName == "EnemyParent")
-        {
-            Parent = EnemyParent;
-        }
-        else
-        {
-            Parent = SummonParent;
-        }
-
         Element.transform.SetParent(Parent, false);
     }
 }

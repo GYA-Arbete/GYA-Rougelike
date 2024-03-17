@@ -141,17 +141,10 @@ public class HealthSystem : NetworkBehaviour
         // If an Enemy
         else
         {
-            RemoveHealthBar();
+            NetworkServer.Destroy(HealthBarScript.gameObject);
 
             // Removes self
             NetworkServer.Destroy(gameObject);
         }
-    }
-
-    [ClientRpc]
-    void RemoveHealthBar()
-    {
-        // Removes the attached HealthBar
-        Destroy(HealthBarScript.gameObject);
     }
 }
