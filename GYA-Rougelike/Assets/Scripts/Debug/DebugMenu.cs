@@ -1,8 +1,9 @@
+using Mirror;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DebugMenu : MonoBehaviour
+public class DebugMenu : NetworkBehaviour
 {
     public Button ExitRoomButton;
     public GameObject DebugCanvas;
@@ -46,6 +47,7 @@ public class DebugMenu : MonoBehaviour
         }
     }
 
+    [Command(requiresAuthority = false)]
     void ExitRoom()
     {
         MapNavigation MapNavScript = FindAnyObjectByType<MapNavigation>();

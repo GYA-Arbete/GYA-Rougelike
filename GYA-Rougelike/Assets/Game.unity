@@ -6702,6 +6702,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1454673878}
   - component: {fileID: 1454673879}
+  - component: {fileID: 1454673880}
   m_Layer: 0
   m_Name: DebugMenu
   m_TagString: Untagged
@@ -6737,11 +6738,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a363f926f3c0b9d41aaef8083e7bc058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   ExitRoomButton: {fileID: 1006624649}
   DebugCanvas: {fileID: 378365589}
   PlayerIDText: {fileID: 1709233208}
   DefaultButton: {fileID: 378569369}
   OneOfEachButton: {fileID: 2091933739}
+--- !u!114 &1454673880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1454673877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clientStarted: 0
+  sceneId: 2228379908
+  _assetId: 0
+  serverOnly: 0
+  visible: 0
+  hasSpawned: 0
 --- !u!1 &1455829109
 GameObject:
   m_ObjectHideFlags: 0
