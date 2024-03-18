@@ -112,7 +112,7 @@ public class CombatSystem : NetworkBehaviour
     [ClientRpc]
     void SetupEnergyBar()
     {
-        EnergyBarScript.SetupBar(10, new Color32(252, 206, 82, 255));
+        EnergyBarScript.SetupBar(3, new Color32(252, 206, 82, 255));
     }
 
     [Command(requiresAuthority = false)]
