@@ -53,8 +53,7 @@ public class PauseMenu : NetworkBehaviour
         // If in combat, end combat
         if (CombatSystemScript.InCombat)
         {
-            CombatSystemScript.EndCombat();
-            CardSpawnerScript.DespawnCards();
+            CombatSystemScript.EndCombat(true);
         }
         // If Canvas is active, meaning currently in LootRoom
         else if (LootRoomScript.LootRoomCanvas.activeSelf)

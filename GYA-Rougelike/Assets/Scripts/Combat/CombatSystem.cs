@@ -116,7 +116,7 @@ public class CombatSystem : NetworkBehaviour
     }
 
     [Command(requiresAuthority = false)]
-    public void EndCombat()
+    public void EndCombat(bool FromMenu)
     {
         InCombat = false;
 
@@ -141,10 +141,13 @@ public class CombatSystem : NetworkBehaviour
             }
         }
 
-        CardSpawnerScript.DespawnCards();
+        CardSpawnerScript.RpcDespawnCards();
 
-        // Exit the room
-        CameraSwitchScript.SetViewToMap();
+        if (!FromMenu)
+        {
+            // Exit the room
+            CameraSwitchScript.SetViewToMap();
+        }   
     }
 
     [ClientRpc]
@@ -184,7 +187,7 @@ public class CombatSystem : NetworkBehaviour
         }
         if (DeadEnemiesAmount == Enemies.Length)
         {
-            EndCombat();
+            EndCombat(false);
             return;
         }
     }

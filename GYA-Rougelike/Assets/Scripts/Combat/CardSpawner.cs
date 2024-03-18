@@ -39,6 +39,12 @@ public class CardSpawner : NetworkBehaviour
     }
 
     [ClientRpc]
+    public void RpcDespawnCards()
+    {
+        DespawnCards();
+    }
+
+    [ClientRpc]
     public void ResetCards()
     {
         DespawnCards();

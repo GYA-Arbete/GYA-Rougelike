@@ -60,7 +60,7 @@ public class DebugMenu : NetworkBehaviour
                 FindAnyObjectByType<StartRoom>().ExitStartRoom();
                 break;
             case 1:
-                FindAnyObjectByType<CombatSystem>().EndCombat();
+                FindAnyObjectByType<CombatSystem>().EndCombat(true);
                 break;
             case 2:
                 FindAnyObjectByType<LootRoom>().ExitLootRoom();
@@ -69,7 +69,7 @@ public class DebugMenu : NetworkBehaviour
                 FindAnyObjectByType<CampRoom>().ExitCampRoom();
                 break;
             case 4:
-                FindAnyObjectByType<CombatSystem>().EndCombat();
+                FindAnyObjectByType<CombatSystem>().EndCombat(true);
                 break;
         }
     }
