@@ -1,22 +1,18 @@
+using Mirror;
 using UnityEngine;
 
-public class StartRoom : MonoBehaviour
+public class StartRoom : NetworkBehaviour
 {
-    [Header("Viewable Elements")]
-    public GameObject[] ElementsToHide;
-
     [Header("Other Scripts")]
     public CameraSwitch CameraSwitchScript;
     public CardInventory CardInventoryScript;
     public MapGen MapGenScript;
     public CardChoice CardChoiceScript;
+    public PlayerManager PlayerManagerScript;
 
     public void EnterStartRoom()
     {
-        foreach (GameObject Element in ElementsToHide)
-        {
-            Element.SetActive(false);
-        }
+        PlayerManagerScript.SetPlayerSpriteVisibility(false);
 
         CameraSwitchScript.SetViewToRoom();
 
@@ -25,12 +21,10 @@ public class StartRoom : MonoBehaviour
         CardChoiceScript.StartChoice("StartRoom", false);
     }
 
+    [Command(requiresAuthority=false)]
     public void ExitStartRoom()
     {
-        foreach (GameObject Element in ElementsToHide)
-        {
-            Element.SetActive(true);
-        }
+        PlayerManagerScript.SetPlayerSpriteVisibility(true);
 
         StartCoroutine(MapGenScript.CreateMap());
 

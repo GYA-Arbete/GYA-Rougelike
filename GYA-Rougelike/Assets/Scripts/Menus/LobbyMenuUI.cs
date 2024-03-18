@@ -7,11 +7,11 @@ public class LobbyMenuUI : MonoBehaviour
     public Toggle[] Toggles = new Toggle[2];
     public Canvas MainCanvas;
     public Button StartButton;
+    public Button ReadyButton;
     public TextMeshProUGUI ButtonText;
     public LobbyMenu LobbyMenuScript;
 
-    public bool OverwritingToggleState;
-    public int PlayerNumber;
+    public int PlayerNumber = 0;
 
     void Start()
     {
@@ -23,14 +23,28 @@ public class LobbyMenuUI : MonoBehaviour
             PlayerNumber = 2;
         }
 
-        Toggles[0].onValueChanged.AddListener(delegate { LobbyMenuScript.OnReadyToggled(Toggles[0], OverwritingToggleState, PlayerNumber); });
-        Toggles[1].onValueChanged.AddListener(delegate { LobbyMenuScript.OnReadyToggled(Toggles[1], OverwritingToggleState, PlayerNumber); });
         StartButton.onClick.AddListener(LobbyMenuScript.StartGame);
+        ReadyButton.onClick.AddListener(UpdateReadyButtonText);
     }
 
     public void SetupUI()
     {
         MainCanvas.worldCamera = FindAnyObjectByType<CameraSwitch>().MapViewCamera;
+    }
+
+    void UpdateReadyButtonText()
+    {
+        TextMeshProUGUI ReadyButtonText = ReadyButton.GetComponentInChildren<TextMeshProUGUI>();
+        if (ReadyButtonText.text == "Ready")
+        {
+            ReadyButtonText.text = "Unready";
+            LobbyMenuScript.OnReadyToggled(Toggles[PlayerNumber - 1], PlayerNumber, true);
+        }
+        else
+        {
+            ReadyButtonText.text = "Ready";
+            LobbyMenuScript.OnReadyToggled(Toggles[PlayerNumber - 1], PlayerNumber, false);
+        }
     }
 
     public void UpdateButtonText(int ReadyPlayers)
@@ -54,10 +68,7 @@ public class LobbyMenuUI : MonoBehaviour
 
     public void UpdateToggles(bool State1, bool State2)
     {
-        // Prevents double-toggling of toggles
-        OverwritingToggleState = true;
         Toggles[0].GetComponent<ToggleHandler>().ValueChanged(Toggles[0], State1);
         Toggles[1].GetComponent<ToggleHandler>().ValueChanged(Toggles[1], State2);
-        OverwritingToggleState = false;
     }
 }

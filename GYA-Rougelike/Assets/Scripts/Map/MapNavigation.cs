@@ -1,23 +1,31 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using Mirror;
 
-public class MapNavigation : MonoBehaviour
+public class MapNavigation : NetworkBehaviour
 {
     public Transform[] Rooms;
     public List<Button> RoomsButtons;
 
-    public int CurrentRoom;
-
     // Each int is StartRoom / EndRoom id for a line
-    public List<KeyValuePair<int, int>> AllowedNav;
+    public List<KeyValuePair<int, int>> AllowedNav = new();
 
     // 0 == StartRoom, 1 == EnemyRoom, 2 == LootRoom, 3 == CampRoom, 4 == BossRoom
     // 5 == HiddenType, 6 == ClearedRoom, 7 == CurrentRoom
     public Texture[] RoomImages;
     public GameObject ImagePrefab;
 
+    [Header("SyncVars")]
+    [SyncVar]
+    public int CurrentRoom = 0;
+    [SyncVar]
     public GameObject PreviousRoom;
+
+    [Header("Room Limits")]
+    const int AllowedLootRooms = 2;
+    const int AllowedCampRooms = 3;
+    const int AllowedHiddenRooms = 2;
 
     [Header("Other Scripts")]
     public MapGen MapGenScript;
@@ -26,13 +34,44 @@ public class MapNavigation : MonoBehaviour
     public CombatSystem CombatSystemScript;
 
     // Simple function that is called when map is generated to setup everything needed for MapNav to work
+    [Server]
     public void SetupForMapNav(List<KeyValuePair<Vector3, Vector3>> SpawnedLines)
     {
-        Rooms = MapGenScript.Rooms;
+        GetRooms();
+
+        ResetNavigation();
 
         var ReturnedVals = GenerateRoomProperties();
-        int[] RoomType = ReturnedVals.Item1;
-        bool[] HiddenType = ReturnedVals.Item2;
+
+        // Set room properties to show up for all clients, hence why its a seperate function and ClientRpc
+        SetRoomProperties(ReturnedVals.Item1, ReturnedVals.Item2);
+
+        // Setup rooms server-side
+        for (int i = 1; i < Rooms.Length; i++)
+        {
+            if (ReturnedVals.Item2[i - 1])
+            {
+                Rooms[i].GetComponent<RoomProperties>().SetupRoomServerSide(i - 1, ReturnedVals.Item1[i - 1]);
+            }
+            else
+            {
+                Rooms[i].GetComponent<RoomProperties>().SetupRoomServerSide(i - 1, ReturnedVals.Item1[i - 1]);
+            }
+        }
+
+        ParseAllowedPaths(SpawnedLines);
+    }
+
+    // Function called from Clients and Server
+    void GetRooms()
+    {
+        Rooms = MapGenScript.MapRoomPrefabParent.GetComponentsInChildren<Transform>();
+    }
+
+    [ClientRpc]
+    void SetRoomProperties(int[] RoomType, bool[] HiddenType)
+    {
+        GetRooms();
 
         for (int i = 1; i < Rooms.Length; i++)
         {
@@ -42,29 +81,20 @@ public class MapNavigation : MonoBehaviour
 
             if (HiddenType[i - 1])
             {
-                Rooms[i].GetComponent<RoomProperties>().SetupRoom(i - 1, RoomType[i - 1], RoomImages[5], ImagePrefab);
+                Rooms[i].GetComponent<RoomProperties>().SetupRoomClientSide(i - 1, RoomType[i - 1], RoomImages[5], ImagePrefab);
             }
             else
             {
-                Rooms[i].GetComponent<RoomProperties>().SetupRoom(i - 1, RoomType[i - 1], RoomImages[RoomType[i - 1]], ImagePrefab);
+                Rooms[i].GetComponent<RoomProperties>().SetupRoomClientSide(i - 1, RoomType[i - 1], RoomImages[RoomType[i - 1]], ImagePrefab);
             }
 
             RoomsButtons.Add(Button);
         }
-
-        PreviousRoom = Rooms[1].gameObject;
-
-        CurrentRoom = 0;
-
-        ParseAllowedPaths(SpawnedLines);
     }
 
+    [Server]
     private (int[], bool[]) GenerateRoomProperties()
     {
-        int AllowedLootRooms = 2;
-        int AllowedCampRooms = 3;
-        int AllowedHiddenRooms = 2;
-
         int[] RoomType = new int[12];
         bool[] HiddenType = new bool[12];
         List<int> UntakenIndexes = new() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
@@ -111,6 +141,7 @@ public class MapNavigation : MonoBehaviour
         return (RoomType, HiddenType);
     }
 
+    [Server]
     void ParseAllowedPaths(List<KeyValuePair<Vector3, Vector3>> SpawnedLines)
     {
         // Clear AllowedNav to avoid old entries being kept
@@ -123,7 +154,7 @@ public class MapNavigation : MonoBehaviour
 
             for (int j = 1; j < Rooms.Length; j++)
             {
-                Vector3 RoomPosition = new Vector3(Rooms[j].position.x, Rooms[j].position.y, -1);
+                Vector3 RoomPosition = new(Rooms[j].position.x, Rooms[j].position.y, -1);
 
                 if (SpawnedLines[i].Key == RoomPosition)
                 {
@@ -154,6 +185,12 @@ public class MapNavigation : MonoBehaviour
     {
         int ID = Button.gameObject.GetComponent<RoomProperties>().RoomID;
 
+        CheckNavIsAllowed(ID);
+    }
+
+    [Command(requiresAuthority=false)]
+    void CheckNavIsAllowed(int ID)
+    {
         // Check that a line is going between CurrentRoom and the room we want to navigate too
         for (int i = 0; i < AllowedNav.Count; i++)
         {
@@ -187,17 +224,14 @@ public class MapNavigation : MonoBehaviour
         }
     }
 
+    [Command(requiresAuthority=false)]
     void EnterRoom(int ID)
     {
         Transform Room = Rooms[ID + 1];
 
         RoomProperties Properties = Room.gameObject.GetComponent<RoomProperties>();
 
-        // Set image showing selected room is current room
-        Properties.RoomImageObject.GetComponent<RawImage>().texture = RoomImages[7];
-
-        // Update previous room image to show it has been cleared
-        PreviousRoom.GetComponent<RoomProperties>().RoomImageObject.GetComponent<RawImage>().texture = RoomImages[6];
+        UpdateRoomImages(Room, PreviousRoom);
 
         switch (Properties.RoomType)
         {
@@ -218,5 +252,22 @@ public class MapNavigation : MonoBehaviour
         CurrentRoom = ID;
 
         PreviousRoom = Room.gameObject;
+    }
+
+    [Command(requiresAuthority=false)]
+    void ResetNavigation()
+    {
+        CurrentRoom = 0;
+        PreviousRoom = Rooms[1].gameObject;
+    }
+
+    [ClientRpc]
+    void UpdateRoomImages(Transform Room, GameObject PreviousRoom)
+    {
+        // Set image showing selected room is current room
+        Room.gameObject.GetComponent<RoomProperties>().RoomImageObject.GetComponent<RawImage>().texture = RoomImages[7];
+
+        // Update previous room image to show it has been cleared
+        PreviousRoom.GetComponent<RoomProperties>().RoomImageObject.GetComponent<RawImage>().texture = RoomImages[6];
     }
 }

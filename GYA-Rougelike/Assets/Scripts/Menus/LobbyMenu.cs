@@ -7,7 +7,7 @@ public class LobbyMenu : NetworkBehaviour
     public GameObject UIPrefab;
     public LobbyMenuUI LobbyUI = null;
 
-    [Header("Ready Toggles")]
+    [Header("SyncVars")]
     [SyncVar(hook = nameof(HandleReadyPlayersChanged))]
     public int ReadyPlayers = 0;
     // SyncLists suck mega ass, so heres 2 SyncVars instead
@@ -16,34 +16,41 @@ public class LobbyMenu : NetworkBehaviour
     [SyncVar(hook = nameof(HandleToggleStateChanged))]
     public bool ToggleState2 = false;
 
+    [Header("Other Scripts")]
+    public StartRoom StartRoomScript;
+    public PlayerManager PlayerManagerScript;
+
     // Events that the LobbyUI will subscribe to
     public event System.Action<int> OnReadyPlayersChanged;
     public event System.Action<bool, bool> OnToggleStateChanged;
 
-    [ClientRpc]
+    [Command(requiresAuthority=false)]
     public void StartGame()
+    {
+        PlayerManagerScript.SetupPlayers();
+
+        // Yes this is dumb but it has to be done because:
+        // 1. We want to hide the LobbyUI for all players
+        // 2. We only want to call EnterStartRoom once
+        HideLobbyUI();
+        StartRoomScript.EnterStartRoom();
+    }
+
+    [ClientRpc]
+    void HideLobbyUI()
     {
         LobbyUI.MainCanvas.gameObject.SetActive(false);
     }
 
-    public void OnReadyToggled(Toggle toggle, bool OverwritingState, int PlayerNumber)
+    public void OnReadyToggled(Toggle toggle, int PlayerNumber, bool State)
     {
-        if (!OverwritingState)
-        {
-            ToggleHandler Handler = toggle.GetComponent<ToggleHandler>();
-            int ID = Handler.ID;
+        ToggleHandler Handler = toggle.GetComponent<ToggleHandler>();
+        int ID = Handler.ID;
+        Handler.ValueChanged(toggle, State);
 
-            if (ID == PlayerNumber - 1)
-            {
-                UpdateSyncvars(ID, toggle.isOn);
-            }
-            else
-            {
-                // When player doesnt have authority, reset toggle to previous state
-                LobbyUI.OverwritingToggleState = true;
-                Handler.ValueChanged(toggle, !toggle.isOn);
-                LobbyUI.OverwritingToggleState = false;
-            }
+        if (ID == PlayerNumber - 1)
+        {
+            UpdateSyncvars(ID, toggle.isOn);
         }
     }
 

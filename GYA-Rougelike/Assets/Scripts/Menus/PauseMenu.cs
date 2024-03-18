@@ -10,9 +10,6 @@ public class PauseMenu : MonoBehaviour
     public Button RestartButton;
     public Button QuitButton;
 
-    [Header("Variables")]
-    public bool IsPaused = false;
-
     [Header("Other Scripts")]
     public MapGen MapGenScript;
     public StartRoom StartRoomScript;
@@ -34,27 +31,13 @@ public class PauseMenu : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            if (!IsPaused)
-            {
-                Pause();
-            }
-            else
-            {
-                Unpause();
-            }
+            PauseMenuCanvas.SetActive(!PauseMenuCanvas.activeSelf);
         }
-    }
-
-    void Pause()
-    {
-        PauseMenuCanvas.SetActive(true);
-        IsPaused = true;
     }
 
     void Unpause()
     {
         PauseMenuCanvas.SetActive(false);
-        IsPaused = false;
     }
 
     void Restart()
@@ -65,11 +48,13 @@ public class PauseMenu : MonoBehaviour
             CombatSystemScript.EndCombat();
             CardSpawnerScript.DespawnCards();
         }
-        else if (LootRoomScript.InLootRoom)
+        // If Canvas is active, meaning currently in LootRoom
+        else if (LootRoomScript.LootRoomCanvas.activeSelf)
         {
             LootRoomScript.ExitLootRoom();
         }
-        else if (CampRoomScript.InCampRoom)
+        // If CampRoomCanvas is active, meaning currently in CampRoom
+        else if (CampRoomScript.CampRoomCanvas.activeSelf)
         {
             CampRoomScript.ExitCampRoom();
         }

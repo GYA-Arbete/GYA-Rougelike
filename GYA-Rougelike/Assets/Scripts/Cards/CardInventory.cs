@@ -59,6 +59,12 @@ public class CardInventory : MonoBehaviour
         CardTypes = JsonUtility.FromJson<CardList>(CardTypesJson.text);
     }
 
+    public void ClearInventory()
+    {
+        Inventory.cardList.Clear();
+        CardType.Clear();
+    }
+
     public void ResetInventory()
     {
         // Clear each list to not keep values when restarting

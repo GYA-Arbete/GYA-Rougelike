@@ -1,8 +1,9 @@
+using Mirror;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class CardSpawner : MonoBehaviour
+public class CardSpawner : NetworkBehaviour
 {
     [Header("Card Spawning")]
     public Transform CardsParent;
@@ -37,23 +38,15 @@ public class CardSpawner : MonoBehaviour
         }
     }
 
+    [ClientRpc]
     public void ResetCards()
     {
-        // Remove cards
-        foreach (GameObject Card in SpawnedCards)
-        {
-            Destroy(Card);
-        }
-
-        // Reset CardInPoint array, no cards are in any point since they are all despawned
-        for (int i = 0; i < CardManagerScript.CardInPoint.Length; i++)
-        {
-            CardManagerScript.CardInPoint[i] = false;
-        }
+        DespawnCards();
 
         SpawnCards();
     }
 
+    [Client]
     void SpawnCards()
     {
         CardInventory.CardList CardsInInventory = CardInventoryScript.Inventory;

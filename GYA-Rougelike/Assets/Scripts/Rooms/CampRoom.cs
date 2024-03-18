@@ -1,10 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-public class CampRoom : MonoBehaviour
+public class CampRoom : NetworkBehaviour
 {
-    public bool InCampRoom = false;
-
     [Header("Viewable Elements")]
     public GameObject CampRoomCanvas;
     public Button RestButton;
@@ -21,20 +20,22 @@ public class CampRoom : MonoBehaviour
 
     public void EnterCampRoom()
     {
-        InCampRoom = true;
-
-        CampRoomCanvas.SetActive(true);
+        ToggleCanvasVisibility();
 
         CameraSwitchScript.SetViewToRoom();
     }
 
     public void ExitCampRoom()
     {
-        InCampRoom = false;
-
-        CampRoomCanvas.SetActive(false);
+        ToggleCanvasVisibility();
 
         CameraSwitchScript.SetViewToMap();
+    }
+
+    [ClientRpc]
+    void ToggleCanvasVisibility()
+    {
+        CampRoomCanvas.SetActive(!CampRoomCanvas.activeSelf);
     }
 
     void Rest()

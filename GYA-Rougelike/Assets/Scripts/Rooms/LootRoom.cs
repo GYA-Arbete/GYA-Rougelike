@@ -1,20 +1,19 @@
+using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LootRoom : MonoBehaviour
+public class LootRoom : NetworkBehaviour
 {
-    public bool InLootRoom = false;
-
     [Header("Viewable Elements")]
     public GameObject LootRoomCanvas;
     public Button UpgradeButton;
     public Button NewCardButton;
-    public GameObject[] ElementsToHide;
 
     [Header("Other Scripts")]
     public CameraSwitch CameraSwitchScript;
     public CardInventory CardInventoryScript;
     public CardChoice CardChoiceScript;
+    public PlayerManager PlayerManagerScript;
 
     // Start is called before the first frame update
     void Start()
@@ -32,34 +31,31 @@ public class LootRoom : MonoBehaviour
 
     void ChooseCard()
     {
-        foreach (GameObject Element in ElementsToHide)
-        {
-            Element.SetActive(false);
-        }
-        LootRoomCanvas.SetActive(false);
+        PlayerManagerScript.SetPlayerSpriteVisibility(false);
+
+        SetCanvasVisibility(false);
 
         CardChoiceScript.StartChoice("LootRoom", false);
     }
 
     public void EnterLootRoom()
     {
-        InLootRoom = true;
-
-        LootRoomCanvas.SetActive(true);
+        SetCanvasVisibility(true);
 
         CameraSwitchScript.SetViewToRoom();
     }
 
+    [ClientRpc]
+    void SetCanvasVisibility(bool State)
+    {
+        LootRoomCanvas.SetActive(State);
+    }
+
     public void ExitLootRoom()
     {
-        InLootRoom = false;
+        PlayerManagerScript.SetPlayerSpriteVisibility(true);
 
-        foreach (GameObject Element in ElementsToHide)
-        {
-            Element.SetActive(true);
-        }
-
-        LootRoomCanvas.SetActive(false);
+        SetCanvasVisibility(false);
 
         CameraSwitchScript.SetViewToMap();
     }

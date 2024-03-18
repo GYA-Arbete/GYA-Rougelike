@@ -23,13 +23,13 @@ public class CardManager : MonoBehaviour
     [Header("Other Scripts")]
     public BarScript EnergyBarScript;
 
-    [System.Serializable]
+    [Serializable]
     public class CardList
     {
         public List<Strings> cardList;
     }
 
-    [System.Serializable]
+    [Serializable]
     public class Strings
     {
         public string CardInfo;

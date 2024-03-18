@@ -15,6 +15,7 @@ public class CardComponent : MonoBehaviour
     [Header("Variables")]
     // Int for which point the Card has snapped to
     public int SnappedToPoint;
+    public bool Dragging;
 
     [Header("Other Scripts")]
     public CardManager CardManagerScript;
@@ -36,6 +37,7 @@ public class CardComponent : MonoBehaviour
 
         SnappedToPoint = SnappedPoint;
         InfoTextElement.text = InfoText;
+        Dragging = false;
     }
 
     public void OnMouseDown()
@@ -45,6 +47,8 @@ public class CardComponent : MonoBehaviour
 
     public void OnMouseUp()
     {
+        Dragging = false;
+
         SnappedToPoint = CardManagerScript.SnapToPoint(transform);
 
         CardManagerScript.HideTargetIndicator();
@@ -52,6 +56,8 @@ public class CardComponent : MonoBehaviour
 
     public void OnMouseDrag()
     {
+        Dragging = true;
+
         // Update sprite position
         Vector2 mousePosition = RoomViewCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         transform.Translate(mousePosition);
@@ -78,7 +84,15 @@ public class CardComponent : MonoBehaviour
 
     public void OnMouseOver()
     {
-        CardInfoHolder.SetActive(true);
+        // Dont show CardInfo when dragging card or when in MoveQueue (top edge of CardView object is y = -12, hence the value)
+        if (Dragging || transform.position.y > -12)
+        {
+            CardInfoHolder.SetActive(false);
+        }
+        else
+        {
+            CardInfoHolder.SetActive(true);
+        }
     }
 
     public void OnMouseExit()

@@ -1,15 +1,21 @@
 using UnityEngine;
 using System;
+using Mirror;
 
-public class HealthSystem : MonoBehaviour
+public class HealthSystem : NetworkBehaviour
 {
     [Header("Variables")]
+    [SyncVar]
     public int MaxHealth;
+    [SyncVar]
     public int Health;
+    [SyncVar]
     public int Defence = 0;
+    [SyncVar]
     public bool Player = false;
 
     [Header("Player Exclusive Variables")]
+    [SyncVar]
     public int Thorns = 0;
 
     [Header("HealthBar Stuff")]
@@ -26,15 +32,21 @@ public class HealthSystem : MonoBehaviour
         Player = true;
     }
 
-    public void SetupEnemy(BarScript Script)
+    [Command(requiresAuthority = false)]
+    public void SetupEnemy(int MaxHp)
     {
-        HealthBarScript = Script;
-
-        Health = MaxHealth;
+        MaxHealth = MaxHp;
+        Health = MaxHp;
         Defence = 0;
     }
 
-    public void ResetHealth()
+    // Called from ClientRpc
+    public void SetBarScript(BarScript Script)
+    {
+        HealthBarScript = Script;
+    }
+
+    public void ResetPlayerHealth()
     {
         Health = MaxHealth;
         Defence = 0;
@@ -45,6 +57,7 @@ public class HealthSystem : MonoBehaviour
         HealthBarScript.ResetBar();
     }
 
+    [Command(requiresAuthority = false)]
     public void Heal(int HealAmount)
     {
         Health += HealAmount;
@@ -53,22 +66,30 @@ public class HealthSystem : MonoBehaviour
         if (Health > MaxHealth)
         {
             Health = MaxHealth;
-            HealthBarScript.UpdateBar(Health - (int)HealthBarScript.Slider.value);
+            UpdateHealthBar(Health - (int)HealthBarScript.Slider.value);
         }
         else
         {
-            HealthBarScript.UpdateBar(HealAmount);
+            UpdateHealthBar(HealAmount);
         }
     }
 
+    [Command(requiresAuthority = false)]
     public void AddDefence(int DefenceToAdd)
     {
         Defence += DefenceToAdd;
 
-        HealthBarScript.UpdateDefence(Defence);
+        UpdateHealthBarDefence(Defence);
+    }
+
+    [Command(requiresAuthority = false)]
+    public void AddThorns(int ThornsToAdd)
+    {
+        Thorns += ThornsToAdd;
     }
 
     // Function that returns a bool for if dead
+    [Server]
     public bool TakeDamage(int Damage)
     {
         if (Defence > 0)
@@ -77,21 +98,21 @@ public class HealthSystem : MonoBehaviour
             if (Defence < 0)
             {
                 Health -= Math.Abs(Defence);
-                HealthBarScript.UpdateBar(-Math.Abs(Defence));
+                UpdateHealthBar(-Math.Abs(Defence));
 
                 Defence = 0;
             }
 
-            HealthBarScript.UpdateDefence(Defence);
+            UpdateHealthBarDefence(Defence);
         }
         else
         {
             Health -= Damage;
-            HealthBarScript.UpdateBar(-Damage);
+            UpdateHealthBar(-Damage);
         }
 
         // Check if dead
-        if (Health  <= 0)
+        if (Health <= 0)
         {
             Die();
 
@@ -103,6 +124,19 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
+    [ClientRpc]
+    void UpdateHealthBar(int ChangeFactor)
+    {
+        HealthBarScript.UpdateBar(ChangeFactor);
+    }
+
+    [ClientRpc]
+    void UpdateHealthBarDefence(int ChangeFactor)
+    {
+        HealthBarScript.UpdateDefence(ChangeFactor);
+    }
+
+    [Command(requiresAuthority = false)]
     public void Die()
     {
         if (Player)
@@ -113,11 +147,10 @@ public class HealthSystem : MonoBehaviour
         // If an Enemy
         else
         {
-            // Removes self
-            Destroy(gameObject);
+            NetworkServer.Destroy(HealthBarScript.gameObject);
 
-            // Removes the attached HealthBar
-            Destroy(HealthBarScript.gameObject);
+            // Removes self
+            NetworkServer.Destroy(gameObject);
         }
     }
 }

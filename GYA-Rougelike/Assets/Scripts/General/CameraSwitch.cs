@@ -1,11 +1,11 @@
 using UnityEngine;
-using UnityEngine.UI;
+using Mirror;
 
-public class CameraSwitch : MonoBehaviour
+public class CameraSwitch : NetworkBehaviour
 {
     [Header("Viewable Elements")]
     public Canvas PauseMenuCanvas;
-    public Button PullMapUpDownButton;
+    public Canvas DebugMenuCanvas;
     public GameObject Map;
 
     [Header("Cameras")]
@@ -15,23 +15,10 @@ public class CameraSwitch : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PullMapUpDownButton.onClick.AddListener(SwitchView);
-
         MapViewCamera.enabled = false;
     }
 
-    public void SwitchView()
-    {
-        if (MapViewCamera.enabled == true)
-        {
-            SetViewToRoom();
-        }
-        else
-        {
-            SetViewToMap();
-        }
-    }
-
+    [ClientRpc]
     public void SetViewToRoom()
     {
         MapViewCamera.enabled = false;
@@ -42,8 +29,10 @@ public class CameraSwitch : MonoBehaviour
 
         // Set which camera is used to render PauseMenu
         PauseMenuCanvas.worldCamera = RoomViewCamera;
+        DebugMenuCanvas.worldCamera = RoomViewCamera;
     }
 
+    [ClientRpc]
     public void SetViewToMap()
     {
         MapViewCamera.enabled = true;
@@ -54,5 +43,6 @@ public class CameraSwitch : MonoBehaviour
 
         // Set which camera is used to render PauseMenu
         PauseMenuCanvas.worldCamera = MapViewCamera;
+        DebugMenuCanvas.worldCamera = MapViewCamera;
     }
 }

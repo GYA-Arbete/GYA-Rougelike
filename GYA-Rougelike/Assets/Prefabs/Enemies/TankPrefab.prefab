@@ -85,9 +85,9 @@ GameObject:
   m_Component:
   - component: {fileID: 384850917448691367}
   - component: {fileID: 9088518875179933833}
-  - component: {fileID: 3133088720581885737}
   - component: {fileID: -942216897112633238}
   - component: {fileID: 1209788471082867537}
+  - component: {fileID: 5530125296493321467}
   m_Layer: 0
   m_Name: TankPrefab
   m_TagString: Untagged
@@ -164,22 +164,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3133088720581885737
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7847554204879673297}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8550f3b1ffb2f354092faeb6ed42ab48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HealthMin: 0a0000000a0000000a0000000a0000000a00000005000000
-  HealthMax: 320000003200000032000000320000003200000019000000
-  DamageMin: 010000000100000001000000010000000100000001000000
-  DamageMax: 050000000500000005000000050000000500000003000000
 --- !u!114 &-942216897112633238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,6 +176,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b3ea4e4f8f36354a88d971bda2e38c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   MaxHealth: 0
   Health: 0
   Defence: 0
@@ -219,6 +206,24 @@ MonoBehaviour:
   EnemyMoveIndicatorImage: {fileID: 9214507430620062003}
   MoveIndicators: []
   Cooldown: 0
+--- !u!114 &5530125296493321467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7847554204879673297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clientStarted: 0
+  sceneId: 0
+  _assetId: 3967478007
+  serverOnly: 0
+  visible: 0
+  hasSpawned: 0
 --- !u!1 &7873293391244542926
 GameObject:
   m_ObjectHideFlags: 0

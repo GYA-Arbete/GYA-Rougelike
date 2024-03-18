@@ -7,8 +7,6 @@ public class FirstLoadManager : MonoBehaviour
 {
     [Header("Other Scripts")]
     public CardInventory CardInventoryScript;
-    public StartRoom StartRoomScript;
-    public PlayerManager PlayerManagerScript;
 
     // Start is called before the first frame update
     void Start()
@@ -16,9 +14,5 @@ public class FirstLoadManager : MonoBehaviour
         CardInventoryScript.GetCardTypes();
 
         CardInventoryScript.ResetInventory();
-
-        PlayerManagerScript.SpawnPlayer();
-
-        StartRoomScript.EnterStartRoom();
     }
 }
