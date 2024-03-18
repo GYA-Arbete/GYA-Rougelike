@@ -22,6 +22,7 @@ public class LootRoom : NetworkBehaviour
         NewCardButton.onClick.AddListener(ChooseCard);
     }
 
+    [Command(requiresAuthority = false)]
     void UpgradeCard()
     {
         CardChoiceScript.StartChoice("LootRoom", true);
@@ -29,6 +30,7 @@ public class LootRoom : NetworkBehaviour
         ExitLootRoom();
     }
 
+    [Command(requiresAuthority = false)]
     void ChooseCard()
     {
         PlayerManagerScript.SetPlayerSpriteVisibility(false);
@@ -51,6 +53,7 @@ public class LootRoom : NetworkBehaviour
         LootRoomCanvas.SetActive(State);
     }
 
+    [Command(requiresAuthority = false)]
     public void ExitLootRoom()
     {
         PlayerManagerScript.SetPlayerSpriteVisibility(true);
