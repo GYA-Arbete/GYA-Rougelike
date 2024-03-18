@@ -4941,6 +4941,7 @@ MonoBehaviour:
   - {fileID: 1090164094}
   - {fileID: 1945140422}
   CameraSwitchScript: {fileID: 628599124}
+  PlayerManagerScript: {fileID: 2042664324}
 --- !u!114 &905317488
 MonoBehaviour:
   m_ObjectHideFlags: 0

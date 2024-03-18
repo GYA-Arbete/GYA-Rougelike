@@ -11,6 +11,7 @@ public class CampRoom : NetworkBehaviour
 
     [Header("Other Scripts")]
     public CameraSwitch CameraSwitchScript;
+    public PlayerManager PlayerManagerScript;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +22,7 @@ public class CampRoom : NetworkBehaviour
     public void EnterCampRoom()
     {
         ToggleCanvasVisibility();
+        PlayerManagerScript.SetHealthbarVisibility(false);
 
         CameraSwitchScript.SetViewToRoom();
     }
@@ -29,6 +31,7 @@ public class CampRoom : NetworkBehaviour
     public void ExitCampRoom()
     {
         ToggleCanvasVisibility();
+        PlayerManagerScript.SetHealthbarVisibility(true);
 
         CameraSwitchScript.SetViewToMap();
     }

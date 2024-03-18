@@ -55,4 +55,13 @@ public class PlayerManager : NetworkBehaviour
             HealthBars[i].SetActive(State);
         }
     }
+
+    [ClientRpc]
+    public void SetHealthbarVisibility(bool State)
+    {
+        for (int i = 0; i < HealthBars.Length; i++)
+        {
+            HealthBars[i].SetActive(State);
+        }
+    }
 }
