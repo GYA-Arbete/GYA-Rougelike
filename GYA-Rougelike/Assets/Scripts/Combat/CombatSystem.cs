@@ -116,7 +116,7 @@ public class CombatSystem : NetworkBehaviour
     }
 
     [Command(requiresAuthority = false)]
-    public void EndCombat(bool FromMenu)
+    public void EndCombat(bool FromPauseMenu)
     {
         InCombat = false;
 
@@ -143,7 +143,7 @@ public class CombatSystem : NetworkBehaviour
 
         CardSpawnerScript.RpcDespawnCards();
 
-        if (!FromMenu)
+        if (!FromPauseMenu)
         {
             // Exit the room
             CameraSwitchScript.SetViewToMap();
