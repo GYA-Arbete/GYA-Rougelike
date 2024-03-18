@@ -52,13 +52,9 @@ public class CardInventory : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CardInventoryButton.onClick.AddListener(SwitchInventory);
-    }
-
-    // Function for getting card types from the json file, only called once on first load via FirstLoadManager.cs
-    public void GetCardTypes()
-    {
         CardTypes = JsonUtility.FromJson<CardList>(CardTypesJson.text);
+
+        CardInventoryButton.onClick.AddListener(SwitchInventory);
     }
 
     public void ClearInventory()
