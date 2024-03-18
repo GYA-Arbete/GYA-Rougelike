@@ -74,7 +74,9 @@ public class CardInventory : NetworkBehaviour
 
         for (int i = 0; i < 5; i++)
         {
-            Inventory.cardList.Add(CardTypes.cardList[StartingCardTypes[i]]);
+            Cards Card = CardTypes.cardList[StartingCardTypes[i]];
+
+            Inventory.cardList.Add(new Cards() { Energy = Card.Energy, Damage = Card.Damage, SplashDamage = Card.SplashDamage, Defence = Card.Defence, Thorns = Card.Thorns, Stun = Card.Stun, DamageBuff = Card.DamageBuff, Cooldown = Card.Cooldown, CardCooldown = 0 });
             CardType.Add(StartingCardTypes[i]);
         }
     }

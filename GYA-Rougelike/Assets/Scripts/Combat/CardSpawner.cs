@@ -129,6 +129,7 @@ public class CardSpawner : NetworkBehaviour
             // If the card is on cooldown, reduce it by 1
             else
             {
+                // Sets for all of same type for some reason
                 CardInventoryScript.Inventory.cardList[i - 1].CardCooldown--;
             }
         }
