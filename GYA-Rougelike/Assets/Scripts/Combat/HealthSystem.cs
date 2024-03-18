@@ -46,14 +46,18 @@ public class HealthSystem : NetworkBehaviour
         HealthBarScript = Script;
     }
 
+    [Command(requiresAuthority = false)]
     public void ResetPlayerHealth()
     {
         Health = MaxHealth;
         Defence = 0;
 
-        gameObject.SetActive(true);
-        HealthBarScript.GetComponent<Transform>().gameObject.SetActive(true);
+        ResetHealthBar();
+    }
 
+    [ClientRpc]
+    void ResetHealthBar()
+    {
         HealthBarScript.ResetBar();
     }
 

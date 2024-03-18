@@ -1,6 +1,5 @@
 using Mirror;
 using UnityEngine;
-using UnityEngine.UI;
 
 // Simple script for making sure each player is correctly set up at the start of the game
 public class PlayerManager : NetworkBehaviour
@@ -11,7 +10,6 @@ public class PlayerManager : NetworkBehaviour
     [Header("HealthBar")]
     public GameObject HealthBarPrefab;
     public Transform HealthBarParent;
-    public Sprite HealthBarImage;
 
     [ClientRpc]
     public void SetupPlayers()
@@ -20,18 +18,7 @@ public class PlayerManager : NetworkBehaviour
         {
             // Create a HealthBar, putting it under the enemy
             GameObject HealthBar = Instantiate(HealthBarPrefab, new Vector3(Players[i].position.x, Players[i].position.y - 1, Players[i].position.z), new Quaternion(0, 0, 0, 0), HealthBarParent);
-            HealthBar.transform.localScale = new Vector3(0.5f, 0.5f, 1);
             HealthBars[i] = HealthBar;
-
-            // Set image
-            Transform BarImageItem = HealthBar.transform.Find("ResourceImage");
-            Image ImageItem = BarImageItem.GetComponent<Image>();
-            ImageItem.sprite = HealthBarImage;
-
-            // Set color
-            Transform BarFillItem = HealthBar.transform.Find("Fill");
-            Image FillItem = BarFillItem.GetComponent<Image>();
-            FillItem.color = Color.red;
 
             // Get HealthSystemScript of the Player
             HealthSystem HealthSystemScript = Players[i].GetComponent<HealthSystem>();

@@ -12,7 +12,5 @@ public class FirstLoadManager : MonoBehaviour
     void Start()
     {
         CardInventoryScript.GetCardTypes();
-
-        CardInventoryScript.ResetInventory();
     }
 }

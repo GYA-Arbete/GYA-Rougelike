@@ -1,9 +1,11 @@
+using Mirror;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CardInventory : MonoBehaviour
+public class CardInventory : NetworkBehaviour
 {
     bool InventoryOpen = false;
 
@@ -27,13 +29,13 @@ public class CardInventory : MonoBehaviour
     public List<GameObject> SpawnedCards;
     public List<int> CardType;
 
-    [System.Serializable]
+    [Serializable]
     public class CardList
     {
         public List<Cards> cardList;
     }
 
-    [System.Serializable]
+    [Serializable]
     public class Cards
     {
         public int Energy;
@@ -65,6 +67,7 @@ public class CardInventory : MonoBehaviour
         CardType.Clear();
     }
 
+    [ClientRpc]
     public void ResetInventory()
     {
         // Clear each list to not keep values when restarting

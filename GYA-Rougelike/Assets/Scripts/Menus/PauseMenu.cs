@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 
-public class PauseMenu : MonoBehaviour
+public class PauseMenu : NetworkBehaviour
 {
     [Header("Viewable Elements")]
     public GameObject PauseMenuCanvas;
@@ -40,6 +40,14 @@ public class PauseMenu : MonoBehaviour
         PauseMenuCanvas.SetActive(false);
     }
 
+    [ClientRpc]
+    // Forces all clients to unpause (only done on game restart)
+    void RpcUnpause()
+    {
+        PauseMenuCanvas.SetActive(false);
+    }
+
+    [Command(requiresAuthority = false)]
     void Restart()
     {
         // If in combat, end combat
@@ -65,7 +73,7 @@ public class PauseMenu : MonoBehaviour
 
         PlayerManagerScript.ResetPlayers();
 
-        Unpause();
+        RpcUnpause();
     }
 
     void Quit()

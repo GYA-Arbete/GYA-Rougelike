@@ -173,7 +173,13 @@ public class CardChoice : NetworkBehaviour
         // Set starting state of ExitRoomButton
         UpdateExitRoomButton();
 
-        // Show the choice buttons
+        // Show the choice buttons again
+        foreach (Button ChoiceButton in ChoiceButtons)
+        {
+            ChoiceButton.gameObject.SetActive(true);
+        }
+
+        // Make canvas visible so all elements are viable
         CardChoiceCanvas.SetActive(true);
     }
 
@@ -184,10 +190,10 @@ public class CardChoice : NetworkBehaviour
 
     void EndChoice(int ChoosenCard)
     {
-        // Remove the buttons as player has already choosen
+        // Hide the buttons as player has already choosen
         foreach (Button ChoiceButton in ChoiceButtons)
         {
-            Destroy(ChoiceButton.gameObject);
+            ChoiceButton.gameObject.SetActive(false);
         }
 
         if (Upgrade)
