@@ -162,7 +162,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ca7df58e9835d3c4e986984f383ee302, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -206,6 +206,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef6dcf7a2a036864f92aaa19fa5bab2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   Damage: 0
   Defence: 0
   Stunned: 0
@@ -213,7 +216,6 @@ MonoBehaviour:
   StunIndicator: {fileID: 1706505227086261900}
   EnemyType: 0
   EnemyMoveIndicatorImage: {fileID: 6919210490263764988}
-  MoveIndicators: []
   Cooldown: 0
 --- !u!114 &3401084548211647344
 MonoBehaviour:
