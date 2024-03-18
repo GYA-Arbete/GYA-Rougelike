@@ -231,11 +231,7 @@ public class MapNavigation : NetworkBehaviour
 
         RoomProperties Properties = Room.gameObject.GetComponent<RoomProperties>();
 
-        // Set image showing selected room is current room
-        Properties.RoomImageObject.GetComponent<RawImage>().texture = RoomImages[7];
-
-        // Update previous room image to show it has been cleared
-        PreviousRoom.GetComponent<RoomProperties>().RoomImageObject.GetComponent<RawImage>().texture = RoomImages[6];
+        UpdateRoomImages(Room, PreviousRoom);
 
         switch (Properties.RoomType)
         {
@@ -263,5 +259,15 @@ public class MapNavigation : NetworkBehaviour
     {
         CurrentRoom = 0;
         PreviousRoom = Rooms[1].gameObject;
+    }
+
+    [ClientRpc]
+    void UpdateRoomImages(Transform Room, GameObject PreviousRoom)
+    {
+        // Set image showing selected room is current room
+        Room.gameObject.GetComponent<RoomProperties>().RoomImageObject.GetComponent<RawImage>().texture = RoomImages[7];
+
+        // Update previous room image to show it has been cleared
+        PreviousRoom.GetComponent<RoomProperties>().RoomImageObject.GetComponent<RawImage>().texture = RoomImages[6];
     }
 }
