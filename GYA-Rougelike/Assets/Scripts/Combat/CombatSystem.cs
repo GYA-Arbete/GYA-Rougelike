@@ -64,6 +64,8 @@ public class CombatSystem : NetworkBehaviour
 
         HideWaitingText();
 
+        EnableEndTurnButtons();
+
         ResetFinishedPlayers();
 
         Enemies = EnemySpawnerScript.SpawnEnemies(EnemyAmount, EnemyTypes);
