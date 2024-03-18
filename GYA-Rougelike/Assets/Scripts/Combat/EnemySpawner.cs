@@ -18,10 +18,10 @@ public class EnemySpawner : NetworkBehaviour
     public Transform SummonHealthBarParent;
 
     [Header("Stat Generation")]
-    public readonly int[] HealthMin = { 10, 10, 10, 10, 10, 5 };
-    public readonly int[] HealthMax = { 50, 50, 50, 50, 50, 25 };
-    public readonly int[] DamageMin = { 1, 1, 1, 1, 1, 1 };
-    public readonly int[] DamageMax = { 5, 5, 5, 5, 5, 3 };
+    public readonly int[] HealthMin = { 100, 10, 10, 10, 10, 5 };
+    public readonly int[] HealthMax = { 150, 50, 50, 50, 50, 25 };
+    public readonly int[] DamageMin = { 8, 1, 1, 1, 1, 1 };
+    public readonly int[] DamageMax = { 10, 5, 5, 5, 5, 3 };
 
     [Server]
     public Transform[] SpawnEnemies(int NumberOfEnemies, int[] EnemyTypes)
