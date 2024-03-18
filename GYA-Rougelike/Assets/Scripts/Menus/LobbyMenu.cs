@@ -42,24 +42,15 @@ public class LobbyMenu : NetworkBehaviour
         LobbyUI.MainCanvas.gameObject.SetActive(false);
     }
 
-    public void OnReadyToggled(Toggle toggle, bool OverwritingState, int PlayerNumber)
+    public void OnReadyToggled(Toggle toggle, int PlayerNumber, bool State)
     {
-        if (!OverwritingState)
-        {
-            ToggleHandler Handler = toggle.GetComponent<ToggleHandler>();
-            int ID = Handler.ID;
+        ToggleHandler Handler = toggle.GetComponent<ToggleHandler>();
+        int ID = Handler.ID;
+        Handler.ValueChanged(toggle, State);
 
-            if (ID == PlayerNumber - 1)
-            {
-                UpdateSyncvars(ID, toggle.isOn);
-            }
-            else
-            {
-                // When player doesnt have authority, reset toggle to previous state
-                LobbyUI.OverwritingToggleState = true;
-                Handler.ValueChanged(toggle, !toggle.isOn);
-                LobbyUI.OverwritingToggleState = false;
-            }
+        if (ID == PlayerNumber - 1)
+        {
+            UpdateSyncvars(ID, toggle.isOn);
         }
     }
 
