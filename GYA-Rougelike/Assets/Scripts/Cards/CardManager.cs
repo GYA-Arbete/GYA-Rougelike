@@ -85,8 +85,18 @@ public class CardManager : MonoBehaviour
         CardInPoint[SnappedToPoint] = false;
     }
 
-    public int SnapToPoint(Transform Card)
+    public int SnapToPoint(Transform Card, int StartPoint)
     {
+        // If Energy == 0
+        if (EnergyBarScript.CurrentValue == 0)
+        {
+            // Snap to point where card was previously
+            Card.position = SnapPoints[StartPoint].position;
+
+            // Return the point where card was previously
+            return StartPoint;
+        }
+
         // Calculate position to each SnapPoint
         for (int i = 0; i < SnapPoints.Length; i++)
         {

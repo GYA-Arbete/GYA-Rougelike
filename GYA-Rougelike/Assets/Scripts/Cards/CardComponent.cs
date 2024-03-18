@@ -49,7 +49,7 @@ public class CardComponent : MonoBehaviour
     {
         Dragging = false;
 
-        SnappedToPoint = CardManagerScript.SnapToPoint(transform);
+        SnappedToPoint = CardManagerScript.SnapToPoint(transform, SnappedToPoint);
 
         CardManagerScript.HideTargetIndicator();
     }
