@@ -25,6 +25,7 @@ public class CampRoom : NetworkBehaviour
         CameraSwitchScript.SetViewToRoom();
     }
 
+    [Command(requiresAuthority = false)]
     public void ExitCampRoom()
     {
         ToggleCanvasVisibility();
