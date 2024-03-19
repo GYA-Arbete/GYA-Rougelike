@@ -16,12 +16,13 @@ public class CardComponent : MonoBehaviour
     // Int for which point the Card has snapped to
     public int SnappedToPoint;
     public bool Dragging;
+    public int CardType;
 
     [Header("Other Scripts")]
     public CardManager CardManagerScript;
     public CombatSystem CombatSystemScript;
 
-    public void Setup(int SnappedPoint, string InfoText)
+    public void Setup(int SnappedPoint, string InfoText, int Type)
     {
         UnityEngine.Object[] temp = Resources.FindObjectsOfTypeAll(typeof(GameObject));
         for (int i = 0; i < temp.Length; i++)
@@ -37,6 +38,7 @@ public class CardComponent : MonoBehaviour
 
         SnappedToPoint = SnappedPoint;
         InfoTextElement.text = InfoText;
+        CardType = Type;
         Dragging = false;
     }
 
@@ -79,7 +81,7 @@ public class CardComponent : MonoBehaviour
         Points[2] = CombatSystemScript.EnemyTarget.position; // Enemy position
         Points[2].z = Z;
 
-        CardManagerScript.DrawTargetIndicator(Points);
+        CardManagerScript.DrawTargetIndicator(Points, CardType);
     }
 
     public void OnMouseOver()

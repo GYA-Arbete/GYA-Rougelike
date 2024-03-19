@@ -5,7 +5,8 @@ using System.Collections.Generic;
 
 public class CardManager : MonoBehaviour
 {
-    public GameObject TargetLineRend;
+    public GameObject[] TargetIndicators;
+    public Transform[] PlayerPositions;
 
     [Header("Variables for Snapping")]
     public double[] SnapPointsDistance;
@@ -163,32 +164,72 @@ public class CardManager : MonoBehaviour
 
     public void HideTargetIndicator()
     {
-        TargetLineRend.SetActive(false);
+        foreach (GameObject TargetIndicator in TargetIndicators)
+        {
+            TargetIndicator.SetActive(false);
+        }
     }
 
-    public void DrawTargetIndicator(Vector3[] Points)
+    public void DrawTargetIndicator(Vector3[] Points, int Type)
     {
-        TargetLineRend.SetActive(true);
-
-        LineRenderer LineRend = TargetLineRend.GetComponent<LineRenderer>();
-
-        LineRend.positionCount = 50;
-
-        int SegmentIndex = 0;
-
-        for (int i = 0; i < 100; i += 2)
+        // CardTypes that affect both players
+        if (Type == 1 || Type == 2 || Type == 6)
         {
-            float t = (float)i / 100;
-
-            Vector3 Position = CalcBezierPoint(Points, t);
-
-            LineRend.SetPosition(SegmentIndex, Position);
-
-            SegmentIndex++;
+            TargetIndicators[0].SetActive(false);
+            TargetIndicators[1].SetActive(true);
+            TargetIndicators[2].SetActive(true);
+        }
+        // CardTypes that affect both players and enemy
+        else if (Type == 5)
+        {
+            TargetIndicators[0].SetActive(true);
+            TargetIndicators[1].SetActive(true);
+            TargetIndicators[2].SetActive(true);
+        }
+        // CardTypes that affect enemy
+        else
+        {
+            TargetIndicators[0].SetActive(true);
+            TargetIndicators[1].SetActive(false);
+            TargetIndicators[2].SetActive(false);
         }
 
-        // Set texture scale to avoid texture stretching
-        LineRend.material.mainTextureScale = new Vector2(1f / LineRend.startWidth, 1.0f);
+        for (int i = 0; i < TargetIndicators.Length; i++)
+        {
+            // Calculate line for each LineRend that is enabled
+            if (TargetIndicators[i].activeSelf)
+            {
+                LineRenderer LineRend = TargetIndicators[i].GetComponent<LineRenderer>();
+                LineRend.positionCount = 50;
+
+                int SegmentIndex = 0;
+
+                // If PlayerTarget recalc some points
+                if (i > 0)
+                {
+                    float Z = 2;
+                    float YOffset = 0.8f;
+                    float NewX = Math.Min(Points[0].x, PlayerPositions[i - 1].position.x) + Math.Abs((Points[0].x - PlayerPositions[i - 1].position.x) / 2);
+                    float NewY = Math.Min(Points[0].y, PlayerPositions[i - 1].position.y) + YOffset + Math.Abs((Points[0].y - PlayerPositions[i - 1].position.y) / 2);
+                    Points[1] = new(NewX, NewY, Z);
+                    Points[2] = new(PlayerPositions[i - 1].position.x, PlayerPositions[i - 1].position.y, Z);
+                }
+
+                for (int j = 0; j < 100; j += 2)
+                {
+                    float t = (float)j / 100;
+
+                    Vector3 Position = CalcBezierPoint(Points, t);
+
+                    LineRend.SetPosition(SegmentIndex, Position);
+
+                    SegmentIndex++;
+                }
+
+                // Set texture scale to avoid texture stretching
+                LineRend.material.mainTextureScale = new Vector2(1f / LineRend.startWidth, 1.0f);
+            }
+        }
     }
 
     Vector3 CalcBezierPoint(Vector3[] Points, float t)

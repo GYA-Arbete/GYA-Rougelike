@@ -78,7 +78,7 @@ public class CardSpawner : NetworkBehaviour
                 CardStatsScript.AssignValues(CardsInInventory.cardList[i - 1].Energy, CardsInInventory.cardList[i - 1].Damage, CardsInInventory.cardList[i - 1].SplashDamage, CardsInInventory.cardList[i - 1].Defence, CardsInInventory.cardList[i - 1].Thorns, CardsInInventory.cardList[i - 1].Stun, CardsInInventory.cardList[i - 1].DamageBuff, CardsInInventory.cardList[i - 1].Cooldown, i - 1);
 
                 // Setup stuff for snapping
-                Card.GetComponent<CardComponent>().Setup(i - 1, CardManagerScript.CardTypesText.cardList[CardType[i - 1]].CardInfo);
+                Card.GetComponent<CardComponent>().Setup(i - 1, CardManagerScript.CardTypesText.cardList[CardType[i - 1]].CardInfo, CardType[i - 1]);
                 SnappedToPoints.Add(i - 1);
 
                 // Change the cards image
@@ -129,7 +129,6 @@ public class CardSpawner : NetworkBehaviour
             // If the card is on cooldown, reduce it by 1
             else
             {
-                // Sets for all of same type for some reason
                 CardInventoryScript.Inventory.cardList[i - 1].CardCooldown--;
             }
         }

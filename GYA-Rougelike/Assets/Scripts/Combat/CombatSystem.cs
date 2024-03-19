@@ -295,7 +295,7 @@ public class CombatSystem : NetworkBehaviour
 
             if (CardStatsScript.DamageBuff > 0)
             {
-                PlayerDamageBuff += 2;
+                AddDamageBuff(CardStatsScript.DamageBuff);
             }
         }
 
@@ -398,6 +398,12 @@ public class CombatSystem : NetworkBehaviour
             // Suboptimal since theoreticly we can get stuck here if both finish at exactly the same time with no way to end combat
             UpdateFinishedPlayers();
         }
+    }
+
+    [ClientRpc]
+    void AddDamageBuff(int BuffValue)
+    {
+        PlayerDamageBuff += BuffValue;
     }
 
     [Command(requiresAuthority = false)]
