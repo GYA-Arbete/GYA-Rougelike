@@ -48,7 +48,7 @@ public class PauseMenu : NetworkBehaviour
     }
 
     [Command(requiresAuthority = false)]
-    void Restart()
+    public void Restart()
     {
         // If in combat, end combat
         if (CombatSystemScript.InCombat)
@@ -75,7 +75,7 @@ public class PauseMenu : NetworkBehaviour
         RpcUnpause();
     }
 
-    void Quit()
+    public void Quit()
     {
         NetworkManager NetworkManager = FindAnyObjectByType<NetworkManager>();
 

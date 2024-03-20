@@ -48,6 +48,8 @@ public class CombatSystem : NetworkBehaviour
     public CardSpawner CardSpawnerScript;
     public CameraSwitch CameraSwitchScript;
     public CardInventory CardInventoryScript;
+    public GameOverMenu GameOverMenuScript;
+    public MapGen MapGenScript;
 
     // Start is called before the first frame update
     void Start()
@@ -195,6 +197,26 @@ public class CombatSystem : NetworkBehaviour
     }
 
     [Command(requiresAuthority = false)]
+    void CheckGameOver()
+    {
+        int DeadPlayers = 0;
+
+        foreach (Transform Player in Players)
+        {
+            if (Player.GetComponent<HealthSystem>().Health <= 0)
+            {
+                DeadPlayers++;
+            }
+        }
+        if (DeadPlayers == Players.Length)
+        {
+            EndCombat(true);
+            GameOverMenuScript.SetGameOverMenuVisibility(true);
+            MapGenScript.DeleteMap();
+        }
+    }
+
+    [Command(requiresAuthority = false)]
     void ContinueEndTurn()
     {
         // If has exited combat dont do enemy turn logic
@@ -229,6 +251,8 @@ public class CombatSystem : NetworkBehaviour
 
         // Set info for TargetIndicator
         UpdateEnemyTarget();
+
+        CheckGameOver();
     }
 
     [Command(requiresAuthority = false)]
