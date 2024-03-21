@@ -4066,7 +4066,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  PauseMenuCanvas: {fileID: 1796844601}
+  PauseMenuCanvas: {fileID: 1257602611}
   DebugMenuCanvas: {fileID: 378365593}
   Map: {fileID: 679690433}
   MapViewCamera: {fileID: 519420031}
@@ -6481,6 +6481,7 @@ MonoBehaviour:
   Health: 0
   Defence: 0
   Player: 0
+  PlayerIndex: -1
   Thorns: 0
   HealthBarScript: {fileID: 0}
 --- !u!1 &1098133441
@@ -11826,6 +11827,7 @@ MonoBehaviour:
   Health: 0
   Defence: 0
   Player: 0
+  PlayerIndex: -1
   Thorns: 0
   HealthBarScript: {fileID: 0}
 --- !u!1 &1959612796
