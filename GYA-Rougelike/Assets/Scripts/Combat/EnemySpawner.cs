@@ -19,10 +19,10 @@ public class EnemySpawner : NetworkBehaviour
     public Transform SummonHealthBarParent;
 
     [Header("Stat Generation")]
-    public readonly int[] HealthMin = { 100, 10, 10, 10, 10, 5 };
-    public readonly int[] HealthMax = { 150, 50, 50, 50, 50, 25 };
+    public readonly int[] HealthMin = { 100, 20, 10, 10, 30, 1 };
+    public readonly int[] HealthMax = { 150, 40, 25, 25, 50, 5 };
     public readonly int[] DamageMin = { 8, 1, 1, 1, 1, 1 };
-    public readonly int[] DamageMax = { 10, 5, 5, 5, 5, 3 };
+    public readonly int[] DamageMax = { 10, 5, 3, 2, 3, 2 };
 
     [Server]
     public Transform[] SpawnEnemies(int NumberOfEnemies, int[] EnemyTypes)
@@ -43,11 +43,11 @@ public class EnemySpawner : NetworkBehaviour
             // Generate EnemyStats
             System.Random Rand = new();
 
-            int MaxHealth = Rand.Next(HealthMin[EnemyTypes[i]], HealthMax[EnemyTypes[i]]);
+            int MaxHealth = Rand.Next(HealthMin[EnemyTypes[i]], HealthMax[EnemyTypes[i]] + 1);
             Enemy.GetComponent<HealthSystem>().SetupObject(MaxHealth, false, -1);
 
             EnemyAI EnemyAIScript = Enemy.GetComponent<EnemyAI>();
-            EnemyAIScript.Damage = Rand.Next(DamageMin[EnemyTypes[i]], DamageMax[EnemyTypes[i]]);
+            EnemyAIScript.Damage = Rand.Next(DamageMin[EnemyTypes[i]], DamageMax[EnemyTypes[i]] + 1);
 
             CreateHealthBar(Enemy, "HealthBarParent", MaxHealth);
         }
@@ -80,11 +80,11 @@ public class EnemySpawner : NetworkBehaviour
                 // Generate EnemyStats (5 == Summon in EnemyIndex)
                 System.Random Rand = new();
 
-                int MaxHealth = Rand.Next(HealthMin[5], HealthMax[5]);
+                int MaxHealth = Rand.Next(HealthMin[5], HealthMax[5] + 1);
                 Summon.GetComponent<HealthSystem>().SetupObject(MaxHealth, false, -1);
 
                 EnemyAI EnemyAIScript = Summon.GetComponent<EnemyAI>();
-                EnemyAIScript.Damage = Rand.Next(DamageMin[5], DamageMax[5]);
+                EnemyAIScript.Damage = Rand.Next(DamageMin[5], DamageMax[5] + 1);
 
                 CreateHealthBar(Summon, "SummonHealthBarParent", MaxHealth);
             }
