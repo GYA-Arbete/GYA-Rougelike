@@ -1,5 +1,6 @@
 using Mirror;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class EnemySpawner : NetworkBehaviour
 {
@@ -56,35 +57,41 @@ public class EnemySpawner : NetworkBehaviour
     }
 
     [Server]
-    public Transform[] SpawnSummons()
+    public async Task<(Transform[], bool[])> SpawnSummons(Transform[] Summons)
     {
-        Transform[] Summons = new Transform[4];
+        bool[] SpawnedEnemy = new bool[4];
 
         for (int i = 0; i < 4; i++)
         {
-            // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
-            // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
-            GameObject Summon = Instantiate(SummonPrefab, SummonSpawnPoints[i].position, new Quaternion(0, 0, 0, 0), SummonParent);
-            Summon.transform.localScale = new Vector3(80, 80, 1);
-            NetworkServer.Spawn(Summon);
-            SetItemParent(Summon, SummonParent);
+            // If there isnt already a summon for that position
+            if (Summons[i] == null)
+            {
+                SpawnedEnemy[i] = true;
 
-            Summons[i] = Summon.transform;
+                // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
+                // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
+                GameObject Summon = Instantiate(SummonPrefab, SummonSpawnPoints[i].position, new Quaternion(0, 0, 0, 0), SummonParent);
+                Summon.transform.localScale = new Vector3(80, 80, 1);
+                NetworkServer.Spawn(Summon);
+                SetItemParent(Summon, SummonParent);
 
-            // Generate EnemyStats (5 == Summon in EnemyIndex)
-            System.Random Rand = new();
+                Summons[i] = Summon.transform;
 
-            int MaxHealth = Rand.Next(HealthMin[5], HealthMax[5]);
-            Summon.GetComponent<HealthSystem>().SetupObject(MaxHealth, false, -1);
+                // Generate EnemyStats (5 == Summon in EnemyIndex)
+                System.Random Rand = new();
 
-            EnemyAI EnemyAIScript = Summon.GetComponent<EnemyAI>();
-            EnemyAIScript.Damage = Rand.Next(DamageMin[5], DamageMax[5]);
+                int MaxHealth = Rand.Next(HealthMin[5], HealthMax[5]);
+                Summon.GetComponent<HealthSystem>().SetupObject(MaxHealth, false, -1);
 
-            CreateHealthBar(Summon, "SummonHealthBarParent", MaxHealth);
+                EnemyAI EnemyAIScript = Summon.GetComponent<EnemyAI>();
+                EnemyAIScript.Damage = Rand.Next(DamageMin[5], DamageMax[5]);
+
+                CreateHealthBar(Summon, "SummonHealthBarParent", MaxHealth);
+            }
         }
 
         // Return an array containing all summons
-        return Summons;
+        return (Summons, SpawnedEnemy);
     }
 
     [Command(requiresAuthority = false)]

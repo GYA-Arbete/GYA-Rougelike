@@ -74,11 +74,13 @@ public class CombatSystem : NetworkBehaviour
 
         CardSpawnerScript.ResetCards();
 
-        EnemyMove = new int[EnemyAmount];
-        SplashDamage = new bool[EnemyAmount];
-        EnemyDamageBuff = new int[EnemyAmount];
-        StunDuration = new int[EnemyAmount];
-        DeadEnemies = new bool[EnemyAmount];
+        // Length == Amount of enemies + 4 summons
+        EnemyMove = new int[EnemyAmount + 4];
+        SplashDamage = new bool[EnemyAmount + 4];
+        EnemyDamageBuff = new int[EnemyAmount + 4];
+        StunDuration = new int[EnemyAmount + 4];
+        DeadEnemies = new bool[EnemyAmount]; // This is only Amount of enemies since summons die first anyways
+        Summons = new Transform[4];
 
         EnemyType = EnemyTypes;
 
@@ -244,6 +246,17 @@ public class CombatSystem : NetworkBehaviour
             {
                 // Get each enemies move
                 var ReturnedValues = Enemies[i].GetComponent<EnemyAI>().GenerateMove();
+                EnemyMove[i] = ReturnedValues.Item1;
+                SplashDamage[i] = ReturnedValues.Item2;
+            }
+        }
+        // Also generate each summons next turn
+        for (int i = Enemies.Length; i < Enemies.Length + Summons.Length; i++)
+        {
+            if (Summons[i - Enemies.Length] != null)
+            {
+                // Get each enemies move
+                var ReturnedValues = Summons[i - Enemies.Length].GetComponent<EnemyAI>().GenerateMove();
                 EnemyMove[i] = ReturnedValues.Item1;
                 SplashDamage[i] = ReturnedValues.Item2;
             }
@@ -505,7 +518,7 @@ public class CombatSystem : NetworkBehaviour
 
     // Called when its the enemies turn, they do stuff then
     [Command(requiresAuthority = false)]
-    void EnemyTurn()
+    async void EnemyTurn()
     {
         // Check if a DamageBuff move is in the "queue"
         // Do said move first
@@ -520,13 +533,25 @@ public class CombatSystem : NetworkBehaviour
         // Do each move in EnemyMoves
         for (int i = 0; i < EnemyMove.Length; i++)
         {
-            // If enemy exists and isnt stunned
-            if (Enemies[i] != null && StunDuration[i] == 0)
+            Transform Enemy;
+            if (i < Enemies.Length)
             {
+                Enemy = Enemies[i];
+            }
+            else
+            {
+                Enemy = Summons[i - Enemies.Length];
+            }
+
+            // If enemy exists and isnt stunned
+            if (Enemy != null && StunDuration[i] == 0)
+            {
+                EnemyAI AIScript = Enemy.GetComponent<EnemyAI>();
+
                 // Do Cleave (Normal Splash)
                 if (SplashDamage[i] == true)
                 {
-                    int Damage = Enemies[i].GetComponent<EnemyAI>().Damage;
+                    int Damage = AIScript.Damage;
 
                     foreach (Transform Player in Players)
                     {
@@ -539,7 +564,7 @@ public class CombatSystem : NetworkBehaviour
                             // If thorns, reflect damage back to attacker
                             if (HealthScript.Thorns > 0)
                             {
-                                Enemies[i].GetComponent<HealthSystem>().TakeDamage(Damage + EnemyDamageBuff[i] * HealthScript.Thorns); // Thorns acts as a damage multiplier
+                                Enemy.GetComponent<HealthSystem>().TakeDamage(Damage + EnemyDamageBuff[i] * HealthScript.Thorns); // Thorns acts as a damage multiplier
 
                                 // Reset Thorns when it has been used
                                 HealthScript.Thorns = 0;
@@ -559,7 +584,7 @@ public class CombatSystem : NetworkBehaviour
                             break;
                         // Slash (Normal attack)
                         case 1:
-                            int Damage = Enemies[i].GetComponent<EnemyAI>().Damage;
+                            int Damage = AIScript.Damage;
 
                             foreach (Transform Player in Players)
                             {
@@ -572,7 +597,7 @@ public class CombatSystem : NetworkBehaviour
                                     // If thorns, reflect damage back to attacker
                                     if (HealthScript.Thorns > 0)
                                     {
-                                        Enemies[i].GetComponent<HealthSystem>().TakeDamage(Damage + EnemyDamageBuff[i] * HealthScript.Thorns); // Thorns acts as a damage multiplier
+                                        Enemy.GetComponent<HealthSystem>().TakeDamage(Damage + EnemyDamageBuff[i] * HealthScript.Thorns); // Thorns acts as a damage multiplier
 
                                         // Reset Thorns when it has been used
                                         HealthScript.Thorns = 0;
@@ -590,7 +615,18 @@ public class CombatSystem : NetworkBehaviour
                             break;
                         // Summon summons
                         case 3:
-                            Summons = EnemySpawnerScript.SpawnSummons();
+                            var Result = await EnemySpawnerScript.SpawnSummons(Summons);
+                            Summons = Result.Item1;
+                            bool[] SpawnedEnemy = Result.Item2;
+
+                            // Setup the newly spawned summons (If summon is already set-up, ignore it)
+                            for (int j = 0; j < Summons.Length; j++)
+                            {
+                                if (SpawnedEnemy[j])
+                                {
+                                    Summons[j].GetComponent<EnemyAI>().SetupEnemy(5);
+                                }
+                            }
                             break;
                         // Buff each ally
                         case 4:

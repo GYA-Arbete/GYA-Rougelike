@@ -15,7 +15,7 @@ public class EnemyAI : NetworkBehaviour
     public GameObject StunIndicator;
 
     [Header("Other")]
-    public int EnemyType;
+    public int EnemyType = -1;
 
     public Image EnemyMoveIndicatorImage;
     public TextMeshProUGUI EnemyMoveIndicatorText;
