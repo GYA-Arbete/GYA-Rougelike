@@ -126,7 +126,7 @@ public class EnemyAI : NetworkBehaviour
                 {
                     Cooldown = 4;
 
-                    //EnemyMoveIndicatorImage.sprite = MoveIndicators[] // MISSING CORRECT IMAGE
+                    SetMoveIndicator(3, $"+2");
                     return (4, false);
                 }
                 // Normal Attack
@@ -144,7 +144,7 @@ public class EnemyAI : NetworkBehaviour
                 {
                     Cooldown = 5;
 
-                    //EnemyMoveIndicatorImage.sprite = MoveIndicators[] // MISSING CORRECT IMAGE
+                    SetMoveIndicator(4, $"{FindAnyObjectByType<CombatSystem>().Summons.Length}x");
                     return (3, false);
                 }
                 // Normal Attack
