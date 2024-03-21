@@ -1,4 +1,5 @@
 using Mirror;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,7 @@ public class EnemyAI : NetworkBehaviour
     public int EnemyType;
 
     public Image EnemyMoveIndicatorImage;
+    public TextMeshProUGUI EnemyMoveIndicatorText;
 
     public int Cooldown;
 
@@ -88,7 +90,7 @@ public class EnemyAI : NetworkBehaviour
                     System.Random Rand = new();
                     Defence = Rand.Next(3, 6); // Picks a random number between 3 and 5
 
-                    SetMoveIndicator(2);
+                    SetMoveIndicator(2, $"{Defence}");
                     return (2, false);
                 }
                 // Normal Attack
@@ -96,7 +98,7 @@ public class EnemyAI : NetworkBehaviour
                 {
                     Cooldown--;
 
-                    SetMoveIndicator(1);
+                    SetMoveIndicator(1, $"{Damage}");
                     return (1, false);
                 }
             // Basic Grunt
@@ -106,7 +108,7 @@ public class EnemyAI : NetworkBehaviour
                 {
                     Cooldown = 5;
 
-                    SetMoveIndicator(0);
+                    SetMoveIndicator(0, $"{Damage}");
                     return (0, true);
                 }
                 // Normal Attack
@@ -114,7 +116,7 @@ public class EnemyAI : NetworkBehaviour
                 {
                     Cooldown--;
 
-                    SetMoveIndicator(1);
+                    SetMoveIndicator(1, $"{Damage}");
                     return (1, false);
                 }
             // Buff / Debuff
@@ -132,7 +134,7 @@ public class EnemyAI : NetworkBehaviour
                 {
                     Cooldown--;
 
-                    SetMoveIndicator(1);
+                    SetMoveIndicator(1, $"{Damage}");
                     return (1, false);
                 }
             // Summoner
@@ -150,7 +152,7 @@ public class EnemyAI : NetworkBehaviour
                 {
                     Cooldown--;
 
-                    SetMoveIndicator(1);
+                    SetMoveIndicator(1, $"{Damage}");
                     return (1, false);
                 }
             // Tank
@@ -163,7 +165,7 @@ public class EnemyAI : NetworkBehaviour
                     System.Random Rand = new();
                     Defence = Rand.Next(2, 5); // Picks a random number between 2 and 4
 
-                    SetMoveIndicator(2);
+                    SetMoveIndicator(2, $"{Defence}");
                     return (2, false);
                 }
                 // Normal Attack
@@ -171,22 +173,23 @@ public class EnemyAI : NetworkBehaviour
                 {
                     Cooldown--;
 
-                    SetMoveIndicator(1);
+                    SetMoveIndicator(1, $"{Damage}");
                     return (1, false);
                 }
             // Summon (Enemy spawned by Summoner)
             case 5:
                 // Only has normal attack
-                SetMoveIndicator(1);
+                SetMoveIndicator(1, $"{Damage}");
                 return (1, false);
         }
         return (0, true);
     }
 
     [ClientRpc]
-    void SetMoveIndicator(int ImageIndex)
+    void SetMoveIndicator(int ImageIndex, string EffectText)
     {
         EnemyMoveIndicatorImage.sprite = FindAnyObjectByType<CombatSystem>().MoveIndicators[ImageIndex];
+        EnemyMoveIndicatorText.text = EffectText;
     }
 
     [ClientRpc]
