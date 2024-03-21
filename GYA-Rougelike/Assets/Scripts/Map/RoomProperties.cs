@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -54,19 +55,19 @@ public class RoomProperties : MonoBehaviour
 
             EnemyTypes = new int[EnemyAmount];
 
+            List<int> AllowedEnemyTypes = new() { 1, 2, 3, 4 };
+
             for (int i = 0; i < EnemyAmount; i++)
             {
-                // Check that it doesnt already contain a Summoner
-                if (!EnemyTypes.Contains(3))
-                {
-                    // If a summoner hasnt been included, allow every enemy to be picked
-                    EnemyTypes[i] = Rand.Next(1, 5);
-                }
-                else
-                {
-                    int[] AllowedEnemyTypes = { 1, 2, 4 };
+                int Index = Rand.Next(0, AllowedEnemyTypes.Count);
+                int EnemyType = AllowedEnemyTypes[Index];
 
-                    EnemyTypes[i] = AllowedEnemyTypes[Rand.Next(0, AllowedEnemyTypes.Length)];
+                EnemyTypes[i] = EnemyType;
+
+                // Check that it doesnt already contain a Summoner or Buffer as we only allow one of those per room
+                if (EnemyType == 2 ||EnemyType == 3)
+                {
+                    AllowedEnemyTypes.RemoveAt(Index);
                 }
             }
         }
