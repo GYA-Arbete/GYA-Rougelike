@@ -23,15 +23,13 @@ public class PlayerManager : NetworkBehaviour
             // Get HealthSystemScript of the Player
             HealthSystem HealthSystemScript = Players[i].GetComponent<HealthSystem>();
 
-            // Set health for players
-            HealthSystemScript.MaxHealth = 50;
-
             // Set values of said HealthBar
             BarScript HealthBarScript = HealthBar.GetComponent<BarScript>();
-            HealthBarScript.SetupBar(HealthSystemScript.MaxHealth, Color.red);
+            HealthBarScript.SetupBar(50, Color.red);
 
             // Setup HealthSystem
-            HealthSystemScript.SetHealth(HealthBarScript);
+            HealthSystemScript.SetupObject(50, true, i);
+            HealthSystemScript.SetBarScript(HealthBarScript);
         }
     }
 
@@ -63,5 +61,12 @@ public class PlayerManager : NetworkBehaviour
         {
             HealthBars[i].SetActive(State);
         }
+    }
+
+    [ClientRpc]
+    public void PlayerDie(int i)
+    {
+        Players[i].gameObject.SetActive(false);
+        HealthBars[i].SetActive(false);
     }
 }

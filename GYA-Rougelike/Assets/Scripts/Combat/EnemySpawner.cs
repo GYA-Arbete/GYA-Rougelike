@@ -43,7 +43,7 @@ public class EnemySpawner : NetworkBehaviour
             System.Random Rand = new();
 
             int MaxHealth = Rand.Next(HealthMin[EnemyTypes[i]], HealthMax[EnemyTypes[i]]);
-            Enemy.GetComponent<HealthSystem>().SetupEnemy(MaxHealth);
+            Enemy.GetComponent<HealthSystem>().SetupObject(MaxHealth, false, -1);
 
             EnemyAI EnemyAIScript = Enemy.GetComponent<EnemyAI>();
             EnemyAIScript.Damage = Rand.Next(DamageMin[EnemyTypes[i]], DamageMax[EnemyTypes[i]]);
@@ -75,7 +75,7 @@ public class EnemySpawner : NetworkBehaviour
             System.Random Rand = new();
 
             int MaxHealth = Rand.Next(HealthMin[5], HealthMax[5]);
-            Summon.GetComponent<HealthSystem>().SetupEnemy(MaxHealth);
+            Summon.GetComponent<HealthSystem>().SetupObject(MaxHealth, false, -1);
 
             EnemyAI EnemyAIScript = Summon.GetComponent<EnemyAI>();
             EnemyAIScript.Damage = Rand.Next(DamageMin[5], DamageMax[5]);

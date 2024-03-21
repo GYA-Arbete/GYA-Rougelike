@@ -13,6 +13,8 @@ public class HealthSystem : NetworkBehaviour
     public int Defence = 0;
     [SyncVar]
     public bool Player = false;
+    [SyncVar]
+    public int PlayerIndex = -1;
 
     [Header("Player Exclusive Variables")]
     [SyncVar]
@@ -21,20 +23,11 @@ public class HealthSystem : NetworkBehaviour
     [Header("HealthBar Stuff")]
     public BarScript HealthBarScript;
 
-    // Called when spawning Players
-    public void SetHealth(BarScript Script)
-    {
-        HealthBarScript = Script;
-
-        Health = MaxHealth;
-        Defence = 0;
-
-        Player = true;
-    }
-
     [Command(requiresAuthority = false)]
-    public void SetupEnemy(int MaxHp)
+    public void SetupObject(int MaxHp, bool PlayerBool, int Playerindex)
     {
+        PlayerIndex = Playerindex;
+        Player = PlayerBool;
         MaxHealth = MaxHp;
         Health = MaxHp;
         Defence = 0;
@@ -145,8 +138,7 @@ public class HealthSystem : NetworkBehaviour
     {
         if (Player)
         {
-            gameObject.SetActive(false);
-            HealthBarScript.GetComponent<Transform>().gameObject.SetActive(false);
+            FindAnyObjectByType<PlayerManager>().PlayerDie(PlayerIndex);
         }
         // If an Enemy
         else
