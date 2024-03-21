@@ -541,16 +541,6 @@ public class CombatSystem : NetworkBehaviour
     [Server]
     async Task EnemyTurn()
     {
-        // Check if a DamageBuff move is in the "queue"
-        // Do said move first
-        if (EnemyMove.Contains(4))
-        {
-            for (int i = 0; i < EnemyDamageBuff.Length; i++)
-            {
-                EnemyDamageBuff[i] = 2;
-            }
-        }
-
         // Do each move in EnemyMoves
         for (int i = 0; i < EnemyMove.Length; i++)
         {
@@ -650,7 +640,7 @@ public class CombatSystem : NetworkBehaviour
                                 }
                             }
                             break;
-                        // Buff each ally
+                        // Buff each ally (Done after every other move so we just ignore this case here)
                         case 4:
                             break;
                     }
@@ -659,6 +649,16 @@ public class CombatSystem : NetworkBehaviour
             else
             {
                 StunDuration[i]--;
+            }
+        }
+
+        // Check if a DamageBuff move is in the "queue"
+        // Do said move last
+        if (EnemyMove.Contains(4))
+        {
+            for (int i = 0; i < EnemyDamageBuff.Length; i++)
+            {
+                EnemyDamageBuff[i] += 2;
             }
         }
     }
