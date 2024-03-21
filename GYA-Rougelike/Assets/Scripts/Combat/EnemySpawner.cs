@@ -33,7 +33,7 @@ public class EnemySpawner : NetworkBehaviour
         {
             // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
             // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
-            GameObject Enemy = Instantiate(EnemyPrefabs[EnemyTypes[i]], new Vector3(EnemySpawnPoints[i].position.x, EnemySpawnPoints[i].position.y, EnemySpawnPoints[i].position.z), new Quaternion(0, 0, 0, 0), EnemyParent);
+            GameObject Enemy = Instantiate(EnemyPrefabs[EnemyTypes[i]], EnemySpawnPoints[i].position, new Quaternion(0, 0, 0, 0), EnemyParent);
             Enemy.transform.localScale = new Vector3(108, 108, 1);
             NetworkServer.Spawn(Enemy);
             SetItemParent(Enemy, EnemyParent);

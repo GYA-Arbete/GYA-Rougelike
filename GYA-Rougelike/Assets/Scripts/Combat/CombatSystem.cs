@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class CombatSystem : NetworkBehaviour
 {
@@ -11,6 +12,7 @@ public class CombatSystem : NetworkBehaviour
     public bool InCombat = false;
     [SyncVar]
     public int FinishedPlayers = 0;
+    public int AliveSummons = 0;
 
     [Header("Buttons")]
     public Button EndTurnButton;
@@ -25,6 +27,7 @@ public class CombatSystem : NetworkBehaviour
     [Header("CombatRoom-Exclusive Elements")]
     public GameObject[] CombatRoomElements;
     public GameObject WaitingText;
+    public GameObject SummonBackground;
 
     [Header("Stuff for checking card position")]
     public Transform CardParent;
@@ -63,7 +66,7 @@ public class CombatSystem : NetworkBehaviour
         InCombat = true;
 
         ToggleCombatElementsVisibility();
-
+        SetSummonBackgroundVisibility(false);
         HideWaitingText();
 
         EnableEndTurnButtons();
@@ -110,6 +113,12 @@ public class CombatSystem : NetworkBehaviour
 
         // Save which enemy will be targeted by the players card
         UpdateEnemyTarget();
+    }
+
+    [ClientRpc]
+    void SetSummonBackgroundVisibility(bool State)
+    {
+        SummonBackground.SetActive(State);
     }
 
     [ClientRpc]
@@ -222,7 +231,7 @@ public class CombatSystem : NetworkBehaviour
     }
 
     [Command(requiresAuthority = false)]
-    void ContinueEndTurn()
+    async void ContinueEndTurn()
     {
         // If has exited combat dont do enemy turn logic
         if (!InCombat)
@@ -230,7 +239,7 @@ public class CombatSystem : NetworkBehaviour
             return;
         }
 
-        EnemyTurn();
+        await EnemyTurn();
 
         // When both players have finished their turn, spawn the "new" cards
         CardSpawnerScript.ResetCards();
@@ -263,6 +272,15 @@ public class CombatSystem : NetworkBehaviour
                 EnemyMove[i] = ReturnedValues.Item1;
                 SplashDamage[i] = ReturnedValues.Item2;
             }
+        }
+
+        if (AliveSummons > 0)
+        {
+            SetSummonBackgroundVisibility(true);
+        }
+        else
+        {
+            SetSummonBackgroundVisibility(false);
         }
 
         // Set info for TargetIndicator
@@ -520,8 +538,8 @@ public class CombatSystem : NetworkBehaviour
     }
 
     // Called when its the enemies turn, they do stuff then
-    [Command(requiresAuthority = false)]
-    async void EnemyTurn()
+    [Server]
+    async Task EnemyTurn()
     {
         // Check if a DamageBuff move is in the "queue"
         // Do said move first
@@ -621,6 +639,7 @@ public class CombatSystem : NetworkBehaviour
                             var Result = await EnemySpawnerScript.SpawnSummons(Summons);
                             Summons = Result.Item1;
                             bool[] SpawnedEnemy = Result.Item2;
+                            AliveSummons = 4;
 
                             // Setup the newly spawned summons (If summon is already set-up, ignore it)
                             for (int j = 0; j < Summons.Length; j++)
