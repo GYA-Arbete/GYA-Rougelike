@@ -89,16 +89,19 @@ public class CombatSystem : NetworkBehaviour
         CameraSwitchScript.SetViewToRoom();
 
         // Generate each enemies next turn
-        for (int i = 0; i < EnemyAmount; i++) 
+        for (int i = 0; i < EnemyAmount + 4; i++) 
         {
-            EnemyAI EnemyAIScript = Enemies[i].gameObject.GetComponent<EnemyAI>();
+            if (i <  EnemyAmount)
+            {
+                EnemyAI EnemyAIScript = Enemies[i].gameObject.GetComponent<EnemyAI>();
 
-            EnemyAIScript.SetupEnemy(EnemyTypes[i]);
+                EnemyAIScript.SetupEnemy(EnemyTypes[i]);
 
-            // Get each enemies move
-            var ReturnedValues = EnemyAIScript.GenerateMove();
-            EnemyMove[i] = ReturnedValues.Item1;
-            SplashDamage[i] = ReturnedValues.Item2;
+                // Get each enemies move
+                var ReturnedValues = EnemyAIScript.GenerateMove();
+                EnemyMove[i] = ReturnedValues.Item1;
+                SplashDamage[i] = ReturnedValues.Item2;
+            }
 
             // Set default value
             EnemyDamageBuff[i] = 0;
