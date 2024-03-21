@@ -35,6 +35,11 @@ public class EnemySpawner : NetworkBehaviour
             // Instantiate(Object original, Vector3 position, Quaternion rotation, Transform parent);
             GameObject Enemy = Instantiate(EnemyPrefabs[EnemyTypes[i]], EnemySpawnPoints[i].position, new Quaternion(0, 0, 0, 0), EnemyParent);
             Enemy.transform.localScale = new Vector3(108, 108, 1);
+            // If Boss
+            if (EnemyTypes[i] == 0)
+            {
+                Enemy.transform.position = EnemySpawnPoints[1].position;
+            }
             NetworkServer.Spawn(Enemy);
             SetItemParent(Enemy, EnemyParent);
 
