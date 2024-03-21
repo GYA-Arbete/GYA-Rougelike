@@ -17,7 +17,7 @@ public class PlayerManager : NetworkBehaviour
         for (int i = 0; i < 2; i++)
         {
             // Create a HealthBar, putting it under the enemy
-            GameObject HealthBar = Instantiate(HealthBarPrefab, new Vector3(Players[i].position.x, Players[i].position.y - 1, Players[i].position.z), new Quaternion(0, 0, 0, 0), HealthBarParent);
+            GameObject HealthBar = Instantiate(HealthBarPrefab, new Vector3(Players[i].position.x, Players[i].position.y - 1.5f, Players[i].position.z), new Quaternion(0, 0, 0, 0), HealthBarParent);
             HealthBars[i] = HealthBar;
 
             // Get HealthSystemScript of the Player
