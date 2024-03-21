@@ -84,6 +84,7 @@ public class CombatSystem : NetworkBehaviour
         StunDuration = new int[EnemyAmount + 4];
         DeadEnemies = new bool[EnemyAmount]; // This is only Amount of enemies since summons die first anyways
         Summons = new Transform[4];
+        AliveSummons = 0;
 
         EnemyType = EnemyTypes;
 
@@ -102,8 +103,8 @@ public class CombatSystem : NetworkBehaviour
 
                 // Get each enemies move
                 var ReturnedValues = EnemyAIScript.GenerateMove();
-                EnemyMove[i] = ReturnedValues.Item1;
-                SplashDamage[i] = ReturnedValues.Item2;
+                EnemyMove[i] = ReturnedValues.Result.Item1;
+                SplashDamage[i] = ReturnedValues.Result.Item2;
             }
 
             // Set default value
@@ -257,9 +258,19 @@ public class CombatSystem : NetworkBehaviour
             if (Enemies[i] != null)
             {
                 // Get each enemies move
-                var ReturnedValues = Enemies[i].GetComponent<EnemyAI>().GenerateMove();
+                EnemyAI AIScript = Enemies[i].GetComponent<EnemyAI>();
+                var ReturnedValues = await AIScript.GenerateMove();
                 EnemyMove[i] = ReturnedValues.Item1;
                 SplashDamage[i] = ReturnedValues.Item2;
+
+                if (EnemyDamageBuff[i] > 0)
+                {
+                    AIScript.SetBuffIndicatorVisibility(true);
+                }
+                else
+                {
+                    AIScript.SetBuffIndicatorVisibility(false);
+                }
             }
         }
         // Also generate each summons next turn
@@ -268,9 +279,19 @@ public class CombatSystem : NetworkBehaviour
             if (Summons[i - Enemies.Length] != null)
             {
                 // Get each enemies move
-                var ReturnedValues = Summons[i - Enemies.Length].GetComponent<EnemyAI>().GenerateMove();
+                EnemyAI AIScript = Summons[i - Enemies.Length].GetComponent<EnemyAI>();
+                var ReturnedValues = await AIScript.GenerateMove();
                 EnemyMove[i] = ReturnedValues.Item1;
                 SplashDamage[i] = ReturnedValues.Item2;
+
+                if (EnemyDamageBuff[i] > 0)
+                {
+                    AIScript.SetBuffIndicatorVisibility(true);
+                }
+                else
+                {
+                    AIScript.SetBuffIndicatorVisibility(false);
+                }
             }
         }
 
@@ -585,6 +606,7 @@ public class CombatSystem : NetworkBehaviour
 
                     // Reset DamageBuff when it has been used
                     EnemyDamageBuff[i] = 0;
+                    AIScript.SetBuffIndicatorVisibility(false);
                 }
                 else
                 {
@@ -616,6 +638,7 @@ public class CombatSystem : NetworkBehaviour
 
                                     // Reset DamageBuff when it has been used
                                     EnemyDamageBuff[i] = 0;
+                                    AIScript.SetBuffIndicatorVisibility(false);
                                     break;
                                 }
                             }
@@ -636,7 +659,7 @@ public class CombatSystem : NetworkBehaviour
                             {
                                 if (SpawnedEnemy[j])
                                 {
-                                    Summons[j].GetComponent<EnemyAI>().SetupEnemy(5);
+                                    await Summons[j].GetComponent<EnemyAI>().SetupEnemy(5);
                                 }
                             }
                             break;
@@ -648,7 +671,18 @@ public class CombatSystem : NetworkBehaviour
             }
             else
             {
-                StunDuration[i]--;
+                if (i < Enemies.Length)
+                {
+                    StunDuration[i]--;
+                }
+                // For a summon un-stun it has to be alive first
+                else
+                {
+                    if (Enemy != null)
+                    {
+                        StunDuration[i]--;
+                    }
+                }
             }
         }
 
@@ -658,7 +692,18 @@ public class CombatSystem : NetworkBehaviour
         {
             for (int i = 0; i < EnemyDamageBuff.Length; i++)
             {
-                EnemyDamageBuff[i] += 2;
+                if (i < Enemies.Length)
+                {
+                    EnemyDamageBuff[i] += 2;
+                }
+                // Only buff summons that are alive
+                else
+                {
+                    if (Summons[i - Enemies.Length] != null)
+                    {
+                        EnemyDamageBuff[i] += 2;
+                    }
+                }
             }
         }
     }

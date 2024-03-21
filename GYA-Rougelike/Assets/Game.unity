@@ -6656,6 +6656,7 @@ MonoBehaviour:
   syncInterval: 0
   InCombat: 0
   FinishedPlayers: 0
+  AliveSummons: 0
   EndTurnButton: {fileID: 264480458}
   Players:
   - {fileID: 1090164095}
@@ -13055,7 +13056,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 1351606603}
-  m_PlaneDistance: 101
+  m_PlaneDistance: 105
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0

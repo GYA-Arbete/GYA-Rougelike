@@ -1,4 +1,5 @@
 using Mirror;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,15 +20,14 @@ public class EnemyAI : NetworkBehaviour
 
     public Image EnemyMoveIndicatorImage;
     public TextMeshProUGUI EnemyMoveIndicatorText;
+    public GameObject EnemyBuffIndicator;
 
     public int Cooldown;
 
     [Server]
-    public void SetupEnemy(int Enemytype)
+    public Task SetupEnemy(int Enemytype)
     {
         EnemyType = Enemytype;
-
-        StunIndicatorVisibility(false);
 
         switch (EnemyType)
         {
@@ -47,6 +47,8 @@ public class EnemyAI : NetworkBehaviour
                 Cooldown = 5;
                 break;
         }
+
+        return Task.CompletedTask;
     }
 
     [Command(requiresAuthority = false)]
@@ -54,12 +56,12 @@ public class EnemyAI : NetworkBehaviour
     {
         Stunned = true;
         StunDuration = Duration;
-        StunIndicatorVisibility(true);
+        SetStunIndicatorVisibility(true);
     }
 
     // Int for type of move, bool for if splash damage
     [Server]
-    public (int, bool) GenerateMove()
+    public async Task<(int, bool)> GenerateMove()
     {
         // If the enemy is stunned, do an early exit and send back an "out of range index" to it doesnt do anything later
         if (Stunned)
@@ -68,7 +70,7 @@ public class EnemyAI : NetworkBehaviour
             if (StunDuration == 0)
             {
                 Stunned = false;
-                StunIndicatorVisibility(false);
+                SetStunIndicatorVisibility(false);
             }
             else
             {
@@ -144,7 +146,8 @@ public class EnemyAI : NetworkBehaviour
                 {
                     Cooldown = 5;
 
-                    SetMoveIndicator(4, $"{FindAnyObjectByType<CombatSystem>().Summons.Length}x");
+                    // Text is set as how many summons will be spawned
+                    SetMoveIndicator(4, $"{4 - FindAnyObjectByType<CombatSystem>().AliveSummons}x");
                     return (3, false);
                 }
                 // Normal Attack
@@ -193,8 +196,14 @@ public class EnemyAI : NetworkBehaviour
     }
 
     [ClientRpc]
-    void StunIndicatorVisibility(bool Visibility)
+    void SetStunIndicatorVisibility(bool State)
     {
-        StunIndicator.SetActive(Visibility);
+        StunIndicator.SetActive(State);
+    }
+
+    [ClientRpc]
+    public void SetBuffIndicatorVisibility(bool State)
+    {
+        EnemyBuffIndicator.SetActive(State);
     }
 }
