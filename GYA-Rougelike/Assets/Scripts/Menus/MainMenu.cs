@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 using Mirror.Discovery;
+using System.Collections.Generic;
 
 public class MainMenu : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class MainMenu : MonoBehaviour
     public RectTransform PlayButtons;
 
     private readonly float Offset = 3.7f;
+    private Dictionary<long, ServerResponse> DiscoveredServers = new Dictionary<long, ServerResponse>();
 
     // Start is called before the first frame update
     void Start()
@@ -54,14 +56,20 @@ public class MainMenu : MonoBehaviour
 
     void HostGame()
     {
+        DiscoveredServers.Clear();
         NetworkManager.StartHost();
+        NetworkDiscovery.AdvertiseServer();
     }
 
     void JoinGame()
     {
+        DiscoveredServers.Clear();
         NetworkDiscovery.StartDiscovery();
+    }
 
-        NetworkManager.StartClient();
+    public void OnDiscoveredServer(ServerResponse info)
+    {
+        NetworkManager.StartClient(info.uri);
     }
 
     void PlayGoBack()
