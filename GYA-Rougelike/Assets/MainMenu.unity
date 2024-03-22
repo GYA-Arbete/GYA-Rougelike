@@ -1349,6 +1349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NetworkManager: {fileID: 2099939618}
+  NetworkDiscovery: {fileID: 2099939619}
   PlayGameButton: {fileID: 1788430978}
   OptionsButton: {fileID: 234372998}
   QuitGameButton: {fileID: 284882653}
@@ -2496,6 +2497,7 @@ GameObject:
   - component: {fileID: 2099939617}
   - component: {fileID: 2099939615}
   - component: {fileID: 2099939618}
+  - component: {fileID: 2099939619}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -2597,6 +2599,27 @@ MonoBehaviour:
   evaluationMethod: 0
   evaluationInterval: 3
   timeInterpolationGui: 0
+--- !u!114 &2099939619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2099939614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c761308e733c51245b2e8bb4201f46dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableActiveDiscovery: 1
+  BroadcastAddress: 
+  serverBroadcastListenPort: 47777
+  ActiveDiscoveryInterval: 3
+  transport: {fileID: 2099939615}
+  OnServerFound:
+    m_PersistentCalls:
+      m_Calls: []
+  secretHandshake: 5755943358023596682
 --- !u!1 &2141645645
 GameObject:
   m_ObjectHideFlags: 0

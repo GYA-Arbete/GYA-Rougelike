@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
+using Mirror.Discovery;
 
 public class MainMenu : MonoBehaviour
 {
     public NetworkManager NetworkManager;
+    public NetworkDiscovery NetworkDiscovery;
 
     [Header("Main Menu Items")]
     public Button PlayGameButton;
@@ -57,6 +59,8 @@ public class MainMenu : MonoBehaviour
 
     void JoinGame()
     {
+        NetworkDiscovery.StartDiscovery();
+
         NetworkManager.StartClient();
     }
 
