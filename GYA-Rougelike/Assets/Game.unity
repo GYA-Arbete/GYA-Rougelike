@@ -4068,6 +4068,7 @@ MonoBehaviour:
   syncInterval: 0
   PauseMenuCanvas: {fileID: 1257602611}
   DebugMenuCanvas: {fileID: 378365593}
+  GameOverCanvas: {fileID: 1796844601}
   Map: {fileID: 679690433}
   MapViewCamera: {fileID: 519420031}
   RoomViewCamera: {fileID: 1351606603}
