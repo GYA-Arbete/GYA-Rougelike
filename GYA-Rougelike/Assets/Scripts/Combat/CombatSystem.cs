@@ -427,8 +427,8 @@ public class CombatSystem : NetworkBehaviour
             // Bash
             else if (CardStatsScript.Stun > 0)
             {
-                // If a tank is spawned
-                if (EnemyType.Contains(4))
+                // If a tank is spawned && No summons are alive
+                if (EnemyType.Contains(4) && AliveSummons == 0)
                 {
                     int TankIndex = Array.IndexOf(EnemyType, 4);
 
@@ -437,14 +437,28 @@ public class CombatSystem : NetworkBehaviour
                 }
                 else
                 {
-                    for (int j = 0; j < Enemies.Length; j++)
+                    // First try to stun a summon
+                    for (int j = 0; j < Summons.Length; j++)
                     {
-                        if (Enemies[j] != null)
+                        if (Summons[j] != null)
                         {
-                            // Stun attacked enemy
-                            StunDuration[j] = CardStatsScript.Stun;
-                            Enemies[j].GetComponent<EnemyAI>().Stun(CardStatsScript.Stun);
+                            StunDuration[j + Enemies.Length] = CardStatsScript.Stun;
+                            Summons[j].GetComponent<EnemyAI>().Stun(CardStatsScript.Stun);
                             break;
+                        }
+                    }
+                    // If no summon is alive, stun enemy
+                    if (AliveSummons == 0)
+                    {
+                        for (int j = 0; j < Enemies.Length; j++)
+                        {
+                            if (Enemies[j] != null)
+                            {
+                                // Stun attacked enemy
+                                StunDuration[j] = CardStatsScript.Stun;
+                                Enemies[j].GetComponent<EnemyAI>().Stun(CardStatsScript.Stun);
+                                break;
+                            }
                         }
                     }
                 }
@@ -489,7 +503,8 @@ public class CombatSystem : NetworkBehaviour
     void Attack(bool SplashDamage, int Damage)
     {
         // If a tank is spawned & not dead, attack it first
-        if (EnemyType.Contains(4) && Enemies[Array.IndexOf(EnemyType, 4)] != null)
+        // And no summons alive
+        if (EnemyType.Contains(4) && Enemies[Array.IndexOf(EnemyType, 4)] != null && AliveSummons == 0)
         {
             int TankIndex = Array.IndexOf(EnemyType, 4);
             int AliveEnemies = 0;
@@ -516,16 +531,38 @@ public class CombatSystem : NetworkBehaviour
         }
         else
         {
-            for (int i = 0; i < Enemies.Length; i++)
+            for (int i = 0; i < Summons.Length; i++)
             {
-                if (!DeadEnemies[i])
+                if (Summons[i] != null)
                 {
-                    DeadEnemies[i] = Enemies[i].GetComponent<HealthSystem>().TakeDamage(Damage + PlayerDamageBuff);
+                    bool Died = Summons[i].GetComponent<HealthSystem>().TakeDamage(Damage + PlayerDamageBuff);
+
+                    if (Died)
+                    {
+                        AliveSummons--;
+                    }
 
                     if (!SplashDamage)
                     {
                         // If not SplashDamage, break loop since it should only attack first enemy
                         break;
+                    }
+                }
+            }
+            // If no summons are alive
+            if (AliveSummons == 0)
+            {
+                for (int i = 0; i < Enemies.Length; i++)
+                {
+                    if (!DeadEnemies[i])
+                    {
+                        DeadEnemies[i] = Enemies[i].GetComponent<HealthSystem>().TakeDamage(Damage + PlayerDamageBuff);
+
+                        if (!SplashDamage)
+                        {
+                            // If not SplashDamage, break loop since it should only attack first enemy
+                            break;
+                        }
                     }
                 }
             }
