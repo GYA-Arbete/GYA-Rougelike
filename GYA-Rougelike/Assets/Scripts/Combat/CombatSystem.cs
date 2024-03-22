@@ -65,7 +65,7 @@ public class CombatSystem : NetworkBehaviour
     {
         InCombat = true;
 
-        ToggleCombatElementsVisibility();
+        SetCombatElementsVisibility(true);
         SetSummonBackgroundVisibility(false);
         HideWaitingText();
 
@@ -78,10 +78,11 @@ public class CombatSystem : NetworkBehaviour
         CardSpawnerScript.ResetCards();
         CardInventoryScript.ResetCardCooldown();
 
-        // Reset defence for each player
+        // Reset defence for each player && Show each player
         for (int i = 0; i < Players.Length; i++)
         {
             Players[i].GetComponent<HealthSystem>().ResetDefence();
+            Players[i].gameObject.SetActive(true);
         }
 
         // Length == Amount of enemies + 4 summons
@@ -146,7 +147,7 @@ public class CombatSystem : NetworkBehaviour
     {
         InCombat = false;
 
-        ToggleCombatElementsVisibility();
+        SetCombatElementsVisibility(false);
 
         HideWaitingText();
 
@@ -177,11 +178,11 @@ public class CombatSystem : NetworkBehaviour
     }
 
     [ClientRpc]
-    void ToggleCombatElementsVisibility()
+    void SetCombatElementsVisibility(bool State)
     {
         foreach (GameObject Element in CombatRoomElements)
         {
-            Element.SetActive(!Element.activeSelf);
+            Element.SetActive(State);
         }
     }
 

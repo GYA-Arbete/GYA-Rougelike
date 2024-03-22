@@ -83,7 +83,7 @@ public class HealthSystem : NetworkBehaviour
     public void ResetDefence()
     {
         Defence = 0;
-        UpdateHealthBarDefence(Defence);
+        UpdateHealthBarDefence(0);
     }
 
     [Command(requiresAuthority = false)]
