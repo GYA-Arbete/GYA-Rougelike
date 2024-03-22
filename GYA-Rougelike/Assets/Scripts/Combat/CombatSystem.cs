@@ -76,6 +76,13 @@ public class CombatSystem : NetworkBehaviour
         Enemies = EnemySpawnerScript.SpawnEnemies(EnemyAmount, EnemyTypes);
 
         CardSpawnerScript.ResetCards();
+        CardInventoryScript.ResetCardCooldown();
+
+        // Reset defence for each player
+        for (int i = 0; i < Players.Length; i++)
+        {
+            Players[i].GetComponent<HealthSystem>().ResetDefence();
+        }
 
         // Length == Amount of enemies + 4 summons
         EnemyMove = new int[EnemyAmount + 4];
@@ -191,6 +198,19 @@ public class CombatSystem : NetworkBehaviour
     }
 
     [Command(requiresAuthority = false)]
+    void CheckSummonsBackground()
+    {
+        if (AliveSummons > 0)
+        {
+            SetSummonBackgroundVisibility(true);
+        }
+        else
+        {
+            SetSummonBackgroundVisibility(false);
+        }
+    }
+
+    [Command(requiresAuthority = false)]
     void CheckCombatEnded()
     {
         // Check if all Enemies are dead, eg combat has ended
@@ -295,14 +315,7 @@ public class CombatSystem : NetworkBehaviour
             }
         }
 
-        if (AliveSummons > 0)
-        {
-            SetSummonBackgroundVisibility(true);
-        }
-        else
-        {
-            SetSummonBackgroundVisibility(false);
-        }
+        CheckSummonsBackground();
 
         // Set info for TargetIndicator
         UpdateEnemyTarget();
@@ -313,7 +326,7 @@ public class CombatSystem : NetworkBehaviour
     [Command(requiresAuthority = false)]
     void UpdateEnemyTarget()
     {
-        int TankIndex = Array.IndexOf(EnemyMove, 4);
+        int TankIndex = Array.IndexOf(EnemyType, 4);
         // If failed to find Tank
         if (TankIndex == -1)
         {
@@ -475,8 +488,9 @@ public class CombatSystem : NetworkBehaviour
             }
         }
 
-        // When players moves has been done, check if combat has ended
+        // When players moves has been done, check if combat has ended and if summon background should be enabled
         CheckCombatEnded();
+        CheckSummonsBackground();
 
         // Check if the other player is finished
         if (FinishedPlayers == 1)

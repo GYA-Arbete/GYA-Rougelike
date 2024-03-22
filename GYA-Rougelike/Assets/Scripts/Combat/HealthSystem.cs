@@ -79,6 +79,13 @@ public class HealthSystem : NetworkBehaviour
         UpdateHealthBarDefence(Defence);
     }
 
+    [Command]
+    public void ResetDefence()
+    {
+        Defence = 0;
+        UpdateHealthBarDefence(Defence);
+    }
+
     [Command(requiresAuthority = false)]
     public void AddThorns(int ThornsToAdd)
     {

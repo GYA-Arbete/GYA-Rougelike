@@ -26,8 +26,6 @@ public class LootRoom : NetworkBehaviour
     void UpgradeCard()
     {
         CardChoiceScript.StartChoice("LootRoom", true);
-
-        ExitLootRoom();
     }
 
     [Command(requiresAuthority = false)]
@@ -43,6 +41,7 @@ public class LootRoom : NetworkBehaviour
     public void EnterLootRoom()
     {
         SetCanvasVisibility(true);
+        PlayerManagerScript.SetHealthbarVisibility(false);
 
         CameraSwitchScript.SetViewToRoom();
     }

@@ -57,6 +57,15 @@ public class CardInventory : NetworkBehaviour
         CardInventoryButton.onClick.AddListener(SwitchInventory);
     }
 
+    [ClientRpc]
+    public void ResetCardCooldown()
+    {
+        for (int i = 0; i < Inventory.cardList.Count; i++)
+        {
+            Inventory.cardList[i].CardCooldown = 0;
+        }
+    }
+
     public void ClearInventory()
     {
         Inventory.cardList.Clear();

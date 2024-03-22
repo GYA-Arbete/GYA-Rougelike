@@ -64,8 +64,8 @@ public class RoomProperties : MonoBehaviour
 
                 EnemyTypes[i] = EnemyType;
 
-                // Check that it doesnt already contain a Summoner or Buffer as we only allow one of those per room
-                if (EnemyType == 2 ||EnemyType == 3)
+                // Check that it doesnt already contain a Summoner or Buffer or Tank as we only allow one of those per room
+                if (EnemyType == 2 || EnemyType == 3 || EnemyType == 4)
                 {
                     AllowedEnemyTypes.RemoveAt(Index);
                 }

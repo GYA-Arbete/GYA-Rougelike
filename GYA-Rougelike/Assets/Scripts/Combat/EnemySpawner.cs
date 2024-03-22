@@ -21,8 +21,8 @@ public class EnemySpawner : NetworkBehaviour
     [Header("Stat Generation")]
     public readonly int[] HealthMin = { 100, 20, 10, 10, 30, 1 };
     public readonly int[] HealthMax = { 150, 40, 25, 25, 50, 5 };
-    public readonly int[] DamageMin = { 8, 1, 1, 1, 1, 1 };
-    public readonly int[] DamageMax = { 10, 5, 3, 2, 3, 2 };
+    public readonly int[] DamageMin = { 8, 3, 1, 1, 1, 1 };
+    public readonly int[] DamageMax = { 10, 6, 3, 2, 3, 2 };
 
     [Server]
     public Transform[] SpawnEnemies(int NumberOfEnemies, int[] EnemyTypes)
