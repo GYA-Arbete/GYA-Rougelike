@@ -1,6 +1,11 @@
 # GYARougelike
 A simple multiplayer roguelike game inspired by other roguelikes like "Slay the Spire".
 
+# Dependencies
+- Unity Engine 2022.3.8f1 (LTS)
+- [TextMesh Pro](https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.0/manual/index.html)
+- [Mirror](https://mirror-networking.com/)
+
 # Architecture
 
 ### UI
